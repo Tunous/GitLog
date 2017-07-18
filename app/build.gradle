@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
@@ -24,18 +25,28 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
 
-    compile('org.eclipse.jgit:org.eclipse.jgit:4.8.0.201706111038-r', {
+    compile('org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r', {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     })
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:25.3.1'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.16'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.16'
+    testCompile 'junit:junit:4.12'
 }
 repositories {
     mavenCentral()
+}
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }
