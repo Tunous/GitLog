@@ -19,8 +19,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/repositoryUrlInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="textUri|textNoSuggestions"
+            android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -37,8 +41,12 @@
         app:layout_constraintTop_toBottomOf="@id/repositoryUrlInputView">
 
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/repositoryNameInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSend"
+            android:inputType="text"
+            android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
 

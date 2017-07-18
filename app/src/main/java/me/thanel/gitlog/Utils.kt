@@ -1,5 +1,7 @@
 package me.thanel.gitlog
 
+import android.app.ProgressDialog
+import android.content.Context
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
@@ -18,3 +20,22 @@ import android.view.ViewGroup
  */
 fun ViewGroup.inflate(@LayoutRes layoutResId: Int, attachToRoot: Boolean = false): View =
         LayoutInflater.from(context).inflate(layoutResId, this, attachToRoot)
+
+/**
+ * Run an operation with a progress dialog. It will be shown before the operation completes and
+ * will be hidden when execution finishes.
+ *
+ * @param title The title of the progress dialog.
+ * @param message The body message of the progress dialog.
+ * @param indeterminate Whether the progress dialog should be indeterminate.
+ * @param body The operation to perform.
+ */
+fun Context.withProgressDialog(title: String, message: String, indeterminate: Boolean = false,
+        body: () -> Unit) {
+    val dialog = ProgressDialog.show(this, title, message, indeterminate)
+    try {
+        body()
+    } finally {
+        dialog.dismiss()
+    }
+}

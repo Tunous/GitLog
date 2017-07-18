@@ -5,6 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_repository.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -20,19 +23,47 @@ class RepositoryActivity : AppCompatActivity() {
     private val adapter = CommitLogAdapter()
 
     private lateinit var git: Git
+    private lateinit var repositoryFile: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_repository)
 
-        supportActionBar?.title = repository.name
+        supportActionBar!!.title = repository.name
 
         recycler.adapter = adapter
         recycler.layoutManager = LinearLayoutManager(this)
 
-        val repositoryFile = File(filesDir, "repos/${repository.name}")
+        repositoryFile = File(filesDir, "repos/${repository.name}")
         git = Git.open(repositoryFile)
         logCommits()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.repository, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.remove -> removeRepository()
+
+            else -> return false
+        }
+
+        return true
+    }
+
+    private fun removeRepository() {
+        val deleted = repositoryFile.deleteRecursively()
+        if (deleted) {
+            setResult(ActivityResults.RESULT_REPOSITORY_REMOVED, Intent().apply {
+                putExtra(EXTRA_REPOSITORY, repository)
+            })
+            finish()
+        } else {
+            Toast.makeText(this, "Failed removing repository...", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun logCommits() = launch(UI) {
@@ -41,7 +72,7 @@ class RepositoryActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_REPOSITORY = "extra.repository"
+        const val EXTRA_REPOSITORY = "extra.repository"
 
         fun newIntent(context: Context, repository: Repository): Intent {
             return Intent(context, RepositoryActivity::class.java).apply {

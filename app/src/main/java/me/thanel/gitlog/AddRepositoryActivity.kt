@@ -5,13 +5,21 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import kotlinx.android.synthetic.main.activity_add_repository.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.run
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.errors.InvalidRemoteException
+import org.eclipse.jgit.api.errors.TransportException
+import org.eclipse.jgit.lib.EmptyProgressMonitor
 import java.io.File
 
 class AddRepositoryActivity : AppCompatActivity() {
@@ -20,57 +28,126 @@ class AddRepositoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_repository)
 
-        cloneButton.setOnClickListener {
-            val uri = repositoryUrlInputView.editText?.text?.toString()
-            if (uri != null) {
-                cloneRepository(uri)
+        cloneButton.setOnClickListener { cloneRepository() }
+
+        repositoryUrlInput.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                val text = s.toString().split("/").lastOrNull() ?: ""
+                val editable = repositoryNameInput.text
+                editable.clear()
+                editable.append(text)
+
+                repositoryUrlInputView.error = null
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+
+        repositoryNameInput.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                repositoryNameInputView.error = null
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        })
+
+        repositoryNameInput.setOnEditorActionListener { _, actionId, event ->
+            val pressedEnter = event.keyCode == KeyEvent.KEYCODE_ENTER &&
+                    event.action == KeyEvent.ACTION_DOWN
+
+            if (actionId == EditorInfo.IME_ACTION_SEND || pressedEnter) {
+                cloneRepository()
+                true
             } else {
-                repositoryUrlInputView.error = "Please enter url"
+                false
             }
         }
     }
 
-    private fun cloneRepository(uri: String) {
-        val regex = Regex("""https://github.com/([^/]+)/([^/]+)""")
-        val uriResult = regex.matchEntire(uri)
+    private fun cloneRepository() {
+        val repoUrl = repositoryUrlInput.text.toString()
+        val targetName = repositoryNameInput.text.toString()
 
-        if (uriResult == null) {
-            repositoryUrlInputView.error = "Incorrect url"
+        if (repoUrl.isBlank()) {
+            repositoryUrlInputView.error = "Please specify URL"
             return
+        } else {
+            repositoryUrlInputView.error = null
         }
 
-        val targetName = repositoryNameInputView.editText?.text?.toString()
-        if (targetName == null || targetName.isBlank()) {
-            repositoryNameInputView.error = "Incorrect name"
+        if (targetName.isBlank()) {
+            repositoryNameInputView.error = "Please specify name"
             return
+        } else {
+            repositoryNameInputView.error = null
         }
 
-        val repoOwner = uriResult.groupValues[1]
-        val repoName = uriResult.groupValues[2]
+        val exists = RepositoryListManager.exists(this, targetName)
+        if (exists) {
+            repositoryNameInputView.error = "Repository with this name already exists"
+            return
+        } else {
+            repositoryNameInputView.error = null
+        }
+
+        cloneRepository(repoUrl, targetName)
+    }
+
+    private fun cloneRepository(repoUrl: String, repoName: String) {
+        val rootFile = File(filesDir, "repos/$repoName")
 
         launch(UI) {
             val dialog = ProgressDialog.show(this@AddRepositoryActivity, "Cloning repository",
-                    "Cloning \"$repoOwner/$repoName\" as $targetName...", true)
+                    "Cloning \"$repoUrl\" as $repoName...", true)
 
-            val result = async(CommonPool) {
-                val rootFile = File(filesDir, "repos/$targetName")
+            try {
+                val result = run(CommonPool) {
+                    Git.cloneRepository()
+                            .setURI(repoUrl)
+                            .setDirectory(rootFile)
+                            .setBare(true)
+                            .setCloneAllBranches(true)
+                            .setRemote("origin")
+                            .setProgressMonitor(object : EmptyProgressMonitor() {
+                                override fun beginTask(title: String, totalWork: Int) {
+                                    launch(UI) {
+                                        dialog.setMessage(title)
+                                    }
+                                }
+                            })
+                            .call()
+                }
+                result.close()
 
-                Git.cloneRepository()
-                        .setURI(uri)
-                        .setDirectory(rootFile)
-                        .setBare(true)
-                        .setCloneAllBranches(true)
-                        .setRemote("origin")
-                        .call()
+                dialog.dismiss()
+
+                setResult(Activity.RESULT_OK, Intent().apply {
+                    putExtra(RepositoryActivity.EXTRA_REPOSITORY, Repository(repoName))
+                })
+                finish()
+            } catch (error: InvalidRemoteException) {
+                rootFile.deleteRecursively()
+
+                repositoryUrlInputView.error = "Incorrect URL"
+                repositoryUrlInputView.requestFocus()
+            } catch (error: TransportException) {
+                rootFile.deleteRecursively()
+
+                AlertDialog.Builder(this@AddRepositoryActivity)
+                        .setTitle("Failed cloning")
+                        .setMessage(error.message)
+                        .show()
+            } finally {
+                dialog.dismiss()
             }
-            result.await()
-
-            dialog.dismiss()
-
-            setResult(Activity.RESULT_OK, Intent().apply {
-                putExtra(RepositoryListActivity.EXTRA_REPOSITORY, Repository(targetName))
-            })
-            finish()
         }
     }
 

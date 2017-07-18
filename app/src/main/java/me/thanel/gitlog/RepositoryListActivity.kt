@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_repository_list.*
-import java.io.File
 
 class RepositoryListActivity : AppCompatActivity() {
 
@@ -18,41 +17,40 @@ class RepositoryListActivity : AppCompatActivity() {
 
         repositoryRecyclerView.adapter = adapter
         repositoryRecyclerView.layoutManager = LinearLayoutManager(this)
+        adapter.setOnOpenRepositoryListener(this::openRepository)
 
         addRepositoryButton.setOnClickListener {
             val intent = AddRepositoryActivity.newIntent(this)
             startActivityForResult(intent, REQUEST_CLONE_REPOSITORY)
         }
 
-        val rootFile = File(filesDir, REPOSITORIES_DIRECTORY)
-        if (!rootFile.exists()) {
-            rootFile.mkdir()
-        }
+        adapter.addAll(RepositoryListManager.listRepositories(this))
+    }
 
-        val repositoryDirectories = rootFile.listFiles { dir, _ ->
-            dir.isDirectory
-        }
-
-        for (dir in repositoryDirectories) {
-            adapter.add(Repository(dir.name))
-        }
+    private fun openRepository(repository: Repository) {
+        val intent = RepositoryActivity.newIntent(this, repository)
+        startActivityForResult(intent, REQUEST_OPEN_REPOSITORY)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CLONE_REPOSITORY) {
-            if (resultCode == Activity.RESULT_OK) {
-                val newRepository = data!!.getParcelableExtra<Repository>(EXTRA_REPOSITORY)
+        when (requestCode) {
+            REQUEST_CLONE_REPOSITORY -> if (resultCode == Activity.RESULT_OK) {
+                val newRepository = data!!.getParcelableExtra<Repository>(RepositoryActivity.EXTRA_REPOSITORY)
                 adapter.add(newRepository)
+                openRepository(newRepository)
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+
+            REQUEST_OPEN_REPOSITORY -> if (resultCode == ActivityResults.RESULT_REPOSITORY_REMOVED) {
+                val repository = data!!.getParcelableExtra<Repository>(RepositoryActivity.EXTRA_REPOSITORY)
+                adapter.remove(repository)
+            }
+
+            else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     companion object {
-        private const val REPOSITORIES_DIRECTORY = "repos"
-
-        const val REQUEST_CLONE_REPOSITORY = 1
-        const val EXTRA_REPOSITORY = "extra.repository"
+        private const val REQUEST_CLONE_REPOSITORY = 1
+        private const val REQUEST_OPEN_REPOSITORY = 2
     }
 }
