@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".RepositoryListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,8 +21,16 @@
         </activity>
 
         <activity
+            android:name=".RepositoryActivity"
+            android:parentActivityName=".RepositoryListActivity" />
+
+        <activity
             android:name=".CommitActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".RepositoryActivity" />
+
+        <activity
+            android:name=".AddRepositoryActivity"
+            android:parentActivityName=".RepositoryListActivity" />
 
     </application>
 
