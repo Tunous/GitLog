@@ -3,9 +3,11 @@ package me.thanel.gitlog.commit
 import android.os.Bundle
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_commit.*
-import me.thanel.gitlog.*
+import me.thanel.gitlog.BaseFragment
+import me.thanel.gitlog.R
 import me.thanel.gitlog.model.Commit
 import me.thanel.gitlog.model.shortSha
+import me.thanel.gitlog.utils.withArguments
 import me.thanel.gitlog.view.AvatarDrawable
 import org.eclipse.jgit.util.RelativeDateFormatter
 import java.text.SimpleDateFormat
@@ -13,7 +15,7 @@ import java.util.*
 
 class CommitFragment : BaseFragment() {
 
-    private val commit by lazy { arguments.getParcelable<Commit>(ARG_COMMIT) }
+    private val commit by parcelableArg<Commit>(ARG_COMMIT)
 
     override val layoutResId: Int
         get() = R.layout.fragment_commit
@@ -38,12 +40,8 @@ class CommitFragment : BaseFragment() {
     companion object {
         private const val ARG_COMMIT = "arg.commit"
 
-        fun newInstance(commit: Commit): CommitFragment {
-            return CommitFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ARG_COMMIT, commit)
-                }
-            }
+        fun newInstance(commit: Commit) = CommitFragment().withArguments {
+            putParcelable(ARG_COMMIT, commit)
         }
     }
 

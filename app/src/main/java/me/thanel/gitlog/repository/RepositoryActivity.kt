@@ -11,11 +11,12 @@ import me.thanel.gitlog.BaseActivity
 import me.thanel.gitlog.R
 import me.thanel.gitlog.model.Repository
 import me.thanel.gitlog.repository.log.CommitLogFragment
+import me.thanel.gitlog.utils.createIntent
 import java.io.File
 
 class RepositoryActivity : BaseActivity() {
 
-    private val repository by lazy { intent.getParcelableExtra<Repository>(EXTRA_REPOSITORY) }
+    private val repository by parcelableExtra<Repository>(EXTRA_REPOSITORY)
 
     private lateinit var repositoryFile: File
 
@@ -62,10 +63,9 @@ class RepositoryActivity : BaseActivity() {
     companion object {
         const val EXTRA_REPOSITORY = "extra.repository"
 
-        fun newIntent(context: Context, repository: Repository): Intent {
-            return Intent(context, RepositoryActivity::class.java).apply {
-                putExtra(EXTRA_REPOSITORY, repository)
-            }
-        }
+        fun newIntent(context: Context, repository: Repository) =
+                context.createIntent<RepositoryActivity> {
+                    putExtra(EXTRA_REPOSITORY, repository)
+                }
     }
 }

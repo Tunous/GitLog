@@ -19,6 +19,7 @@ import kotlinx.coroutines.experimental.run
 import me.thanel.gitlog.model.Repository
 import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.repositorylist.RepositoryListManager
+import me.thanel.gitlog.utils.createIntent
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.InvalidRemoteException
 import org.eclipse.jgit.api.errors.TransportException
@@ -33,7 +34,7 @@ class AddRepositoryActivity : AppCompatActivity() {
 
         cloneButton.setOnClickListener { cloneRepository() }
 
-        repositoryUrlInput.addTextChangedListener(object: TextWatcher {
+        repositoryUrlInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 val text = s.toString().split("/").lastOrNull() ?: ""
                 val editable = repositoryNameInput.text
@@ -50,7 +51,7 @@ class AddRepositoryActivity : AppCompatActivity() {
             }
         })
 
-        repositoryNameInput.addTextChangedListener(object: TextWatcher {
+        repositoryNameInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 repositoryNameInputView.error = null
             }
@@ -155,8 +156,6 @@ class AddRepositoryActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, AddRepositoryActivity::class.java)
-        }
+        fun newIntent(context: Context) = context.createIntent<AddRepositoryActivity>()
     }
 }

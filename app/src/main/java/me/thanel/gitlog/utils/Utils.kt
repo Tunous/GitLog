@@ -2,7 +2,11 @@ package me.thanel.gitlog.utils
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.support.annotation.LayoutRes
+import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,3 +43,25 @@ fun Context.withProgressDialog(title: String, message: String, indeterminate: Bo
         dialog.dismiss()
     }
 }
+
+/**
+ * Create a new instance of fragment with type [T] and initialize its arguments using the provided
+ * [initializer].
+ */
+fun <T : Fragment> T.withArguments(initializer: Bundle.() -> Unit): T {
+    arguments = Bundle().apply(initializer)
+    return this
+}
+
+/**
+ * Create a new intent for an activity of the specified type [T].
+ */
+inline fun <reified T : AppCompatActivity> Context.createIntent(): Intent =
+        Intent(this, T::class.java)
+
+/**
+ * Create a new intent for an activity of the specified type [T] and initialize it with the
+ * specified [initializer].
+ */
+inline fun <reified T : AppCompatActivity> Context.createIntent(
+        initializer: Intent.() -> Unit): Intent = createIntent<T>().apply(initializer)

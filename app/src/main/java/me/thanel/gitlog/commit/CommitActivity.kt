@@ -1,17 +1,17 @@
 package me.thanel.gitlog.commit
 
 import android.content.Context
-import android.content.Intent
-import me.thanel.gitlog.*
+import me.thanel.gitlog.BaseActivity
 import me.thanel.gitlog.model.Commit
 import me.thanel.gitlog.model.Repository
 import me.thanel.gitlog.model.shortSha
 import me.thanel.gitlog.repository.RepositoryActivity
+import me.thanel.gitlog.utils.createIntent
 
 class CommitActivity : BaseActivity() {
 
-    private val commit by lazy { intent.getParcelableExtra<Commit>(EXTRA_COMMIT) }
-    private val repository by lazy { intent.getParcelableExtra<Repository>(EXTRA_REPOSITORY) }
+    private val commit by parcelableExtra<Commit>(EXTRA_COMMIT)
+    private val repository by parcelableExtra<Repository>(EXTRA_REPOSITORY)
 
     override val title: String?
         get() = "Commit ${commit.shortSha}"
@@ -27,11 +27,10 @@ class CommitActivity : BaseActivity() {
         private const val EXTRA_COMMIT = "extra.commit"
         private const val EXTRA_REPOSITORY = "extra.repository"
 
-        fun newIntent(context: Context, commit: Commit, repository: Repository): Intent {
-            return Intent(context, CommitActivity::class.java).apply {
-                putExtra(EXTRA_COMMIT, commit)
-                putExtra(EXTRA_REPOSITORY, repository)
-            }
-        }
+        fun newIntent(context: Context, commit: Commit, repository: Repository) =
+                context.createIntent<CommitActivity> {
+                    putExtra(EXTRA_COMMIT, commit)
+                    putExtra(EXTRA_REPOSITORY, repository)
+                }
     }
 }

@@ -1,6 +1,7 @@
 package me.thanel.gitlog
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,10 @@ abstract class BaseFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?): View {
         return inflater.inflate(layoutResId, container, false)
+    }
+
+    protected fun <T : Parcelable> parcelableArg(name: String) = lazy {
+        arguments.getParcelable<T>(name)
     }
 
 }

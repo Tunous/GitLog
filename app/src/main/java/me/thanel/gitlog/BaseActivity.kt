@@ -1,6 +1,7 @@
 package me.thanel.gitlog
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.view_toolbar.*
@@ -32,4 +33,9 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected abstract fun createFragment(): Fragment
+
+    protected fun <T : Parcelable> parcelableExtra(name: String) = lazy {
+        intent.getParcelableExtra<T>(name)
+    }
+
 }
