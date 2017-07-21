@@ -3,21 +3,15 @@ package me.thanel.gitlog
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 
-class RepositoryListFragment : Fragment() {
+class RepositoryListFragment : BaseFragment() {
 
     private val adapter = RepositoryListAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_repository_list, container, false)
-    }
+    override val layoutResId: Int
+        get() = R.layout.fragment_repository_list
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

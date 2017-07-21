@@ -1,11 +1,7 @@
 package me.thanel.gitlog
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_commit_log.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -13,7 +9,7 @@ import kotlinx.coroutines.experimental.launch
 import org.eclipse.jgit.api.Git
 import java.io.File
 
-class CommitLogFragment : Fragment() {
+class CommitLogFragment : BaseFragment() {
 
     private val repository by lazy { arguments.getParcelable<Repository>(ARG_REPOSITORY) }
 
@@ -22,10 +18,8 @@ class CommitLogFragment : Fragment() {
     private lateinit var git: Git
     private lateinit var repositoryFile: File
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_commit_log, container, false)
-    }
+    override val layoutResId: Int
+        get() = R.layout.fragment_commit_log
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

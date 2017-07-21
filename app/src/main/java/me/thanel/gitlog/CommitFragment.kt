@@ -1,24 +1,18 @@
 package me.thanel.gitlog
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_commit.*
 import org.eclipse.jgit.util.RelativeDateFormatter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CommitFragment : Fragment() {
+class CommitFragment : BaseFragment() {
 
     private val commit by lazy { arguments.getParcelable<Commit>(ARG_COMMIT) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_commit, container, false)
-    }
+    override val layoutResId: Int
+        get() = R.layout.fragment_commit
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
