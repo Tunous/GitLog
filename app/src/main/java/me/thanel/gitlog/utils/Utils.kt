@@ -3,10 +3,17 @@ package me.thanel.gitlog.utils
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.text.Html
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -65,3 +72,38 @@ inline fun <reified T : AppCompatActivity> Context.createIntent(): Intent =
  */
 inline fun <reified T : AppCompatActivity> Context.createIntent(
         initializer: Intent.() -> Unit): Intent = createIntent<T>().apply(initializer)
+
+/**
+ * Returns displayable styled text from the provided HTML string.
+ */
+@Suppress("DEPRECATION")
+fun String.fromHtml(): Spanned {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+    } else {
+        Html.fromHtml(this)
+    }
+}
+
+/**
+ * Replace a tag inside of the string with the specified replacement string.
+ * A tag means string enclosed in square brackets.
+ *
+ * @param tagName The name of a tag to replace.
+ * @param replaceWith The text that will be placed where the replaced tag was located.
+ * @param makeBold Whether the replaced text should be displayed in bold.
+ */
+fun String.replaceTag(tagName: String, replaceWith: String, makeBold: Boolean = false): CharSequence {
+    val tag = "[$tagName]"
+    val startIndex = indexOf(tag)
+    val replacedString = replace(tag, replaceWith)
+
+    if (makeBold) {
+        return SpannableString(replacedString).apply {
+            setSpan(StyleSpan(Typeface.BOLD), startIndex,
+                    startIndex + replaceWith.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        }
+    }
+
+    return replacedString
+}

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">GitLog</string>
+
+    <string name="remove_repository_dialog_title">Remove repository</string>
+    <string name="remove_repository_confirm_message">Are you sure you want to remove [repository]? This operation cannot be undone.</string>
+
+    <string name="action_remove">Remove</string>
+    <string name="action_cancel">Cancel</string>
 </resources>
