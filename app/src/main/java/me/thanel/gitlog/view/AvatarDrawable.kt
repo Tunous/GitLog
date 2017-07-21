@@ -1,4 +1,4 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.view
 
 import android.graphics.*
 import android.graphics.drawable.Drawable

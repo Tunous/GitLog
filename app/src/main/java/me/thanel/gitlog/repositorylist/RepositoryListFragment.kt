@@ -1,10 +1,13 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.repositorylist
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_repository_list.*
+import me.thanel.gitlog.*
+import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.repository.RepositoryActivity
 
 class RepositoryListFragment : BaseFragment() {
 

@@ -1,4 +1,4 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.utils
 
 import android.app.ProgressDialog
 import android.content.Context

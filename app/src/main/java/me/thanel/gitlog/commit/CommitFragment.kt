@@ -1,8 +1,12 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.commit
 
 import android.os.Bundle
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_commit.*
+import me.thanel.gitlog.*
+import me.thanel.gitlog.model.Commit
+import me.thanel.gitlog.model.shortSha
+import me.thanel.gitlog.view.AvatarDrawable
 import org.eclipse.jgit.util.RelativeDateFormatter
 import java.text.SimpleDateFormat
 import java.util.*

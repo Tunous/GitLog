@@ -1,4 +1,4 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.model
 
 import android.os.Parcel
 import android.os.Parcelable

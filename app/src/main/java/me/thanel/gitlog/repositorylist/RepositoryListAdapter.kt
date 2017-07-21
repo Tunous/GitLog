@@ -1,10 +1,13 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.repositorylist
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_repository.view.*
+import me.thanel.gitlog.R
+import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.utils.inflate
 
 class RepositoryListAdapter : RecyclerView.Adapter<RepositoryListAdapter.ViewHolder>() {
     private val repositories = mutableListOf<Repository>()

@@ -1,4 +1,6 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.repositorylist
+
+import me.thanel.gitlog.BaseActivity
 
 class RepositoryListActivity : BaseActivity() {
 

@@ -1,7 +1,12 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.commit
 
 import android.content.Context
 import android.content.Intent
+import me.thanel.gitlog.*
+import me.thanel.gitlog.model.Commit
+import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.model.shortSha
+import me.thanel.gitlog.repository.RepositoryActivity
 
 class CommitActivity : BaseActivity() {
 

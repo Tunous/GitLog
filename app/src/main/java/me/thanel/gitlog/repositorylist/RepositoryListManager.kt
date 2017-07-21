@@ -1,6 +1,7 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.repositorylist
 
 import android.content.Context
+import me.thanel.gitlog.model.Repository
 import java.io.File
 
 object RepositoryListManager {

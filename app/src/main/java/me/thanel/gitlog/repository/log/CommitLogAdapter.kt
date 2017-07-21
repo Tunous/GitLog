@@ -1,4 +1,4 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.repository.log
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -6,6 +6,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_log.view.*
+import me.thanel.gitlog.*
+import me.thanel.gitlog.commit.CommitActivity
+import me.thanel.gitlog.model.Commit
+import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.utils.inflate
+import me.thanel.gitlog.view.AvatarDrawable
+import me.thanel.gitlog.view.SmallCircleDrawable
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitLogAdapter(

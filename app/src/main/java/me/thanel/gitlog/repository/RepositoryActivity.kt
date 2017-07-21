@@ -1,4 +1,4 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.repository
 
 import android.content.Context
 import android.content.Intent
@@ -6,6 +6,11 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import me.thanel.gitlog.ActivityResults
+import me.thanel.gitlog.BaseActivity
+import me.thanel.gitlog.R
+import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.repository.log.CommitLogFragment
 import java.io.File
 
 class RepositoryActivity : BaseActivity() {

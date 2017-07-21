@@ -16,6 +16,9 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.run
+import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.repository.RepositoryActivity
+import me.thanel.gitlog.repositorylist.RepositoryListManager
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.InvalidRemoteException
 import org.eclipse.jgit.api.errors.TransportException
