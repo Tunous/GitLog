@@ -8,7 +8,9 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.item_log.view.*
 import org.eclipse.jgit.revwalk.RevCommit
 
-class CommitLogAdapter : RecyclerView.Adapter<CommitLogAdapter.ViewHolder>() {
+class CommitLogAdapter(
+        private val repository: Repository
+) : RecyclerView.Adapter<CommitLogAdapter.ViewHolder>() {
     private val commits = mutableListOf<RevCommit>()
 
     fun addAll(items: Iterable<RevCommit>) {
@@ -17,26 +19,25 @@ class CommitLogAdapter : RecyclerView.Adapter<CommitLogAdapter.ViewHolder>() {
         notifyItemRangeInserted(positionStart, commits.size - positionStart)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(commits[position])
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+            holder.bind(commits[position])
 
-    override fun getItemCount(): Int {
-        return commits.size
-    }
+    override fun getItemCount() = commits.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(parent.inflate(R.layout.item_log))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+            ViewHolder(parent.inflate(R.layout.item_log), repository)
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(
+            itemView: View,
+            repository: Repository
+    ) : RecyclerView.ViewHolder(itemView) {
         private val logMessage: TextView by lazy { itemView.logMessage }
         private val avatarView: ImageView by lazy { itemView.commitAuthorAvatarView }
 
         init {
             itemView.setOnClickListener {
                 val commit = it.tag as RevCommit
-                val intent = CommitActivity.newIntent(itemView.context, Commit(commit))
+                val intent = CommitActivity.newIntent(itemView.context, Commit(commit), repository)
                 itemView.context.startActivity(intent)
             }
         }

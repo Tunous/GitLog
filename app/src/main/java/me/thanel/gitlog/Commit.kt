@@ -50,3 +50,5 @@ data class Commit(
         }
     }
 }
+
+val Commit.shortSha get() = sha.substring(0, 7)
