@@ -10,7 +10,7 @@ import android.widget.Toast
 import me.thanel.gitlog.ActivityResults
 import me.thanel.gitlog.BaseActivity
 import me.thanel.gitlog.R
-import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.Repo
 import me.thanel.gitlog.repository.log.CommitLogFragment
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.replaceTag
@@ -18,7 +18,7 @@ import java.io.File
 
 class RepositoryActivity : BaseActivity() {
 
-    private val repository by parcelableExtra<Repository>(EXTRA_REPOSITORY)
+    private val repository by parcelableExtra<Repo>(EXTRA_REPOSITORY)
 
     private lateinit var repositoryFile: File
 
@@ -79,7 +79,7 @@ class RepositoryActivity : BaseActivity() {
     companion object {
         const val EXTRA_REPOSITORY = "extra.repository"
 
-        fun newIntent(context: Context, repository: Repository) =
+        fun newIntent(context: Context, repository: Repo) =
                 context.createIntent<RepositoryActivity> {
                     putExtra(EXTRA_REPOSITORY, repository)
                 }

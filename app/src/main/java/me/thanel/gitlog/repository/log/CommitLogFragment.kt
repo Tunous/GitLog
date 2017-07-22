@@ -8,14 +8,14 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.BaseFragment
 import me.thanel.gitlog.R
-import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.Repo
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.api.Git
 import java.io.File
 
 class CommitLogFragment : BaseFragment() {
 
-    private val repository by parcelableArg<Repository>(ARG_REPOSITORY)
+    private val repository by parcelableArg<Repo>(ARG_REPOSITORY)
 
     private val adapter by lazy { CommitLogAdapter(repository) }
 
@@ -44,7 +44,7 @@ class CommitLogFragment : BaseFragment() {
     companion object {
         private const val ARG_REPOSITORY = "arg.repository"
 
-        fun newInstance(repository: Repository) = CommitLogFragment().withArguments {
+        fun newInstance(repository: Repo) = CommitLogFragment().withArguments {
             putParcelable(ARG_REPOSITORY, repository)
         }
     }

@@ -2,6 +2,7 @@ package me.thanel.gitlog
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,8 +16,8 @@ import kotlinx.android.synthetic.main.activity_add_repository.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.run
-import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.db.Repository
+import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.repositorylist.RepositoryListManager
 import me.thanel.gitlog.utils.createIntent
@@ -27,6 +28,8 @@ import org.eclipse.jgit.lib.EmptyProgressMonitor
 import java.io.File
 
 class AddRepositoryActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: RepositoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +77,9 @@ class AddRepositoryActivity : AppCompatActivity() {
                 false
             }
         }
+
+        viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
+        viewModel.init(applicationContext)
     }
 
     private fun cloneRepository() {
@@ -113,7 +119,7 @@ class AddRepositoryActivity : AppCompatActivity() {
                     "Cloning \"$repoUrl\" as $repoName...", true)
 
             try {
-                val result = run(CommonPool) {
+                launch(CommonPool) {
                     Git.cloneRepository()
                             .setURI(repoUrl)
                             .setDirectory(rootFile)
@@ -128,13 +134,16 @@ class AddRepositoryActivity : AppCompatActivity() {
                                 }
                             })
                             .call()
-                }
-                result.close()
+                            .close()
+
+                    val repository = Repository(0, repoName, repoUrl)
+                    viewModel.addRepository(repository)
+                }.join()
 
                 dialog.dismiss()
 
                 setResult(Activity.RESULT_OK, Intent().apply {
-                    putExtra(RepositoryActivity.EXTRA_REPOSITORY, Repository(repoName))
+                    putExtra(RepositoryActivity.EXTRA_REPOSITORY, Repo(repoName))
                 })
                 finish()
             } catch (error: InvalidRemoteException) {

@@ -1,12 +1,18 @@
 package me.thanel.gitlog.repositorylist
 
-import android.app.Activity
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import kotlinx.android.synthetic.main.fragment_repository_list.*
-import me.thanel.gitlog.*
-import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.AddRepositoryActivity
+import me.thanel.gitlog.BaseFragment
+import me.thanel.gitlog.R
+import me.thanel.gitlog.Repo
+import me.thanel.gitlog.db.Repository
+import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.repository.RepositoryActivity
 
 class RepositoryListFragment : BaseFragment() {
@@ -28,28 +34,36 @@ class RepositoryListFragment : BaseFragment() {
             startActivityForResult(intent, REQUEST_CLONE_REPOSITORY)
         }
 
-        adapter.addAll(RepositoryListManager.listRepositories(context))
+        val viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
+        viewModel.init(context.applicationContext)
+        viewModel.listRepositories().observe(this, Observer { repositories ->
+            Log.d("Repositories", "Received: $repositories")
+            adapter.clear()
+            if (repositories != null) {
+                adapter.addAll(repositories)
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_CLONE_REPOSITORY -> if (resultCode == Activity.RESULT_OK) {
-                val newRepository = data!!.getParcelableExtra<Repository>(RepositoryActivity.EXTRA_REPOSITORY)
-                adapter.add(newRepository)
-                openRepository(newRepository)
-            }
-
-            REQUEST_OPEN_REPOSITORY -> if (resultCode == ActivityResults.RESULT_REPOSITORY_REMOVED) {
-                val repository = data!!.getParcelableExtra<Repository>(RepositoryActivity.EXTRA_REPOSITORY)
-                adapter.remove(repository)
-            }
+//            REQUEST_CLONE_REPOSITORY -> if (resultCode == Activity.RESULT_OK) {
+//                val newRepository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY)
+//                adapter.add(newRepository)
+//                openRepository(newRepository)
+//            }
+//
+//            REQUEST_OPEN_REPOSITORY -> if (resultCode == ActivityResults.RESULT_REPOSITORY_REMOVED) {
+//                val repository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY)
+//                adapter.remove(repository)
+//            }
 
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     private fun openRepository(repository: Repository) {
-        val intent = RepositoryActivity.newIntent(context, repository)
+        val intent = RepositoryActivity.newIntent(context, Repo(repository.name))
         startActivityForResult(intent, REQUEST_OPEN_REPOSITORY)
     }
 

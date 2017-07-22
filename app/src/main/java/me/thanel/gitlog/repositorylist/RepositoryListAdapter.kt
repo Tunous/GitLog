@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_repository.view.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.utils.inflate
 
 class RepositoryListAdapter : RecyclerView.Adapter<RepositoryListAdapter.ViewHolder>() {
@@ -35,6 +35,11 @@ class RepositoryListAdapter : RecyclerView.Adapter<RepositoryListAdapter.ViewHol
             repositories.removeAt(index)
             notifyItemRemoved(index)
         }
+    }
+
+    fun clear() {
+        repositories.clear()
+        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

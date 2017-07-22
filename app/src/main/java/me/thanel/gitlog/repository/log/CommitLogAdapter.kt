@@ -6,17 +6,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_log.view.*
-import me.thanel.gitlog.*
+import me.thanel.gitlog.R
+import me.thanel.gitlog.Repo
 import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.model.Commit
-import me.thanel.gitlog.model.Repository
 import me.thanel.gitlog.utils.inflate
 import me.thanel.gitlog.view.AvatarDrawable
 import me.thanel.gitlog.view.SmallCircleDrawable
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitLogAdapter(
-        private val repository: Repository
+        private val repository: Repo
 ) : RecyclerView.Adapter<CommitLogAdapter.ViewHolder>() {
     private val commits = mutableListOf<RevCommit>()
 
@@ -36,7 +36,7 @@ class CommitLogAdapter(
 
     class ViewHolder(
             itemView: View,
-            repository: Repository
+            repository: Repo
     ) : RecyclerView.ViewHolder(itemView) {
         private val logMessage: TextView by lazy { itemView.logMessage }
         private val avatarView: ImageView by lazy { itemView.commitAuthorAvatarView }

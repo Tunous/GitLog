@@ -1,21 +1,21 @@
 package me.thanel.gitlog.repositorylist
 
 import android.content.Context
-import me.thanel.gitlog.model.Repository
+import me.thanel.gitlog.Repo
 import java.io.File
 
 object RepositoryListManager {
     private const val REPOSITORIES_DIRECTORY = "repos"
 
-    fun listRepositories(context: Context): List<Repository> {
+    fun listRepositories(context: Context): List<Repo> {
         val dirs = getRepositoryDirectories(context)
-        val repositories = mutableListOf<Repository>()
+        val repositories = mutableListOf<Repo>()
 
         for (dir in dirs) {
             if (dir.list().isEmpty()) {
                 dir.deleteRecursively()
             } else {
-                repositories.add(Repository(dir.name))
+                repositories.add(Repo(dir.name))
             }
         }
 

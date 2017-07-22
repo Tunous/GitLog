@@ -1,9 +1,9 @@
-package me.thanel.gitlog.model
+package me.thanel.gitlog
 
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Repository(
+data class Repo(
         val name: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -18,12 +18,12 @@ data class Repository(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Repository> {
-        override fun createFromParcel(parcel: Parcel): Repository {
-            return Repository(parcel)
+    companion object CREATOR : Parcelable.Creator<Repo> {
+        override fun createFromParcel(parcel: Parcel): Repo {
+            return Repo(parcel)
         }
 
-        override fun newArray(size: Int): Array<Repository?> {
+        override fun newArray(size: Int): Array<Repo?> {
             return arrayOfNulls(size)
         }
     }
