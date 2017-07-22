@@ -79,7 +79,6 @@ class AddRepositoryActivity : AppCompatActivity() {
         }
 
         viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
-        viewModel.init(applicationContext)
     }
 
     private fun cloneRepository() {

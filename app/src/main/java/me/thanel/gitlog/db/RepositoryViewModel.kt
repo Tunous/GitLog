@@ -1,20 +1,13 @@
 package me.thanel.gitlog.db
 
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
-import android.arch.persistence.room.Room
-import android.content.Context
+import me.thanel.gitlog.GitLogApplication
 
-class RepositoryViewModel : ViewModel() {
+class RepositoryViewModel(application: Application) : AndroidViewModel(application) {
 
-    private lateinit var db: Database
-    private var isInitialized = false
-
-    fun init(application: Context) {
-        if (isInitialized) return
-        db = Room.databaseBuilder(application, Database::class.java, "gitlog.db").build()
-        isInitialized = true
-    }
+    private val db = (application as GitLogApplication).database
 
     fun listRepositories(): LiveData<List<Repository>> {
         return db.repositoryDao().listRepositories()

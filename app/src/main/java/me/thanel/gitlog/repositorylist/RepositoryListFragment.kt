@@ -35,7 +35,6 @@ class RepositoryListFragment : BaseFragment() {
         }
 
         val viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
-        viewModel.init(context.applicationContext)
         viewModel.listRepositories().observe(this, Observer { repositories ->
             Log.d("Repositories", "Received: $repositories")
             adapter.clear()
