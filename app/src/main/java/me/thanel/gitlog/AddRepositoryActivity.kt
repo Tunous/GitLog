@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_add_repository.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.run
 import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.repository.RepositoryActivity
@@ -118,7 +119,7 @@ class AddRepositoryActivity : AppCompatActivity() {
                     "Cloning \"$repoUrl\" as $repoName...", true)
 
             try {
-                launch(CommonPool) {
+                val repository = run(CommonPool) {
                     Git.cloneRepository()
                             .setURI(repoUrl)
                             .setDirectory(rootFile)
@@ -137,12 +138,13 @@ class AddRepositoryActivity : AppCompatActivity() {
 
                     val repository = Repository(0, repoName, repoUrl)
                     viewModel.addRepository(repository)
-                }.join()
+                    repository
+                }
 
                 dialog.dismiss()
 
                 setResult(Activity.RESULT_OK, Intent().apply {
-                    putExtra(RepositoryActivity.EXTRA_REPOSITORY, Repo(repoName))
+                    putExtra(RepositoryActivity.EXTRA_REPOSITORY, repository)
                 })
                 finish()
             } catch (error: InvalidRemoteException) {

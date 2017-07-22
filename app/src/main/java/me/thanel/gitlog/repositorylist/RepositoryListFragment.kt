@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.fragment_repository_list.*
 import me.thanel.gitlog.AddRepositoryActivity
 import me.thanel.gitlog.BaseFragment
 import me.thanel.gitlog.R
-import me.thanel.gitlog.Repo
 import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.repository.RepositoryActivity
@@ -47,13 +46,13 @@ class RepositoryListFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
 //            REQUEST_CLONE_REPOSITORY -> if (resultCode == Activity.RESULT_OK) {
-//                val newRepository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY)
+//                val newRepository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY_ID)
 //                adapter.add(newRepository)
 //                openRepository(newRepository)
 //            }
 //
 //            REQUEST_OPEN_REPOSITORY -> if (resultCode == ActivityResults.RESULT_REPOSITORY_REMOVED) {
-//                val repository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY)
+//                val repository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY_ID)
 //                adapter.remove(repository)
 //            }
 
@@ -62,7 +61,7 @@ class RepositoryListFragment : BaseFragment() {
     }
 
     private fun openRepository(repository: Repository) {
-        val intent = RepositoryActivity.newIntent(context, Repo(repository.name))
+        val intent = RepositoryActivity.newIntent(context, repository)
         startActivityForResult(intent, REQUEST_OPEN_REPOSITORY)
     }
 
