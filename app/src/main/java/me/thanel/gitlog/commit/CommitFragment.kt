@@ -1,10 +1,13 @@
 package me.thanel.gitlog.commit
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_commit.*
 import me.thanel.gitlog.BaseFragment
 import me.thanel.gitlog.R
+import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.model.Commit
 import me.thanel.gitlog.model.shortSha
 import me.thanel.gitlog.utils.withArguments
@@ -16,6 +19,7 @@ import java.util.*
 class CommitFragment : BaseFragment() {
 
     private val commit by parcelableArg<Commit>(ARG_COMMIT)
+    private val repository by parcelableArg<Repository>(ARG_REPOSITORY)
 
     override val layoutResId: Int
         get() = R.layout.fragment_commit
@@ -35,13 +39,28 @@ class CommitFragment : BaseFragment() {
         commitDateView.setOnClickListener {
             Toast.makeText(context, longDate, Toast.LENGTH_SHORT).show()
         }
+
+        val factory = DiffViewModel.Factory(repository.path, commit.sha)
+        val viewModel = ViewModelProviders.of(activity, factory)
+                .get(DiffViewModel::class.java)
+
+        viewModel.getDiffEntries().observe(this, Observer {
+            if (it == null) {
+                // TODO: Display loading
+            } else {
+                val diffText = it.joinToString("\n- ", "- ") { it.newPath }
+                filesListView.text = diffText
+            }
+        })
     }
 
     companion object {
         private const val ARG_COMMIT = "arg.commit"
+        private const val ARG_REPOSITORY = "arg.repository"
 
-        fun newInstance(commit: Commit) = CommitFragment().withArguments {
+        fun newInstance(commit: Commit, repository: Repository) = CommitFragment().withArguments {
             putParcelable(ARG_COMMIT, commit)
+            putParcelable(ARG_REPOSITORY, repository)
         }
     }
 

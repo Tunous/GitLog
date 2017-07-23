@@ -136,7 +136,7 @@ class AddRepositoryActivity : AppCompatActivity() {
                             .call()
                             .close()
 
-                    val repository = Repository(0, repoName, repoUrl)
+                    val repository = Repository(0, repoName, repoUrl, rootFile.absolutePath)
                     viewModel.addRepository(repository)
                     repository
                 }

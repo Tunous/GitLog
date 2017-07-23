@@ -19,7 +19,7 @@ class CommitActivity : BaseActivity() {
     override val subtitle: String?
         get() = repository.name
 
-    override fun createFragment() = CommitFragment.newInstance(commit)
+    override fun createFragment() = CommitFragment.newInstance(commit, repository)
 
     override fun getSupportParentActivityIntent() = RepositoryActivity.newIntent(this, repository)
 

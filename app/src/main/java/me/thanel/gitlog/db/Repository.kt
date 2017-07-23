@@ -9,17 +9,20 @@ import android.os.Parcelable
 data class Repository(
         @PrimaryKey(autoGenerate = true) val id: Int,
         val name: String,
-        val url: String
+        val url: String,
+        val path: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
             id = parcel.readInt(),
             name = parcel.readString(),
-            url = parcel.readString())
+            url = parcel.readString(),
+            path = parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
         parcel.writeString(name)
         parcel.writeString(url)
+        parcel.writeString(path)
     }
 
     override fun describeContents(): Int {
