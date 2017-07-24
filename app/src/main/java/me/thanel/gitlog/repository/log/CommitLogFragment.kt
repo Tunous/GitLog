@@ -6,7 +6,7 @@ import kotlinx.android.synthetic.main.fragment_commit_log.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import me.thanel.gitlog.BaseFragment
+import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.utils.withArguments

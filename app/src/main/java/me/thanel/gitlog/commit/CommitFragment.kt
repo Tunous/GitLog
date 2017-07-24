@@ -3,10 +3,11 @@ package me.thanel.gitlog.commit
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_commit.*
-import me.thanel.gitlog.BaseFragment
 import me.thanel.gitlog.R
+import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.model.Commit
 import me.thanel.gitlog.model.shortSha
@@ -40,6 +41,13 @@ class CommitFragment : BaseFragment() {
             Toast.makeText(context, longDate, Toast.LENGTH_SHORT).show()
         }
 
+        val adapter = FileAdapter {
+            // TODO: Open file diff
+        }
+
+        fileRecyclerView.adapter = adapter
+        fileRecyclerView.layoutManager = LinearLayoutManager(context)
+
         val factory = DiffViewModel.Factory(repository.path, commit.sha)
         val viewModel = ViewModelProviders.of(activity, factory)
                 .get(DiffViewModel::class.java)
@@ -48,8 +56,7 @@ class CommitFragment : BaseFragment() {
             if (it == null) {
                 // TODO: Display loading
             } else {
-                val diffText = it.joinToString("\n- ", "- ") { it.newPath }
-                filesListView.text = diffText
+                adapter.addAll(it)
             }
         })
     }

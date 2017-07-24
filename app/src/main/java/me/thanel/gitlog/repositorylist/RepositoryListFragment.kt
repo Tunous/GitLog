@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 import me.thanel.gitlog.AddRepositoryActivity
-import me.thanel.gitlog.BaseFragment
+import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.db.RepositoryViewModel

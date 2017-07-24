@@ -21,69 +21,67 @@
         android:id="@+id/commitAuthorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/commitAuthorAvatarView"
         app:layout_constraintRight_toLeftOf="@+id/commitShaView"
         app:layout_constraintTop_toTopOf="@+id/commitAuthorAvatarView"
-        tools:text="Author"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp" />
+        tools:text="Author" />
 
     <TextView
         android:id="@+id/commitDateView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="?selectableItemBackground"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/commitAuthorAvatarView"
         app:layout_constraintRight_toLeftOf="@+id/commitShaView"
         app:layout_constraintTop_toBottomOf="@+id/commitAuthorView"
-        tools:text="15 hours ago"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp" />
+        tools:text="15 hours ago" />
 
     <TextView
         android:id="@+id/commitMessageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:textIsSelectable="true"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commitAuthorAvatarView"
-        tools:text="Commit message text\n\nThat can be multiline"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp" />
+        tools:text="Commit message text\n\nThat can be multiline" />
 
     <TextView
         android:id="@+id/commitShaView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="15f2gf"
-        android:layout_marginEnd="16dp" />
+        tools:text="15f2gf" />
 
-    <TextView
-        android:id="@+id/filesListView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintHorizontal_bias="0.0"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fileRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commitMessageView"
-        tools:text="- File\n- File" />
+        app:layout_constraintTop_toBottomOf="@+id/commitMessageView" />
+
 </android.support.constraint.ConstraintLayout>

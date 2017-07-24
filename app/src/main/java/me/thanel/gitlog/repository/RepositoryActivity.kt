@@ -10,7 +10,7 @@ import android.view.MenuItem
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.ActivityResults
-import me.thanel.gitlog.BaseActivity
+import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.db.RepositoryViewModel
@@ -19,7 +19,7 @@ import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.replaceTag
 import java.io.File
 
-class RepositoryActivity : BaseActivity() {
+class RepositoryActivity : BaseFragmentActivity() {
 
     private val repository by parcelableExtra<Repository>(EXTRA_REPOSITORY)
 

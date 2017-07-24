@@ -1,4 +1,4 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.base
 
 import android.arch.lifecycle.LifecycleFragment
 import android.os.Bundle

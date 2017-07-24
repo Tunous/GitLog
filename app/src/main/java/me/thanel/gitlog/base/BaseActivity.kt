@@ -1,10 +1,11 @@
-package me.thanel.gitlog
+package me.thanel.gitlog.base
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v4.app.Fragment
+import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.view_toolbar.*
+import android.support.v7.widget.Toolbar
+import me.thanel.gitlog.R
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -14,25 +15,21 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected open val canNavigateUp = true
 
+    protected abstract val layoutResId: Int
+        @LayoutRes get
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_base)
+        setContentView(layoutResId)
 
+        val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         title?.let { supportActionBar!!.title = it }
         subtitle?.let { supportActionBar!!.subtitle = it }
         if (canNavigateUp) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, createFragment())
-                    .commit()
-        }
     }
-
-    protected abstract fun createFragment(): Fragment
 
     protected fun <T : Parcelable> parcelableExtra(name: String) = lazy {
         intent.getParcelableExtra<T>(name)

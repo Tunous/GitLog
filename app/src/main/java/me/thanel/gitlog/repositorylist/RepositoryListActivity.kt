@@ -2,11 +2,11 @@ package me.thanel.gitlog.repositorylist
 
 import android.view.Menu
 import android.view.MenuItem
-import me.thanel.gitlog.BaseActivity
+import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.R
 import java.io.File
 
-class RepositoryListActivity : BaseActivity() {
+class RepositoryListActivity : BaseFragmentActivity() {
 
     override val canNavigateUp = false
 
