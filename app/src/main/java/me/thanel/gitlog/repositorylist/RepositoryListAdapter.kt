@@ -1,39 +1,25 @@
 package me.thanel.gitlog.repositorylist
 
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_repository.view.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.base.ItemAdapter
-import me.thanel.gitlog.utils.inflate
+import me.thanel.gitlog.db.Repository
 
-class RepositoryListAdapter : ItemAdapter<Repository, RepositoryListAdapter.ViewHolder>() {
-    private var onOpenRepository: (Repository) -> Unit = {}
+class RepositoryListAdapter(
+        onItemClickListener: (Repository) -> Unit
+) : ItemAdapter<Repository, RepositoryListAdapter.ViewHolder>(onItemClickListener) {
 
-    fun setOnOpenRepositoryListener(listener: (Repository) -> Unit) {
-        onOpenRepository = listener
-    }
+    override fun getLayoutResId(viewType: Int) = R.layout.item_repository
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolder(parent.inflate(R.layout.item_repository), onOpenRepository)
+    override fun createViewHolder(itemView: View, viewType: Int) = ViewHolder(itemView)
 
-    class ViewHolder(
-            itemView: View,
-            onOpenRepository: (Repository) -> Unit
-    ) : ItemAdapter.ViewHolder<Repository>(itemView) {
+    class ViewHolder(itemView: View) : ItemAdapter.ViewHolder<Repository>(itemView) {
         private val repositoryNameView: TextView by lazy { itemView.repositoryNameView }
 
-        init {
-            itemView.setOnClickListener {
-                val repository = it.tag as Repository
-                onOpenRepository(repository)
-            }
-        }
-
         override fun bind(item: Repository) {
-            itemView.tag = item
+            super.bind(item)
             repositoryNameView.text = item.name
         }
     }

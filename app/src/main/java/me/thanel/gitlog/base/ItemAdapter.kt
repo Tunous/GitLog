@@ -1,14 +1,37 @@
 package me.thanel.gitlog.base
 
+import android.support.annotation.CallSuper
+import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.ViewGroup
+import me.thanel.gitlog.utils.inflate
 
-abstract class ItemAdapter<in E, VH : ItemAdapter.ViewHolder<E>> : RecyclerView.Adapter<VH>() {
+abstract class ItemAdapter<in E, VH : ItemAdapter.ViewHolder<E>>(
+        private val onItemClickListener: ((E) -> Unit)? = null
+) : RecyclerView.Adapter<VH>() {
     private val items = mutableListOf<E>()
 
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(items[position])
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val view = parent.inflate(getLayoutResId(viewType))
+        onItemClickListener?.let { listener ->
+            view.setOnClickListener {
+                @Suppress("UNCHECKED_CAST")
+                listener(it.tag as E)
+            }
+        }
+
+        return createViewHolder(view, viewType)
+    }
+
+    @LayoutRes
+    abstract fun getLayoutResId(viewType: Int): Int
+
+    abstract fun createViewHolder(itemView: View, viewType: Int): VH
 
     fun addAll(newItems: Iterable<E>) {
         val positionStart = items.size
@@ -35,7 +58,11 @@ abstract class ItemAdapter<in E, VH : ItemAdapter.ViewHolder<E>> : RecyclerView.
         notifyItemRangeRemoved(0, itemCount)
     }
 
-    abstract class ViewHolder<in T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        abstract fun bind(item: T)
+    abstract class ViewHolder<in E>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        @CallSuper
+        open fun bind(item: E) {
+            itemView.tag = item
+        }
     }
+
 }

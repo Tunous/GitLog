@@ -8,15 +8,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 import me.thanel.gitlog.AddRepositoryActivity
-import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.R
+import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.Repository
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.repository.RepositoryActivity
 
 class RepositoryListFragment : BaseFragment() {
 
-    private val adapter = RepositoryListAdapter()
+    private val adapter = RepositoryListAdapter(this::openRepository)
 
     override val layoutResId: Int
         get() = R.layout.fragment_repository_list
@@ -26,7 +26,6 @@ class RepositoryListFragment : BaseFragment() {
 
         repositoryRecyclerView.adapter = adapter
         repositoryRecyclerView.layoutManager = LinearLayoutManager(context)
-        adapter.setOnOpenRepositoryListener(this::openRepository)
 
         addRepositoryButton.setOnClickListener {
             val intent = AddRepositoryActivity.newIntent(context)

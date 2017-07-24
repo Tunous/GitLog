@@ -6,18 +6,21 @@ import kotlinx.android.synthetic.main.fragment_commit_log.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.R
+import me.thanel.gitlog.base.BaseFragment
+import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.db.Repository
+import me.thanel.gitlog.model.Commit
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.revwalk.RevCommit
 import java.io.File
 
 class CommitLogFragment : BaseFragment() {
 
     private val repository by parcelableArg<Repository>(ARG_REPOSITORY)
 
-    private val adapter by lazy { CommitLogAdapter(repository) }
+    private val adapter = CommitLogAdapter(this::openCommit)
 
     private lateinit var git: Git
     private lateinit var repositoryFile: File
@@ -34,6 +37,11 @@ class CommitLogFragment : BaseFragment() {
         repositoryFile = File(context.filesDir, "repos/${repository.name}")
         git = Git.open(repositoryFile)
         logCommits()
+    }
+
+    private fun openCommit(commit: RevCommit) {
+        val intent = CommitActivity.newIntent(context, Commit(commit), repository)
+        startActivity(intent)
     }
 
     private fun logCommits() = launch(UI) {

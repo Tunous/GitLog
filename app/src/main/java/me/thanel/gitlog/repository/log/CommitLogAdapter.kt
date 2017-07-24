@@ -1,44 +1,29 @@
 package me.thanel.gitlog.repository.log
 
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_log.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
-import me.thanel.gitlog.commit.CommitActivity
-import me.thanel.gitlog.db.Repository
-import me.thanel.gitlog.model.Commit
-import me.thanel.gitlog.utils.inflate
 import me.thanel.gitlog.view.AvatarDrawable
 import me.thanel.gitlog.view.SmallCircleDrawable
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitLogAdapter(
-        private val repository: Repository
-) : ItemAdapter<RevCommit, CommitLogAdapter.ViewHolder>() {
+        onItemClickListener: (RevCommit) -> Unit
+) : ItemAdapter<RevCommit, CommitLogAdapter.ViewHolder>(onItemClickListener) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolder(parent.inflate(R.layout.item_log), repository)
+    override fun getLayoutResId(viewType: Int) = R.layout.item_log
 
-    class ViewHolder(
-            itemView: View,
-            repository: Repository
-    ) : ItemAdapter.ViewHolder<RevCommit>(itemView) {
+    override fun createViewHolder(itemView: View, viewType: Int) = ViewHolder(itemView)
+
+    class ViewHolder(itemView: View) : ItemAdapter.ViewHolder<RevCommit>(itemView) {
         private val logMessage: TextView by lazy { itemView.logMessage }
         private val avatarView: ImageView by lazy { itemView.commitAuthorAvatarView }
 
-        init {
-            itemView.setOnClickListener {
-                val commit = it.tag as RevCommit
-                val intent = CommitActivity.newIntent(itemView.context, Commit(commit), repository)
-                itemView.context.startActivity(intent)
-            }
-        }
-
         override fun bind(item: RevCommit) {
-            itemView.tag = item
+            super.bind(item)
             logMessage.text = item.shortMessage
 
             if (item.parentCount > 1) {
