@@ -1,16 +1,12 @@
 package me.thanel.gitlog.commit
 
-import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_commit.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
-import me.thanel.gitlog.diff.DiffActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import me.thanel.gitlog.view.AvatarDrawable
-import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.util.RelativeDateFormatter
 import java.text.SimpleDateFormat
@@ -23,32 +19,10 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
     override val layoutResId: Int
         get() = R.layout.fragment_commit
 
-    private val adapter = FileAdapter()
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        fileRecyclerView.adapter = adapter
-        fileRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        viewWholeDiffButton.setOnClickListener { showDiff() }
-        selectAllButton.setOnClickListener { adapter.selectAll(true) }
-        deselectAllButton.setOnClickListener { adapter.selectAll(false) }
-    }
-
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
     override fun observeViewModel(viewModel: CommitViewModel) {
-        viewModel.diffEntries.observe(this, this::displayDiffEntries)
         viewModel.commit.observe(this, this::displayCommitInformation)
-    }
-
-    private fun displayDiffEntries(it: List<DiffEntry>?) {
-        if (it == null) {
-            // TODO: Loading indicator
-            return
-        }
-        adapter.replaceAll(it.map { FileEntry(it, false) })
     }
 
     private fun displayCommitInformation(it: RevCommit?) {
@@ -71,12 +45,6 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
         }
     }
 
-    private fun showDiff() {
-        val checkedFiles = adapter.checkedFiles.map { it.oldPath }
-        startActivity(DiffActivity.newIntent(context, commitSha, repositoryId,
-                checkedFiles.toTypedArray()))
-    }
-
     companion object {
         private const val ARG_COMMIT_SHA = "arg.commit_sha"
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
@@ -86,5 +54,4 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
             putInt(ARG_REPOSITORY_ID, repositoryId)
         }
     }
-
 }

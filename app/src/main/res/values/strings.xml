@@ -7,4 +7,5 @@
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="view_diff">View diff</string>
+    <string name="deselect_all">Deselect all</string>
 </resources>
