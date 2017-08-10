@@ -21,6 +21,7 @@ class CommitLogAdapter(
     class ViewHolder(itemView: View) : ItemAdapter.ViewHolder<RevCommit>(itemView) {
         private val logMessage: TextView by lazy { itemView.logMessage }
         private val avatarView: ImageView by lazy { itemView.commitAuthorAvatarView }
+        private val detailsIndicator: ImageView by lazy { itemView.commitDetailsIndicator }
 
         override fun bind(item: RevCommit) {
             super.bind(item)
@@ -30,6 +31,12 @@ class CommitLogAdapter(
                 avatarView.setImageDrawable(SmallCircleDrawable())
             } else {
                 avatarView.setImageDrawable(AvatarDrawable(item.authorIdent.name, item.authorIdent))
+            }
+
+            detailsIndicator.visibility = if (item.fullMessage.trim().split("\n").size > 1) {
+                View.VISIBLE
+            } else {
+                View.GONE
             }
         }
     }
