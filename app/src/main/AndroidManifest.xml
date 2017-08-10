@@ -23,17 +23,21 @@
 
         <activity
             android:name=".repository.RepositoryActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".repositorylist.RepositoryListActivity" />
 
         <activity
+            android:launchMode="singleTop"
             android:name="me.thanel.gitlog.commit.CommitActivity"
             android:parentActivityName=".repository.RepositoryActivity" />
 
         <activity
+            android:launchMode="singleTop"
             android:name=".AddRepositoryActivity"
             android:parentActivityName=".repositorylist.RepositoryListActivity" />
 
         <activity
+            android:launchMode="singleTop"
             android:name=".diff.DiffActivity"
             android:parentActivityName=".commit.CommitActivity" />
 

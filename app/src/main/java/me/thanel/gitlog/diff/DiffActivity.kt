@@ -4,8 +4,8 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import me.thanel.gitlog.base.BaseFragmentActivity
+import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.commit.CommitViewModel
-import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.utils.createIntent
 
 class DiffActivity : BaseFragmentActivity() {
@@ -28,7 +28,8 @@ class DiffActivity : BaseFragmentActivity() {
 
     override fun createFragment() = DiffFragment.newInstance(commitSha, repositoryId, diffFilePath)
 
-    override fun getSupportParentActivityIntent() = RepositoryActivity.newIntent(this, repositoryId)
+    override fun getSupportParentActivityIntent() =
+            CommitActivity.newIntent(this, commitSha, repositoryId)
 
     companion object {
         private const val EXTRA_COMMIT_SHA = "extra.commit_sha"
