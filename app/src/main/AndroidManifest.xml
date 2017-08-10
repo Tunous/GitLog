@@ -33,6 +33,10 @@
             android:name=".AddRepositoryActivity"
             android:parentActivityName=".repositorylist.RepositoryListActivity" />
 
+        <activity
+            android:name=".diff.DiffActivity"
+            android:parentActivityName=".commit.CommitActivity" />
+
     </application>
 
 </manifest>

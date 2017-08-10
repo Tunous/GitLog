@@ -2,11 +2,9 @@ package me.thanel.gitlog.repository.log
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.LiveData
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_commit_log.*
 import kotlinx.coroutines.experimental.CommonPool
@@ -18,12 +16,14 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.utils.getViewModel
+import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.revwalk.RevCommit
 import java.io.File
 
-class CommitLogFragment : BaseFragment() {
+class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
 
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
 
@@ -42,18 +42,21 @@ class CommitLogFragment : BaseFragment() {
 
         commitLogRecycler.adapter = adapter
         commitLogRecycler.layoutManager = LinearLayoutManager(context)
+    }
 
-        val application = context.applicationContext as Application
-        val factory = CommitLogViewModel.Factory(application, repositoryId)
-        val viewModel = ViewModelProviders.of(this, factory).get(CommitLogViewModel::class.java)
-        viewModel.getRepository().observe(this, Observer {
-            if (it != null) {
-                repository = it
-                repositoryFile = File(context.filesDir, "repos/${it.name}")
-                git = Git.open(repositoryFile)
-                logCommits()
-            }
-        })
+    override fun onCreateViewModel() = CommitLogViewModel.get(activity, repositoryId)
+
+    override fun observeViewModel(viewModel: CommitLogViewModel) {
+        viewModel.repository.observe(this, this::displayLog)
+    }
+
+    private fun displayLog(it: Repository?) {
+        if (it != null) {
+            repository = it
+            repositoryFile = File(context.filesDir, "repos/${it.name}")
+            git = Git.open(repositoryFile)
+            logCommits()
+        }
     }
 
     private fun openCommit(commit: RevCommit) {
@@ -81,15 +84,12 @@ class CommitLogViewModel(
 ) : AndroidViewModel(application) {
     private val db = (application as GitLogApplication).database
 
-    fun getRepository() = db.repositoryDao().getRepository(repositoryId)
+    val repository: LiveData<Repository>
+        get() = db.repositoryDao().getRepository(repositoryId)
 
-    class Factory(
-            private val application: Application,
-            private val repositoryId: Int
-    ) : ViewModelProvider.NewInstanceFactory() {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            @Suppress("UNCHECKED_CAST")
-            return CommitLogViewModel(application, repositoryId) as T
+    companion object {
+        fun get(activity: FragmentActivity, repositoryId: Int) = getViewModel(activity) {
+            CommitLogViewModel(activity.application, repositoryId)
         }
     }
 }

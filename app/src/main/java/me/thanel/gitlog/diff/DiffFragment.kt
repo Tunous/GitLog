@@ -1,14 +1,16 @@
-package me.thanel.gitlog.commit
+package me.thanel.gitlog.diff
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import kotlinx.android.synthetic.main.fragment_commit_diff.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
+import me.thanel.gitlog.commit.CommitViewModel
+import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
+import org.eclipse.jgit.diff.DiffEntry
 
-class DiffFragment : BaseFragment() {
+class DiffFragment : BaseFragment<CommitViewModel>() {
 
     private val commitSha by stringArg(ARG_COMMIT_SHA)
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
@@ -26,28 +28,32 @@ class DiffFragment : BaseFragment() {
             displayZoomControls = false
             setSupportZoom(true)
         }
+    }
 
-        val viewModel = CommitViewModel.get(activity, repositoryId, commitSha)
+    override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
-        viewModel.diffEntries.observe(this, Observer { diffEntries ->
-            if (diffEntries == null) {
-                // TODO: Loading...
-            } else {
-                val builder = StringBuilder()
-                for (diffEntry in diffEntries) {
-                    val diffText = viewModel.formatDiffEntry(diffEntry).replace("\n", "<br/>")
+    override fun observeViewModel(viewModel: CommitViewModel) {
+        viewModel.diffEntries.observe(this, this::displayDiff)
+    }
 
-                    builder.apply {
-                        append("<div>")
-                        append("<h1>").append(diffEntry.newPath).append("</h1>")
-                        append("<p><pre><code>").append(diffText).append("</code></pre></p>")
-                        append("</div>")
-                    }
-                }
-                val diffText = builder.toString()
-                diffWebView.loadData("<body>$diffText</body>", "text/html", "UTF-8")
+    private fun displayDiff(diffEntries: List<DiffEntry>?) {
+        if (diffEntries == null) {
+            // TODO: Loading...
+            return
+        }
+        val builder = StringBuilder()
+        for (diffEntry in diffEntries) {
+            val diffText = viewModel.formatDiffEntry(diffEntry).replace("\n", "<br/>")
+
+            builder.apply {
+                append("<div>")
+                append("<h1>").append(diffEntry.newPath).append("</h1>")
+                append("<p><pre><code>").append(diffText).append("</code></pre></p>")
+                append("</div>")
             }
-        })
+        }
+        val diffText = builder.toString()
+        diffWebView.loadData("<body>$diffText</body>", "text/html", "UTF-8")
     }
 
     companion object {

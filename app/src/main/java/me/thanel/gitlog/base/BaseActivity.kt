@@ -52,5 +52,4 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     protected fun stringExtra(name: String) = lazy {
         intent.getStringExtra(name)
     }
-
 }
