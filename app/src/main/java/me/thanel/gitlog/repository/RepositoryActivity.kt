@@ -3,14 +3,21 @@ package me.thanel.gitlog.repository
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.Menu
 import android.view.MenuItem
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
+import me.thanel.gitlog.ActivityResults
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.db.RepositoryViewModel
+import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.log.CommitLogFragment
 import me.thanel.gitlog.utils.createIntent
+import me.thanel.gitlog.utils.replaceTag
 import java.io.File
 
 class RepositoryActivity : BaseFragmentActivity() {
@@ -19,6 +26,9 @@ class RepositoryActivity : BaseFragmentActivity() {
 
     private lateinit var repositoryFile: File
     private lateinit var viewModel: RepositoryViewModel
+
+    private var repository: Repository? = null
+    private var removeRepositoryItem: MenuItem? = null
 
     override val title: String?
         get() = "Loading..."
@@ -33,6 +43,8 @@ class RepositoryActivity : BaseFragmentActivity() {
             if (it != null) {
                 repositoryFile = File(filesDir, "repos/${it.name}")
                 supportActionBar!!.title = it.name
+                repository = it
+                removeRepositoryItem?.isVisible = true
             }
         })
     }
@@ -41,6 +53,10 @@ class RepositoryActivity : BaseFragmentActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.repository, menu)
+        removeRepositoryItem = menu.findItem(R.id.remove)
+        if (repository != null) {
+            removeRepositoryItem?.isVisible = true
+        }
         return true
     }
 
@@ -55,28 +71,27 @@ class RepositoryActivity : BaseFragmentActivity() {
     }
 
     private fun promptRemoveRepository() {
-        TODO()
-//        val message = getString(R.string.remove_repository_confirm_message)
-//                .replaceTag("repository", repository.name, makeBold = true)
-//
-//        AlertDialog.Builder(this)
-//                .setTitle(R.string.remove_repository_dialog_title)
-//                .setMessage(message)
-//                .setPositiveButton(R.string.action_remove) { _, _ ->
-//                    removeRepository()
-//                }
-//                .setNegativeButton(R.string.action_cancel, null)
-//                .show()
+        val message = getString(R.string.remove_repository_confirm_message)
+                .replaceTag("repository", repository!!.name, makeBold = true)
+
+        AlertDialog.Builder(this)
+                .setTitle(R.string.remove_repository_dialog_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.remove) { _, _ ->
+                    removeRepository()
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
     }
 
     private fun removeRepository() {
-//        launch(CommonPool) {
-//            viewModel.removeRepository(repository)
-//            setResult(ActivityResults.RESULT_REPOSITORY_REMOVED, Intent().apply {
-//                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-//            })
-//            finish()
-//        }
+        launch(CommonPool) {
+            viewModel.removeRepository(repository!!)
+            setResult(ActivityResults.RESULT_REPOSITORY_REMOVED, Intent().apply {
+                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
+            })
+            finish()
+        }
     }
 
     companion object {
