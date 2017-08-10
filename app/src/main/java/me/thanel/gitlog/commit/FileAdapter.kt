@@ -1,7 +1,6 @@
 package me.thanel.gitlog.commit
 
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import kotlinx.android.synthetic.main.item_file.view.*
@@ -23,14 +22,27 @@ class FileAdapter : ItemAdapter<FileEntry, FileAdapter.ViewHolder>() {
         override fun bind(item: FileEntry) {
             super.bind(item)
             val diffEntry = item.diffEntry
-            fileNameCheckBox.text = "${diffEntry.oldPath} -> ${diffEntry.newPath}"
             fileNameCheckBox.isChecked = item.isChecked
 
-            fileNameCheckBox.setOnClickListener {
-                val isChecked = fileNameCheckBox.isChecked
-                Log.d("CommitFragment", "Checked changed $isChecked")
-                item.isChecked = isChecked
+            fileNameCheckBox.text = when (diffEntry.changeType) {
+                DiffEntry.ChangeType.ADD -> diffEntry.newPath
+                DiffEntry.ChangeType.RENAME,
+                DiffEntry.ChangeType.COPY -> "${diffEntry.oldPath} -> ${diffEntry.newPath}"
+                else -> diffEntry.oldPath
             }
+
+            fileNameCheckBox.setOnClickListener {
+                item.isChecked = fileNameCheckBox.isChecked
+            }
+
+            val color = when (diffEntry.changeType) {
+                DiffEntry.ChangeType.ADD -> Color.GREEN
+                DiffEntry.ChangeType.DELETE -> Color.RED
+                DiffEntry.ChangeType.RENAME,
+                DiffEntry.ChangeType.COPY -> Color.BLUE
+                else -> Color.BLACK
+            }
+            fileNameCheckBox.setTextColor(color)
         }
     }
 
