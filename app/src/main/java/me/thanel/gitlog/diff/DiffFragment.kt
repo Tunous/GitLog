@@ -14,7 +14,7 @@ class DiffFragment : BaseFragment<CommitViewModel>() {
 
     private val commitSha: String by stringArg(ARG_COMMIT_SHA)
     private val repositoryId: Int by intArg(ARG_REPOSITORY_ID)
-    private val diffFilePath: String? by stringArg(ARG_DIFF_FILE_PATH)
+    private val diffFilePath: Array<String>? by stringArrayArg(ARG_DIFF_FILE_PATH)
 
     override val layoutResId: Int
         get() = R.layout.fragment_commit_diff
@@ -45,7 +45,7 @@ class DiffFragment : BaseFragment<CommitViewModel>() {
 
         val builder = StringBuilder()
         val entries = if (diffFilePath == null) diffEntries
-        else diffEntries.filter { it.oldPath == diffFilePath }
+        else diffEntries.filter { diffFilePath!!.contains(it.oldPath) }
 
         for (diffEntry in entries) {
             val diffText = viewModel.formatDiffEntry(diffEntry).replace("\n", "<br/>")
@@ -66,11 +66,11 @@ class DiffFragment : BaseFragment<CommitViewModel>() {
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
         private const val ARG_DIFF_FILE_PATH = "arg.diff_file_path"
 
-        fun newInstance(commitSha: String, repositoryId: Int, diffFilePath: String?)
+        fun newInstance(commitSha: String, repositoryId: Int, diffFilePath: Array<String>?)
                 = DiffFragment().withArguments {
             putString(ARG_COMMIT_SHA, commitSha)
             putInt(ARG_REPOSITORY_ID, repositoryId)
-            putString(ARG_DIFF_FILE_PATH, diffFilePath)
+            putStringArray(ARG_DIFF_FILE_PATH, diffFilePath)
         }
     }
 

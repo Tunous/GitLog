@@ -6,5 +6,5 @@
 
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
-    <string name="view_whole_diff">View whole diff</string>
+    <string name="view_diff">View diff</string>
 </resources>

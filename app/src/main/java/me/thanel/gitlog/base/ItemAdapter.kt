@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import me.thanel.gitlog.utils.inflate
 
-abstract class ItemAdapter<in E, VH : ItemAdapter.ViewHolder<E>>(
+abstract class ItemAdapter<E, VH : ItemAdapter.ViewHolder<E>>(
         private val onItemClickListener: ((E) -> Unit)? = null
 ) : RecyclerView.Adapter<VH>() {
-    private val items = mutableListOf<E>()
+    protected val items = mutableListOf<E>()
 
     override fun getItemCount() = items.size
 

@@ -27,9 +27,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import java.util.concurrent.TimeUnit
 
 /**
  * Inflate a new view hierarchy from the specified xml resource.

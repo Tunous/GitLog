@@ -52,4 +52,8 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     protected fun stringExtra(name: String) = lazy {
         intent.getStringExtra(name)
     }
+
+    protected fun stringArrayExtra(name: String) = lazy {
+        intent.getStringArrayExtra(name)
+    }
 }

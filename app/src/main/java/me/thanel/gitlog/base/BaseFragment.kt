@@ -42,4 +42,8 @@ abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
     protected fun stringArg(name: String) = lazy {
         arguments.getString(name)
     }
+
+    protected fun stringArrayArg(name: String) = lazy {
+        arguments.getStringArray(name)
+    }
 }
