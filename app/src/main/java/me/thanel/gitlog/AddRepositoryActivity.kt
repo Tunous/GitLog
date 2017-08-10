@@ -17,7 +17,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.run
-import me.thanel.gitlog.db.Repository
+import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.repositorylist.RepositoryListManager

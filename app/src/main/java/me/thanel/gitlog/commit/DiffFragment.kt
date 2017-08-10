@@ -2,19 +2,16 @@ package me.thanel.gitlog.commit
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import kotlinx.android.synthetic.main.fragment_commit_diff.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
-import me.thanel.gitlog.db.Repository
-import me.thanel.gitlog.model.Commit
 import me.thanel.gitlog.utils.withArguments
 
 class DiffFragment : BaseFragment() {
 
-    private val commit by parcelableArg<Commit>(ARG_COMMIT)
-    private val repository by parcelableArg<Repository>(ARG_REPOSITORY)
+    private val commitSha by stringArg(ARG_COMMIT_SHA)
+    private val repositoryId by intArg(ARG_REPOSITORY_ID)
 
     override val layoutResId: Int
         get() = R.layout.fragment_commit_diff
@@ -30,11 +27,9 @@ class DiffFragment : BaseFragment() {
             setSupportZoom(true)
         }
 
-        val factory = DiffViewModel.Factory(repository.path, commit.sha)
-        val viewModel = ViewModelProviders.of(activity, factory)
-                .get(DiffViewModel::class.java)
+        val viewModel = CommitViewModel.get(activity, repositoryId, commitSha)
 
-        viewModel.getDiffEntries().observe(this, Observer { diffEntries ->
+        viewModel.diffEntries.observe(this, Observer { diffEntries ->
             if (diffEntries == null) {
                 // TODO: Loading...
             } else {
@@ -56,12 +51,12 @@ class DiffFragment : BaseFragment() {
     }
 
     companion object {
-        private const val ARG_COMMIT = "arg.commit"
-        private const val ARG_REPOSITORY = "arg.repository"
+        private const val ARG_COMMIT_SHA = "arg.commit_sha"
+        private const val ARG_REPOSITORY_ID = "arg.repository_id"
 
-        fun newInstance(commit: Commit, repository: Repository) = DiffFragment().withArguments {
-            putParcelable(ARG_COMMIT, commit)
-            putParcelable(ARG_REPOSITORY, repository)
+        fun newInstance(commitSha: String, repositoryId: Int) = DiffFragment().withArguments {
+            putString(ARG_COMMIT_SHA, commitSha)
+            putInt(ARG_REPOSITORY_ID, repositoryId)
         }
     }
 

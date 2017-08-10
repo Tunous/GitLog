@@ -5,12 +5,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 import me.thanel.gitlog.AddRepositoryActivity
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
-import me.thanel.gitlog.db.Repository
+import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.repository.RepositoryActivity
 
@@ -28,16 +27,15 @@ class RepositoryListFragment : BaseFragment() {
         repositoryRecyclerView.layoutManager = LinearLayoutManager(context)
 
         addRepositoryButton.setOnClickListener {
-            val intent = AddRepositoryActivity.newIntent(context)
-            startActivityForResult(intent, REQUEST_CLONE_REPOSITORY)
+            showAddRepositoryScreen()
         }
 
         val viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
         viewModel.listRepositories().observe(this, Observer { repositories ->
-            Log.d("Repositories", "Received: $repositories")
-            adapter.clear()
             if (repositories != null) {
-                adapter.addAll(repositories)
+                adapter.replaceAll(repositories)
+            } else {
+                adapter.clear()
             }
         })
     }
@@ -59,8 +57,13 @@ class RepositoryListFragment : BaseFragment() {
         }
     }
 
+    private fun showAddRepositoryScreen() {
+        val intent = AddRepositoryActivity.newIntent(context)
+        startActivityForResult(intent, REQUEST_CLONE_REPOSITORY)
+    }
+
     private fun openRepository(repository: Repository) {
-        val intent = RepositoryActivity.newIntent(context, repository)
+        val intent = RepositoryActivity.newIntent(context, repository.id)
         startActivityForResult(intent, REQUEST_OPEN_REPOSITORY)
     }
 

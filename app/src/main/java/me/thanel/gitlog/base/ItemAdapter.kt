@@ -58,6 +58,12 @@ abstract class ItemAdapter<in E, VH : ItemAdapter.ViewHolder<E>>(
         notifyItemRangeRemoved(0, itemCount)
     }
 
+    fun replaceAll(newItems: Iterable<E>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
+
     abstract class ViewHolder<in E>(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @CallSuper
         open fun bind(item: E) {

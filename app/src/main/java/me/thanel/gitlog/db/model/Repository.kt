@@ -1,9 +1,11 @@
-package me.thanel.gitlog.db
+package me.thanel.gitlog.db.model
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
+import org.eclipse.jgit.api.Git
+import java.io.File
 
 @Entity(tableName = "repositories")
 data class Repository(
@@ -12,6 +14,10 @@ data class Repository(
         val url: String,
         val path: String
 ) : Parcelable {
+
+    val file: File get() = File(path)
+    val git: Git get() = Git.open(file)
+
     constructor(parcel: Parcel) : this(
             id = parcel.readInt(),
             name = parcel.readString(),
@@ -25,9 +31,7 @@ data class Repository(
         parcel.writeString(path)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<Repository> {
         override fun createFromParcel(parcel: Parcel): Repository {

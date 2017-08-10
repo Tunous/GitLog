@@ -5,7 +5,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.item_repository.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
-import me.thanel.gitlog.db.Repository
+import me.thanel.gitlog.db.model.Repository
 
 class RepositoryListAdapter(
         onItemClickListener: (Repository) -> Unit

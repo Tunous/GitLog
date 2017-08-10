@@ -1,43 +1,49 @@
 package me.thanel.gitlog.commit
 
+import android.arch.lifecycle.Observer
 import android.content.Context
+import android.os.Bundle
 import me.thanel.gitlog.base.BasePagerActivity
-import me.thanel.gitlog.db.Repository
-import me.thanel.gitlog.model.Commit
-import me.thanel.gitlog.model.shortSha
 import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.utils.createIntent
 
 class CommitActivity : BasePagerActivity() {
 
-    private val commit by parcelableExtra<Commit>(EXTRA_COMMIT)
-    private val repository by parcelableExtra<Repository>(EXTRA_REPOSITORY)
+    private val commitSha by stringExtra(EXTRA_COMMIT_SHA)
+    private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
 
     override val pageTitles: Array<CharSequence>
         get() = arrayOf("Details", "Diff")
 
     override val title: String?
-        get() = "Commit ${commit.shortSha}"
+        get() = "Commit ${commitSha.substring(0, 7)}"
 
-    override val subtitle: String?
-        get() = repository.name
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val viewModel = CommitViewModel.get(this, repositoryId, commitSha)
+
+        viewModel.repository.observe(this, Observer {
+            subtitle = it?.name
+        })
+    }
 
     override fun createFragment(position: Int) = when (position) {
-        0 -> CommitFragment.newInstance(commit, repository)
-        1 -> DiffFragment.newInstance(commit, repository)
+        0 -> CommitFragment.newInstance(commitSha, repositoryId)
+        1 -> DiffFragment.newInstance(commitSha, repositoryId)
         else -> throw IllegalArgumentException("Incorrect fragment position: $position.")
     }
 
-    override fun getSupportParentActivityIntent() = RepositoryActivity.newIntent(this, repository)
+    override fun getSupportParentActivityIntent() = RepositoryActivity.newIntent(this, repositoryId)
 
     companion object {
-        private const val EXTRA_COMMIT = "extra.commit"
-        private const val EXTRA_REPOSITORY = "extra.repository"
+        private const val EXTRA_COMMIT_SHA = "extra.commit_sha"
+        private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
 
-        fun newIntent(context: Context, commit: Commit, repository: Repository) =
+        fun newIntent(context: Context, commitSha: String, repositoryId: Int) =
                 context.createIntent<CommitActivity> {
-                    putExtra(EXTRA_COMMIT, commit)
-                    putExtra(EXTRA_REPOSITORY, repository)
+                    putExtra(EXTRA_COMMIT_SHA, commitSha)
+                    putExtra(EXTRA_REPOSITORY_ID, repositoryId)
                 }
     }
 }

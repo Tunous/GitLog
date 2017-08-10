@@ -22,4 +22,12 @@ abstract class BaseFragment : LifecycleFragment() {
         arguments.getParcelable<T>(name)
     }
 
+    protected fun intArg(name: String) = lazy {
+        arguments.getInt(name)
+    }
+
+    protected fun stringArg(name: String) = lazy {
+        arguments.getString(name)
+    }
+
 }
