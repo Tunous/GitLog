@@ -24,7 +24,7 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
         get() = R.layout.fragment_commit
 
     private val adapter = FileAdapter {
-        // TODO: Open file diff
+        showDiff(it.oldPath)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -33,7 +33,7 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
         fileRecyclerView.adapter = adapter
         fileRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewWholeDiffButton.setOnClickListener { showWholeDiff() }
+        viewWholeDiffButton.setOnClickListener { showDiff() }
     }
 
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
@@ -71,8 +71,8 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
         }
     }
 
-    private fun showWholeDiff() {
-        startActivity(DiffActivity.newIntent(context, commitSha, repositoryId))
+    private fun showDiff(diffFilePath: String? = null) {
+        startActivity(DiffActivity.newIntent(context, commitSha, repositoryId, diffFilePath))
     }
 
     companion object {

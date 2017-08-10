@@ -20,7 +20,7 @@ class FileAdapter(
 
         override fun bind(item: DiffEntry) {
             super.bind(item)
-            fileNameView.text = item.newPath
+            fileNameView.text = "${item.oldPath} -> ${item.newPath}"
         }
     }
 }

@@ -9,8 +9,9 @@ import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.utils.createIntent
 
 class DiffActivity : BaseFragmentActivity() {
-    private val commitSha by stringExtra(EXTRA_COMMIT_SHA)
-    private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
+    private val commitSha: String by stringExtra(EXTRA_COMMIT_SHA)
+    private val repositoryId: Int by intExtra(EXTRA_REPOSITORY_ID)
+    private val diffFilePath: String? by stringExtra(EXTRA_DIFF_FILE_PATH)
 
     override val title: String?
         get() = "Commit ${commitSha.substring(0, 7)} - diff"
@@ -25,18 +26,20 @@ class DiffActivity : BaseFragmentActivity() {
         })
     }
 
-    override fun createFragment() = DiffFragment.newInstance(commitSha, repositoryId)
+    override fun createFragment() = DiffFragment.newInstance(commitSha, repositoryId, diffFilePath)
 
     override fun getSupportParentActivityIntent() = RepositoryActivity.newIntent(this, repositoryId)
 
     companion object {
         private const val EXTRA_COMMIT_SHA = "extra.commit_sha"
         private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
+        private const val EXTRA_DIFF_FILE_PATH = "extra.diff_file_path"
 
-        fun newIntent(context: Context, commitSha: String, repositoryId: Int) =
-                context.createIntent<DiffActivity> {
-                    putExtra(EXTRA_COMMIT_SHA, commitSha)
-                    putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-                }
+        fun newIntent(context: Context, commitSha: String, repositoryId: Int,
+                diffFilePath: String?) = context.createIntent<DiffActivity> {
+            putExtra(EXTRA_COMMIT_SHA, commitSha)
+            putExtra(EXTRA_REPOSITORY_ID, repositoryId)
+            putExtra(EXTRA_DIFF_FILE_PATH, diffFilePath)
+        }
     }
 }
