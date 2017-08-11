@@ -13,7 +13,7 @@ import java.io.File
 
 class FileListFragment : BaseFragment<FileListViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
-    private val adapter = FileListAdapter(this::displayContents)
+    private val adapter = FileListAdapter(this::moveDown)
     private var currentFile: File? = null
     private var rootFile: File? = null
 
@@ -37,7 +37,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
 
     override fun onBackPressed(): Boolean {
         if (currentFile == null || currentFile == rootFile) return false
-        displayContents(currentFile!!.parentFile)
+        moveUp()
         return true
     }
 
@@ -46,15 +46,27 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
             // TODO: Loading
             return
         }
-
         displayContents(it.file)
     }
 
-    private fun displayContents(file: File) {
+    private fun moveDown(file: File) {
         if (!file.isDirectory) {
             Toast.makeText(context, "This file is not a directory", Toast.LENGTH_SHORT).show()
             return
         }
+        val scrollState = fileListRecycler.layoutManager.onSaveInstanceState()
+        viewModel.pushScrollState(scrollState)
+        displayContents(file)
+    }
+
+    private fun moveUp() {
+        displayContents(currentFile!!.parentFile)
+        viewModel.popScrollState()?.let {
+            fileListRecycler.layoutManager.onRestoreInstanceState(it)
+        }
+    }
+
+    private fun displayContents(file: File) {
         adapter.displayContents(file)
         currentFile = file
     }
