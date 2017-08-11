@@ -24,7 +24,6 @@ import org.eclipse.jgit.revwalk.RevCommit
 import java.io.File
 
 class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
-
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
 
     private val adapter = CommitLogAdapter(this::openCommit)

@@ -2,8 +2,14 @@ package me.thanel.gitlog.repositorylist
 
 import android.view.Menu
 import android.view.MenuItem
-import me.thanel.gitlog.base.BaseFragmentActivity
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
+import me.thanel.gitlog.GitLogApplication
 import me.thanel.gitlog.R
+import me.thanel.gitlog.base.BaseFragmentActivity
+import me.thanel.gitlog.db.RepositoryDao
+import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.utils.observe
 import java.io.File
 
 class RepositoryListActivity : BaseFragmentActivity() {
@@ -28,6 +34,20 @@ class RepositoryListActivity : BaseFragmentActivity() {
     private fun removeAllRepositories() {
         val root = File(filesDir, "repos")
         root.deleteRecursively()
+
+        val dao = (application as GitLogApplication).database.repositoryDao()
+        dao.listRepositories().observe(this) {
+            if (it != null) {
+                removeRepos(it, dao)
+            }
+        }
     }
 
+    private fun removeRepos(it: List<Repository>, dao: RepositoryDao) {
+        launch(CommonPool) {
+            for (repo in it) {
+                dao.removeRepository(repo)
+            }
+        }
+    }
 }

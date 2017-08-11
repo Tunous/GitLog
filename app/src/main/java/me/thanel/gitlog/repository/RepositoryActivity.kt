@@ -12,7 +12,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.ActivityResults
 import me.thanel.gitlog.R
-import me.thanel.gitlog.base.BaseFragmentActivity
+import me.thanel.gitlog.base.BasePagerActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.log.CommitLogFragment
@@ -20,8 +20,7 @@ import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.replaceTag
 import java.io.File
 
-class RepositoryActivity : BaseFragmentActivity() {
-
+class RepositoryActivity : BasePagerActivity() {
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
 
     private lateinit var repositoryFile: File
@@ -32,6 +31,9 @@ class RepositoryActivity : BaseFragmentActivity() {
 
     override val title: String?
         get() = "Loading..."
+
+    override val pageTitles: Array<CharSequence>
+        get() = arrayOf("Log", "Files")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +51,11 @@ class RepositoryActivity : BaseFragmentActivity() {
         })
     }
 
-    override fun createFragment() = CommitLogFragment.newInstance(repositoryId)
+    override fun createFragment(position: Int) = when (position) {
+        0 -> CommitLogFragment.newInstance(repositoryId)
+        1 -> FileListFragment.newInstance(repositoryId)
+        else -> throw IllegalArgumentException("Invalid fragment position")
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.repository, menu)

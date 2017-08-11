@@ -17,8 +17,8 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.run
-import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.db.RepositoryViewModel
+import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.repositorylist.RepositoryListManager
 import me.thanel.gitlog.utils.createIntent
@@ -123,7 +123,7 @@ class AddRepositoryActivity : AppCompatActivity() {
                     Git.cloneRepository()
                             .setURI(repoUrl)
                             .setDirectory(rootFile)
-                            .setBare(true)
+                            .setBare(false)
                             .setCloneAllBranches(true)
                             .setRemote("origin")
                             .setProgressMonitor(object : EmptyProgressMonitor() {

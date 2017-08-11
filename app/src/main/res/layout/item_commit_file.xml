@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
-    android:clickable="true"
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/fileNameView"
+    <CheckBox
+        android:id="@+id/fileNameCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
+        tools:ignore="RtlSymmetry"
         tools:text="/path/to/file/name.txt" />
 
 </LinearLayout>
