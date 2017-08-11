@@ -12,7 +12,6 @@ import android.view.View
 import me.thanel.gitlog.R
 
 abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
-
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
     private val appBarLayout by lazy { findViewById(R.id.appBarLayout) as AppBarLayout }
 
