@@ -4,12 +4,12 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "me.thanel.gitlog"
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion 17
+        targetSdkVersion 26
         versionCode 1
         versionName '0.1.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,6 +24,12 @@ android {
     }
 }
 
+ext {
+    supportVersion = '26.0.1'
+    coroutinesVersion = '0.16'
+    archVersion = '1.0.0-alpha5'
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -33,17 +39,17 @@ dependencies {
     compile('org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r', {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.3.1'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.16'
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.16'
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    compile "android.arch.lifecycle:runtime:1.0.0-alpha5"
-    compile "android.arch.lifecycle:extensions:1.0.0-alpha5"
-    compile "android.arch.persistence.room:runtime:1.0.0-alpha5"
-    kapt "android.arch.lifecycle:compiler:1.0.0-alpha5"
-    kapt "android.arch.persistence.room:compiler:1.0.0-alpha5"
+    compile "android.arch.lifecycle:runtime:$archVersion"
+    compile "android.arch.lifecycle:extensions:$archVersion"
+    compile "android.arch.persistence.room:runtime:$archVersion"
+    kapt "android.arch.lifecycle:compiler:$archVersion"
+    kapt "android.arch.persistence.room:compiler:$archVersion"
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

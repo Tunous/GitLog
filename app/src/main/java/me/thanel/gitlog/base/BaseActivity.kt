@@ -13,7 +13,7 @@ import me.thanel.gitlog.R
 
 abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
-    private val appBarLayout by lazy { findViewById(R.id.appBarLayout) as AppBarLayout }
+    private val appBarLayout by lazy { findViewById<AppBarLayout>(R.id.appBarLayout) }
 
     protected open val title: String? = null
 
@@ -32,7 +32,7 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
         super.onCreate(savedInstanceState)
         setContentView(layoutResId)
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         title?.let { supportActionBar!!.title = it }
         subtitle?.let { supportActionBar!!.subtitle = it }
