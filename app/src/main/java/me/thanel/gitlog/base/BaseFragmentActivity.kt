@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment
 import me.thanel.gitlog.R
 
 abstract class BaseFragmentActivity : BaseActivity() {
-
     override val layoutResId: Int
         get() = R.layout.activity_base
 
@@ -19,6 +18,14 @@ abstract class BaseFragmentActivity : BaseActivity() {
         }
     }
 
-    protected abstract fun createFragment(): Fragment
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        val baseFragment = fragment as? BaseFragment<*>
+        val handled = baseFragment?.onBackPressed() ?: false
+        if (!handled) {
+            super.onBackPressed()
+        }
+    }
 
+    protected abstract fun createFragment(): Fragment
 }

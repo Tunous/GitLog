@@ -14,6 +14,8 @@ import java.io.File
 class FileListFragment : BaseFragment<FileListViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
     private val adapter = FileListAdapter(this::displayContents)
+    private var currentFile: File? = null
+    private var rootFile: File? = null
 
     override val layoutResId: Int
         get() = R.layout.fragment_file_list
@@ -28,8 +30,15 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
 
     override fun observeViewModel(viewModel: FileListViewModel) {
         viewModel.repository.observe(this) {
+            rootFile = it?.file
             displayFiles(it)
         }
+    }
+
+    override fun onBackPressed(): Boolean {
+        if (currentFile == null || currentFile == rootFile) return false
+        displayContents(currentFile!!.parentFile)
+        return true
     }
 
     private fun displayFiles(it: Repository?) {
@@ -47,6 +56,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
             return
         }
         adapter.displayContents(file)
+        currentFile = file
     }
 
     companion object {

@@ -31,6 +31,8 @@ abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
 
     abstract fun observeViewModel(viewModel: T)
 
+    open fun onBackPressed(): Boolean = false
+
     protected fun <T : Parcelable> parcelableArg(name: String) = lazy {
         arguments.getParcelable<T>(name)
     }
