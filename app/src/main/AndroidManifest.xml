@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".repositorylist.RepositoryListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,27 +19,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".repository.RepositoryActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".repositorylist.RepositoryListActivity" />
-
         <activity
+            android:name=".commit.CommitActivity"
             android:launchMode="singleTop"
-            android:name="me.thanel.gitlog.commit.CommitActivity"
             android:parentActivityName=".repository.RepositoryActivity" />
-
         <activity
-            android:launchMode="singleTop"
             android:name=".AddRepositoryActivity"
-            android:parentActivityName=".repositorylist.RepositoryListActivity" />
-
-        <activity
             android:launchMode="singleTop"
+            android:parentActivityName=".repositorylist.RepositoryListActivity" />
+        <activity
             android:name=".diff.DiffActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".commit.CommitActivity" />
-
+        <activity android:name=".file.FileActivity"></activity>
     </application>
 
 </manifest>

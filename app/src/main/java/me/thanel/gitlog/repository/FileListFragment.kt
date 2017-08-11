@@ -2,11 +2,11 @@ package me.thanel.gitlog.repository
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_file_list.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.file.FileActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import java.io.File
@@ -51,7 +51,8 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
 
     private fun moveDown(file: File) {
         if (!file.isDirectory) {
-            Toast.makeText(context, "This file is not a directory", Toast.LENGTH_SHORT).show()
+            val intent = FileActivity.newIntent(context, file.absolutePath)
+            startActivity(intent)
             return
         }
         val scrollState = fileListRecycler.layoutManager.onSaveInstanceState()
