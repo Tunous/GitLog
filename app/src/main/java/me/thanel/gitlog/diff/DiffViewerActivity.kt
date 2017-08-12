@@ -9,7 +9,7 @@ import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.observe
 import org.eclipse.jgit.lib.AbbreviatedObjectId
 
-class DiffActivity : BaseFragmentActivity() {
+class DiffViewerActivity : BaseFragmentActivity() {
     private val commitSha by stringExtra(EXTRA_COMMIT_SHA)
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
     private val diffId by serializableExtra<AbbreviatedObjectId>(EXTRA_DIFF_ID)
@@ -27,7 +27,7 @@ class DiffActivity : BaseFragmentActivity() {
         }
     }
 
-    override fun createFragment() = DiffFragment.newInstance(commitSha, repositoryId, diffId)
+    override fun createFragment() = DiffViewerFragment.newInstance(commitSha, repositoryId, diffId)
 
     override fun getSupportParentActivityIntent() =
             CommitActivity.newIntent(this, commitSha, repositoryId)
@@ -38,7 +38,7 @@ class DiffActivity : BaseFragmentActivity() {
         private const val EXTRA_DIFF_ID = "extra.diff_id"
 
         fun newIntent(context: Context, commitSha: String, repositoryId: Int,
-                diffId: AbbreviatedObjectId) = context.createIntent<DiffActivity> {
+                diffId: AbbreviatedObjectId) = context.createIntent<DiffViewerActivity> {
             putExtra(EXTRA_COMMIT_SHA, commitSha)
             putExtra(EXTRA_REPOSITORY_ID, repositoryId)
             putExtra(EXTRA_DIFF_ID, diffId)

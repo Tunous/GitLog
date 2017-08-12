@@ -30,7 +30,7 @@ abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
 
     abstract fun onCreateViewModel(): T
 
-    abstract fun observeViewModel(viewModel: T)
+    open fun observeViewModel(viewModel: T) {}
 
     open fun onBackPressed(): Boolean = false
 

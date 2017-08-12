@@ -32,10 +32,13 @@
             android:launchMode="singleTop"
             android:parentActivityName=".repositorylist.RepositoryListActivity" />
         <activity
-            android:name=".diff.DiffActivity"
+            android:name=".diff.DiffViewerActivity"
             android:launchMode="singleTop"
             android:parentActivityName=".commit.CommitActivity" />
-        <activity android:name=".file.FileActivity"></activity>
+        <activity
+            android:name=".file.FileViewerActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".commit.CommitActivity" />
     </application>
 
 </manifest>

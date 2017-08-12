@@ -6,7 +6,7 @@ import kotlinx.android.synthetic.main.fragment_file_list.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.file.FileActivity
+import me.thanel.gitlog.file.FileViewerActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import java.io.File
@@ -51,7 +51,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
 
     private fun moveDown(file: File) {
         if (!file.isDirectory) {
-            val intent = FileActivity.newIntent(context, file.absolutePath)
+            val intent = FileViewerActivity.newIntent(context, file.absolutePath)
             startActivity(intent)
             return
         }

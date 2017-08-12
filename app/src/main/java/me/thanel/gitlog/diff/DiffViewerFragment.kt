@@ -1,35 +1,16 @@
 package me.thanel.gitlog.diff
 
-import android.annotation.SuppressLint
-import android.os.Bundle
-import kotlinx.android.synthetic.main.fragment_commit_diff.*
-import me.thanel.gitlog.R
-import me.thanel.gitlog.base.BaseFragment
+import me.thanel.gitlog.base.BaseWebViewerFragment
 import me.thanel.gitlog.commit.CommitViewModel
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.lib.AbbreviatedObjectId
 
-class DiffFragment : BaseFragment<CommitViewModel>() {
+class DiffViewerFragment : BaseWebViewerFragment<CommitViewModel>() {
     private val commitSha by stringArg(ARG_COMMIT_SHA)
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
     private val diffId by serializableArg<AbbreviatedObjectId>(ARG_DIFF_ID)
-
-    override val layoutResId: Int
-        get() = R.layout.fragment_commit_diff
-
-    @SuppressLint("SetJavaScriptEnabled")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        diffWebView.settings.apply {
-            javaScriptEnabled = true
-            builtInZoomControls = true
-            displayZoomControls = false
-            setSupportZoom(true)
-        }
-    }
 
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
@@ -47,12 +28,13 @@ class DiffFragment : BaseFragment<CommitViewModel>() {
                 .split("\n")
                 .dropWhile { !it.startsWith("@@") }
                 .joinToString("<br/>")
-        val builder = StringBuilder().apply {
+        loadData(StringBuilder().apply {
+            append("<body>")
             append("<div>")
             append("<p><pre><code>").append(diffText).append("</code></pre></p>")
             append("</div>")
-        }
-        diffWebView.loadData("<body>$builder</body>", "text/html", "UTF-8")
+            append("</body>")
+        }.toString())
     }
 
     companion object {
@@ -61,7 +43,7 @@ class DiffFragment : BaseFragment<CommitViewModel>() {
         private const val ARG_DIFF_ID = "arg.diff_id"
 
         fun newInstance(commitSha: String, repositoryId: Int, diffId: AbbreviatedObjectId)
-                = DiffFragment().withArguments {
+                = DiffViewerFragment().withArguments {
             putString(ARG_COMMIT_SHA, commitSha)
             putInt(ARG_REPOSITORY_ID, repositoryId)
             putSerializable(ARG_DIFF_ID, diffId)
