@@ -14,14 +14,13 @@ class CommitActivity : BasePagerActivity() {
 
     private lateinit var headerView: CommitHeaderView
 
-    override val title: String?
-        get() = "Commit ${commitSha.substring(0, 7)}"
-
     override val pageTitles: Array<CharSequence>
         get() = arrayOf("Commit", "Changed Files")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        title = "Commit ${commitSha.substring(0, 7)}"
 
         headerView = CommitHeaderView(this)
         addViewAboveToolbar(headerView)

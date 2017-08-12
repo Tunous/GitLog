@@ -34,26 +34,21 @@ class DiffFragment : BaseFragment<CommitViewModel>() {
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
     override fun observeViewModel(viewModel: CommitViewModel) {
-        viewModel.diffEntries.observe(this, this::displayDiff)
+        viewModel.getDiffEntry(diffId).observe(this, this::displayDiff)
     }
 
-    private fun displayDiff(diffEntries: List<DiffEntry>?) {
-        if (diffEntries == null) {
-            // TODO: Loading...
-            return
-        }
-
-        val diffEntry = diffEntries.find { it.newId == diffId }
-        @Suppress("FoldInitializerAndIfToElvis")
+    private fun displayDiff(diffEntry: DiffEntry?) {
         if (diffEntry == null) {
-            // TODO: Error...
+            // TODO: Loading or error...
             return
         }
 
-        val diffText = viewModel.formatDiffEntry(diffEntry).replace("\n", "<br/>")
+        val diffText = viewModel.formatDiffEntry(diffEntry)
+                .split("\n")
+                .dropWhile { !it.startsWith("@@") }
+                .joinToString("<br/>")
         val builder = StringBuilder().apply {
             append("<div>")
-            append("<h1>").append(diffEntry.newPath).append("</h1>")
             append("<p><pre><code>").append(diffText).append("</code></pre></p>")
             append("</div>")
         }

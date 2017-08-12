@@ -10,6 +10,7 @@ import android.widget.TextView
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
 import me.thanel.gitlog.diff.DiffActivity
+import me.thanel.gitlog.utils.showNotImplementedToast
 import me.thanel.gitlog.view.DiffHunkView
 import org.eclipse.jgit.diff.DiffEntry
 
@@ -63,13 +64,15 @@ class DiffHunkViewHolder(
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
+        val diffEntry = itemView.tag as DiffEntry
         when (item.itemId) {
             R.id.view_full_screen -> {
-                val diffEntry = itemView.tag as DiffEntry
-                diffEntry.newId
                 val intent = DiffActivity.newIntent(context, viewModel.commitSha,
                         viewModel.repositoryId, diffEntry.newId)
                 context.startActivity(intent)
+            }
+            R.id.view_whole_file -> {
+                showNotImplementedToast(context)
             }
             else -> return false
         }

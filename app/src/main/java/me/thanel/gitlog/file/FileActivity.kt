@@ -1,14 +1,18 @@
 package me.thanel.gitlog.file
 
 import android.content.Context
+import android.os.Bundle
 import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.utils.createIntent
 
 class FileActivity : BaseFragmentActivity() {
     private val filePath: String by stringExtra(EXTRA_FILE_PATH)
 
-    override val title: String?
-        get() = filePath.split("/").last()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        title = filePath.split("/").last()
+
+    }
 
     override fun createFragment() = FileFragment.newInstance(filePath)
 

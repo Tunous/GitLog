@@ -1,12 +1,12 @@
 package me.thanel.gitlog.diff
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.commit.CommitViewModel
 import me.thanel.gitlog.utils.createIntent
+import me.thanel.gitlog.utils.observe
 import org.eclipse.jgit.lib.AbbreviatedObjectId
 
 class DiffActivity : BaseFragmentActivity() {
@@ -14,17 +14,17 @@ class DiffActivity : BaseFragmentActivity() {
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
     private val diffId by serializableExtra<AbbreviatedObjectId>(EXTRA_DIFF_ID)
 
-    override val title: String?
-        get() = "Commit ${commitSha.substring(0, 7)} - diff"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val viewModel = CommitViewModel.get(this, repositoryId, commitSha)
 
-        viewModel.repository.observe(this, Observer {
+        viewModel.repository.observe(this) {
             subtitle = it?.name
-        })
+        }
+        viewModel.getDiffEntry(diffId).observe(this) {
+            title = it?.newPath?.split("/")?.lastOrNull()
+        }
     }
 
     override fun createFragment() = DiffFragment.newInstance(commitSha, repositoryId, diffId)

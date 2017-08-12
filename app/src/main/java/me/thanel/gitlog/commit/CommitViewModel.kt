@@ -9,6 +9,7 @@ import me.thanel.gitlog.utils.getViewModel
 import me.thanel.gitlog.utils.mapBg
 import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.diff.DiffFormatter
+import org.eclipse.jgit.lib.AbbreviatedObjectId
 import org.eclipse.jgit.revwalk.RevCommit
 import java.io.ByteArrayOutputStream
 
@@ -25,17 +26,15 @@ class CommitViewModel(
     val diffEntries = repository.mapBg(this::loadDiffEntries)
     val commit = repository.mapBg(this::loadCommit)
 
-    override fun onCleared() {
-        super.onCleared()
-
-        diffFormatter.release()
-    }
-
     fun formatDiffEntry(diffEntry: DiffEntry): String {
         outputStream.reset()
         diffFormatter.format(diffEntry)
         diffFormatter.flush()
         return outputStream.toString("UTF-8")
+    }
+
+    fun getDiffEntry(newId: AbbreviatedObjectId) = diffEntries.mapBg { diffEntries ->
+        diffEntries.find { it.newId == newId }
     }
 
     private fun loadDiffEntries(repository: Repository): List<DiffEntry> {
@@ -56,6 +55,12 @@ class CommitViewModel(
                 .setMaxCount(1)
                 .call()
                 .first()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        diffFormatter.release()
     }
 
     companion object {

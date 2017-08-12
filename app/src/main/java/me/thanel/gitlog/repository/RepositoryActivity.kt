@@ -32,9 +32,6 @@ class RepositoryActivity : BasePagerActivity() {
     private var repository: Repository? = null
     private var removeRepositoryItem: MenuItem? = null
 
-    override val title: String?
-        get() = "Loading..."
-
     override val pageTitles: Array<CharSequence>
         get() = arrayOf("Log", "Files")
 
@@ -47,7 +44,7 @@ class RepositoryActivity : BasePagerActivity() {
         viewModel.getRepository(repositoryId).observe(this, Observer {
             if (it != null) {
                 repositoryFile = File(filesDir, "repos/${it.name}")
-                supportActionBar!!.title = it.name
+                title = it.name
                 repository = it
                 removeRepositoryItem?.isVisible = true
             }

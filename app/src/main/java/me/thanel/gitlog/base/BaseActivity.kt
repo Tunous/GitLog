@@ -16,9 +16,13 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
     private val appBarLayout by lazy { findViewById<AppBarLayout>(R.id.appBarLayout) }
 
-    protected open val title: String? = null
+    protected var title: String? = null
+        set(value) {
+            field = value
+            supportActionBar?.title = value
+        }
 
-    protected open var subtitle: String? = null
+    protected var subtitle: String? = null
         set(value) {
             field = value
             supportActionBar?.subtitle = value
@@ -35,8 +39,6 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        title?.let { supportActionBar!!.title = it }
-        subtitle?.let { supportActionBar!!.subtitle = it }
         if (canNavigateUp) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }

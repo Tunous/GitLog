@@ -11,7 +11,6 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.AttrRes
@@ -21,14 +20,12 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 
@@ -187,4 +184,9 @@ fun Context.resolveColor(@AttrRes attResId: Int): Int {
     val color = a.getColor(0, 0)
     a.recycle()
     return color
+}
+
+@Suppress("unused")
+fun showNotImplementedToast(context: Context) {
+    Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
 }

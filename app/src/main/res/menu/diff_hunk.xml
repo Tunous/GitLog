@@ -2,5 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/view_full_screen"
-        android:title="View in full-screen" />
+        android:title="@string/view_in_full_screen" />
+
+    <item
+        android:id="@+id/view_whole_file"
+        android:title="@string/view_whole_file" />
 </menu>
