@@ -1,31 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/fileNameView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:drawableLeft="@drawable/ic_arrow_drop_down"
+            android:drawablePadding="8dp"
             android:focusable="true"
+            android:gravity="center_vertical"
             android:padding="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/actionsMenu"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="ChangedFile.kt" />
 
         <me.thanel.gitlog.view.DiffHunkView
             android:id="@+id/diffHunkView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fileNameView"
+            tools:visibility="visible" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/actionsMenu"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:focusable="true"
+            app:layout_constraintBottom_toTopOf="@+id/diffHunkView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_more_vert" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

@@ -1,5 +1,6 @@
 package me.thanel.gitlog.base
 
+import android.content.Context
 import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView
@@ -65,10 +66,11 @@ abstract class ItemAdapter<E, VH : ItemAdapter.ViewHolder<E>>(
     }
 
     abstract class ViewHolder<in E>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        protected val context: Context get() = itemView.context
+
         @CallSuper
         open fun bind(item: E) {
             itemView.tag = item
         }
     }
-
 }

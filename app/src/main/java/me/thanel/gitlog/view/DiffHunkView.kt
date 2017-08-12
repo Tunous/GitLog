@@ -24,7 +24,6 @@ class DiffHunkView @JvmOverloads constructor(
 ) : HorizontalScrollView(context, attrs, defStyleAttr) {
     private val diffTextView = AppCompatTextView(context).apply {
         typeface = Typeface.MONOSPACE
-        setTextIsSelectable(true)
     }
 
     var displayLineNumbers: Boolean = true
