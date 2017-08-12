@@ -70,6 +70,11 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
     private fun displayContents(file: File) {
         adapter.displayContents(file)
         currentFile = file
+
+        val rootPath = rootFile!!.absolutePath
+        val path = file.absolutePath
+        val resultPath = path.removePrefix(rootPath)
+        pathBar.setPath(resultPath)
     }
 
     companion object {

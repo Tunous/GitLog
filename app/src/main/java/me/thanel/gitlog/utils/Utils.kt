@@ -14,6 +14,8 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.AttrRes
+import android.support.annotation.ColorInt
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
@@ -167,4 +169,12 @@ inline fun <reified T : ViewModel> getViewModel(activity: FragmentActivity,
     }
     val provider = ViewModelProviders.of(activity, factory)
     return provider.get(T::class.java)
+}
+
+@ColorInt
+fun Context.resolveColor(@AttrRes attResId: Int): Int {
+    val a = obtainStyledAttributes(intArrayOf(attResId))
+    val color = a.getColor(0, 0)
+    a.recycle()
+    return color
 }

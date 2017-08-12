@@ -11,7 +11,7 @@ import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.util.RelativeDateFormatter
 import java.util.*
 
-class CommitHeaderView(
+class CommitHeaderView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
