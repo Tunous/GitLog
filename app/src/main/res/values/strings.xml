@@ -1,11 +1,23 @@
 <resources>
     <string name="app_name">GitLog</string>
-
     <string name="remove_repository_dialog_title">Remove repository</string>
     <string name="remove_repository_confirm_message">Are you sure you want to remove [repository]? This operation cannot be undone.</string>
-
     <string name="remove">Remove</string>
     <string name="cancel">Cancel</string>
     <string name="view_diff">View diff</string>
     <string name="deselect_all">Deselect all</string>
+    <string name="diff_summary">Showing [changed_files] with [additions] and [deletions].</string>
+
+    <plurals name="changed_files">
+        <item quantity="one">1 changed file</item>
+        <item quantity="other">%1$d changed files</item>
+    </plurals>
+    <plurals name="additions">
+        <item quantity="one">1 addition</item>
+        <item quantity="other">%1$d additions</item>
+    </plurals>
+    <plurals name="deletions">
+        <item quantity="one">1 deletion</item>
+        <item quantity="other">%1$d deletions</item>
+    </plurals>
 </resources>

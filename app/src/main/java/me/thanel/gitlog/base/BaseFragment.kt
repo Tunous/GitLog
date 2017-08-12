@@ -8,6 +8,7 @@ import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import java.io.Serializable
 
 abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
     protected lateinit var viewModel: T
@@ -47,5 +48,10 @@ abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
 
     protected fun stringArrayArg(name: String) = lazy {
         arguments.getStringArray(name)
+    }
+
+    protected fun <T : Serializable> serializableArg(name: String) = lazy {
+        @Suppress("UNCHECKED_CAST")
+        arguments.getSerializable(name) as T
     }
 }

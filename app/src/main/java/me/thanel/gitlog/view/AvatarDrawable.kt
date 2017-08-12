@@ -1,6 +1,12 @@
 package me.thanel.gitlog.view
 
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.Rect
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.text.TextUtils
@@ -117,7 +123,6 @@ class AvatarDrawable(userName: String, identifier: Any?) : Drawable() {
             val userName: String,
             val identifier: Any?
     ) : Drawable.ConstantState() {
-
         override fun newDrawable() = AvatarDrawable(userName, identifier)
 
         override fun getChangingConfigurations() = 0

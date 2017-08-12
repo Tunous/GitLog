@@ -9,8 +9,11 @@ import me.thanel.gitlog.base.ItemAdapter
 import org.eclipse.jgit.diff.DiffEntry
 
 class FileAdapter : ItemAdapter<FileEntry, FileAdapter.ViewHolder>() {
-
     val checkedFiles get() = items.filter { it.isChecked }.map { it.diffEntry }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
 
     override fun getLayoutResId(viewType: Int) = R.layout.item_commit_file
 

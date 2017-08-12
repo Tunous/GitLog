@@ -7,11 +7,12 @@ import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.commit.CommitViewModel
 import me.thanel.gitlog.utils.createIntent
+import org.eclipse.jgit.lib.AbbreviatedObjectId
 
 class DiffActivity : BaseFragmentActivity() {
-    private val commitSha: String by stringExtra(EXTRA_COMMIT_SHA)
-    private val repositoryId: Int by intExtra(EXTRA_REPOSITORY_ID)
-    private val diffFilePath: Array<String>? by stringArrayExtra(EXTRA_DIFF_FILE_PATH)
+    private val commitSha by stringExtra(EXTRA_COMMIT_SHA)
+    private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
+    private val diffId by serializableExtra<AbbreviatedObjectId>(EXTRA_DIFF_ID)
 
     override val title: String?
         get() = "Commit ${commitSha.substring(0, 7)} - diff"
@@ -26,7 +27,7 @@ class DiffActivity : BaseFragmentActivity() {
         })
     }
 
-    override fun createFragment() = DiffFragment.newInstance(commitSha, repositoryId, diffFilePath)
+    override fun createFragment() = DiffFragment.newInstance(commitSha, repositoryId, diffId)
 
     override fun getSupportParentActivityIntent() =
             CommitActivity.newIntent(this, commitSha, repositoryId)
@@ -34,13 +35,13 @@ class DiffActivity : BaseFragmentActivity() {
     companion object {
         private const val EXTRA_COMMIT_SHA = "extra.commit_sha"
         private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
-        private const val EXTRA_DIFF_FILE_PATH = "extra.diff_file_path"
+        private const val EXTRA_DIFF_ID = "extra.diff_id"
 
         fun newIntent(context: Context, commitSha: String, repositoryId: Int,
-                diffFilePath: Array<String>?) = context.createIntent<DiffActivity> {
+                diffId: AbbreviatedObjectId) = context.createIntent<DiffActivity> {
             putExtra(EXTRA_COMMIT_SHA, commitSha)
             putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-            putExtra(EXTRA_DIFF_FILE_PATH, diffFilePath)
+            putExtra(EXTRA_DIFF_ID, diffId)
         }
     }
 }

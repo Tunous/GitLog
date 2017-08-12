@@ -5,7 +5,6 @@ import android.arch.persistence.room.Room
 import me.thanel.gitlog.db.Database
 
 class GitLogApplication : Application() {
-
     lateinit var database: Database
         private set
 
@@ -14,5 +13,4 @@ class GitLogApplication : Application() {
 
         database = Room.databaseBuilder(this, Database::class.java, "gitlog.db").build()
     }
-
 }

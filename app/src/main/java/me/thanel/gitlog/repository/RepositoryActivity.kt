@@ -4,8 +4,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.text.style.StyleSpan
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.coroutines.experimental.CommonPool
@@ -16,8 +18,9 @@ import me.thanel.gitlog.base.BasePagerActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.log.CommitLogFragment
+import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.createIntent
-import me.thanel.gitlog.utils.replaceTag
+import me.thanel.gitlog.utils.formatTags
 import java.io.File
 
 class RepositoryActivity : BasePagerActivity() {
@@ -78,7 +81,7 @@ class RepositoryActivity : BasePagerActivity() {
 
     private fun promptRemoveRepository() {
         val message = getString(R.string.remove_repository_confirm_message)
-                .replaceTag("repository", repository!!.name, makeBold = true)
+                .formatTags(StyleableTag("repository", repository!!.name, StyleSpan(Typeface.BOLD)))
 
         AlertDialog.Builder(this)
                 .setTitle(R.string.remove_repository_dialog_title)

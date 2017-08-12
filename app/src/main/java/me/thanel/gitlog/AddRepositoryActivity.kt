@@ -29,7 +29,6 @@ import org.eclipse.jgit.lib.EmptyProgressMonitor
 import java.io.File
 
 class AddRepositoryActivity : AppCompatActivity() {
-
     private lateinit var viewModel: RepositoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

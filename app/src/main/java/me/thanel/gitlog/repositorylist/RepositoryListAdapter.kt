@@ -10,6 +10,9 @@ import me.thanel.gitlog.db.model.Repository
 class RepositoryListAdapter(
         onItemClickListener: (Repository) -> Unit
 ) : ItemAdapter<Repository, RepositoryListAdapter.ViewHolder>(onItemClickListener) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
 
     override fun getLayoutResId(viewType: Int) = R.layout.item_repository
 

@@ -10,6 +10,10 @@ import java.io.File
 class FileListAdapter(
         onItemClickListener: (File) -> Unit
 ) : ItemAdapter<File, FileListAdapter.ViewHolder>(onItemClickListener) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
+
     override fun getLayoutResId(viewType: Int) = R.layout.item_file
 
     override fun createViewHolder(itemView: View, viewType: Int) = ViewHolder(itemView)

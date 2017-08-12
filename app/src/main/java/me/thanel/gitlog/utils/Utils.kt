@@ -23,6 +23,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
@@ -97,27 +98,36 @@ fun String.fromHtml(): Spanned {
     }
 }
 
-/**
- * Replace a tag inside of the string with the specified replacement string.
- * A tag means string enclosed in square brackets.
- *
- * @param tagName The name of a tag to replace.
- * @param replaceWith The text that will be placed where the replaced tag was located.
- * @param makeBold Whether the replaced text should be displayed in bold.
- */
-fun String.replaceTag(tagName: String, replaceWith: String, makeBold: Boolean = false): CharSequence {
-    val tag = "[$tagName]"
-    val startIndex = indexOf(tag)
-    val replacedString = replace(tag, replaceWith)
+class StyleableTag(name: String, val replacement: String, vararg spans: Any) {
+    val name = "[$name]"
+    val spans = spans
+}
 
-    if (makeBold) {
-        return SpannableString(replacedString).apply {
-            setSpan(StyleSpan(Typeface.BOLD), startIndex,
-                    startIndex + replaceWith.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+/**
+ * Format all [tags] inside of this string with the specified replacement strings and apply any
+ * provided spans on the replaced text.
+ */
+fun String.formatTags(vararg tags: StyleableTag): SpannableStringBuilder {
+    val builder = SpannableStringBuilder()
+    var pos = 0
+
+    for (tag in tags) {
+        val start = indexOf(tag.name, pos)
+        val end = start + tag.name.length
+        if (start >= 0 && end >= 0) {
+            builder.append(substring(pos, start))
+            builder.append(tag.replacement)
+
+            val spanEnd = builder.length
+            val spanStart = spanEnd - tag.replacement.length
+            for (span in tag.spans) {
+                builder.setSpan(span, spanStart, spanEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            pos = end
         }
     }
-
-    return replacedString
+    builder.append(substring(pos))
+    return builder
 }
 
 inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {

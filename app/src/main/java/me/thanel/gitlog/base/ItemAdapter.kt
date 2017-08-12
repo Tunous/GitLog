@@ -8,14 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import me.thanel.gitlog.utils.inflate
 
-abstract class ItemAdapter<E, VH : ItemAdapter.ViewHolder<E>>(
+abstract class ItemAdapter<E, VH : RecyclerView.ViewHolder>(
         private val onItemClickListener: ((E) -> Unit)? = null
 ) : RecyclerView.Adapter<VH>() {
     protected val items = mutableListOf<E>()
 
     override fun getItemCount() = items.size
-
-    override fun onBindViewHolder(holder: VH, position: Int) = holder.bind(items[position])
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val view = parent.inflate(getLayoutResId(viewType))

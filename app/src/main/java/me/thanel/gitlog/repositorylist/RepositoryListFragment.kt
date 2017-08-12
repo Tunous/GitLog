@@ -13,7 +13,6 @@ import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.utils.observe
 
 class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
-
     private val adapter = RepositoryListAdapter(this::openRepository)
 
     override val layoutResId: Int

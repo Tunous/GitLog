@@ -10,4 +10,7 @@
     <color name="diffLineAddBackground">#cdffd8</color>
     <color name="diffLineRemoveBackground">#ffdce0</color>
     <color name="diffLineMarkerBackground">#dbedff</color>
+
+    <color name="diffAddForeground">#2cbe4e</color>
+    <color name="diffRemoveForeground">#cb2431</color>
 </resources>

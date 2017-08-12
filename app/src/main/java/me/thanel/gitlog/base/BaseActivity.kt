@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import me.thanel.gitlog.R
+import java.io.Serializable
 
 abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
@@ -64,5 +65,10 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     protected fun stringArrayExtra(name: String) = lazy {
         intent.getStringArrayExtra(name)
+    }
+
+    protected fun <T : Serializable> serializableExtra(name: String) = lazy {
+        @Suppress("UNCHECKED_CAST")
+        intent.getSerializableExtra(name) as T
     }
 }

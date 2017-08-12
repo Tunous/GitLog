@@ -14,8 +14,8 @@ import java.io.ByteArrayOutputStream
 
 class CommitViewModel(
         application: Application,
-        repositoryId: Int,
-        private val commitSha: String
+        val repositoryId: Int,
+        val commitSha: String
 ) : ViewModel() {
     private val db = (application as GitLogApplication).database
     private val outputStream = ByteArrayOutputStream()

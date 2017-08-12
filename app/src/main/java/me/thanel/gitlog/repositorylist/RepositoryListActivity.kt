@@ -13,7 +13,6 @@ import me.thanel.gitlog.utils.observe
 import java.io.File
 
 class RepositoryListActivity : BaseFragmentActivity() {
-
     override val canNavigateUp = false
 
     override fun createFragment() = RepositoryListFragment()

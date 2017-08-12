@@ -13,6 +13,9 @@ import org.eclipse.jgit.revwalk.RevCommit
 class CommitLogAdapter(
         onItemClickListener: (RevCommit) -> Unit
 ) : ItemAdapter<RevCommit, CommitLogAdapter.ViewHolder>(onItemClickListener) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
 
     override fun getLayoutResId(viewType: Int) = R.layout.item_log
 
