@@ -26,6 +26,9 @@ class DiffHunkView @JvmOverloads constructor(
         typeface = Typeface.MONOSPACE
         setTextIsSelectable(true)
     }
+
+    var displayLineNumbers: Boolean = true
+
     init {
         addView(diffTextView, ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -35,12 +38,12 @@ class DiffHunkView @JvmOverloads constructor(
         isFillViewport = true
 
         if (isInEditMode) {
-            setDiff("+ Added Line\n  Regular line\n- Removed line")
+            setDiff("@@ -6,7 +6,7 @@\n+ Added Line\n  Regular line\n- Removed line")
         }
     }
 
     fun setDiff(diff: String) {
-        val lines = diff.trim().split("\n").drop(4)
+        val lines = diff.trim().split("\n").dropWhile { !it.startsWith("@@") }
         val builder = SpannableStringBuilder()
 
         val bgAdd = ContextCompat.getColor(context, R.color.diffAddBackground)
@@ -57,26 +60,28 @@ class DiffHunkView @JvmOverloads constructor(
         for ((index, line) in lines.withIndex()) {
             val spanStart = builder.length
 
-            if (line.startsWith("@@")) {
-                val regex = Regex("""^@@ -(\d+),\d+ \+(\d+),\d+ @@.*""")
-                val result = regex.find(line)
-                if (result != null) {
-                    fromLineNumber = result.groupValues[1].toInt() - 1
-                    toLineNumber = result.groupValues[2].toInt() - 1
+            if (displayLineNumbers) {
+                if (line.startsWith("@@")) {
+                    val regex = Regex("""^@@ -(\d+),\d+ \+(\d+),\d+ @@.*""")
+                    val result = regex.find(line)
+                    if (result != null) {
+                        fromLineNumber = result.groupValues[1].toInt() - 1
+                        toLineNumber = result.groupValues[2].toInt() - 1
 
-                    val maxLineNumber = Math.max(fromLineNumber, toLineNumber)
-                    numberLength = (maxLineNumber + lines.size).toString().length
+                        val maxLineNumber = Math.max(fromLineNumber, toLineNumber)
+                        numberLength = (maxLineNumber + lines.size).toString().length
+                    }
+                } else if (line.startsWith("+")) {
+                    toLineNumber += 1
+                } else if (line.startsWith("-")) {
+                    fromLineNumber += 1
+                } else {
+                    toLineNumber += 1
+                    fromLineNumber += 1
                 }
-            } else if (line.startsWith("+")) {
-                toLineNumber += 1
-            } else if (line.startsWith("-")) {
-                fromLineNumber += 1
-            } else {
-                toLineNumber += 1
-                fromLineNumber += 1
-            }
 
-            builder.appendLineNumbers(line, fromLineNumber, toLineNumber, numberLength)
+                builder.appendLineNumbers(line, fromLineNumber, toLineNumber, numberLength)
+            }
 
             val lineNumberLength = builder.length - spanStart
 
