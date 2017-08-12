@@ -7,4 +7,7 @@
     <color name="diffAddBackground">#e6ffed</color>
     <color name="diffRemoveBackground">#ffeef0</color>
     <color name="diffMarkerBackground">#f1f8ff</color>
+    <color name="diffLineAddBackground">#cdffd8</color>
+    <color name="diffLineRemoveBackground">#ffdce0</color>
+    <color name="diffLineMarkerBackground">#dbedff</color>
 </resources>

@@ -31,8 +31,7 @@ class DiffHunkView @JvmOverloads constructor(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ))
-    }
-    init {
+
         isFillViewport = true
 
         if (isInEditMode) {
@@ -47,10 +46,40 @@ class DiffHunkView @JvmOverloads constructor(
         val bgAdd = ContextCompat.getColor(context, R.color.diffAddBackground)
         val bgRemove = ContextCompat.getColor(context, R.color.diffRemoveBackground)
         val bgMarker = ContextCompat.getColor(context, R.color.diffMarkerBackground)
+        val bgLineAdd = ContextCompat.getColor(context, R.color.diffLineAddBackground)
+        val bgLineRemove = ContextCompat.getColor(context, R.color.diffLineRemoveBackground)
+        val bgLineMarker = ContextCompat.getColor(context, R.color.diffLineMarkerBackground)
         val bgRegular = Color.WHITE
 
+        var fromLineNumber = 0
+        var toLineNumber = 0
+        var numberLength = 1
         for ((index, line) in lines.withIndex()) {
             val spanStart = builder.length
+
+            if (line.startsWith("@@")) {
+                val regex = Regex("""^@@ -(\d+),\d+ \+(\d+),\d+ @@.*""")
+                val result = regex.find(line)
+                if (result != null) {
+                    fromLineNumber = result.groupValues[1].toInt() - 1
+                    toLineNumber = result.groupValues[2].toInt() - 1
+
+                    val maxLineNumber = Math.max(fromLineNumber, toLineNumber)
+                    numberLength = (maxLineNumber + lines.size).toString().length
+                }
+            } else if (line.startsWith("+")) {
+                toLineNumber += 1
+            } else if (line.startsWith("-")) {
+                fromLineNumber += 1
+            } else {
+                toLineNumber += 1
+                fromLineNumber += 1
+            }
+
+            builder.appendLineNumbers(line, fromLineNumber, toLineNumber, numberLength)
+
+            val lineNumberLength = builder.length - spanStart
+
             builder.append("  ").append(line).append("  ")
             if (index < lines.size - 1) {
                 builder.append("\n")
@@ -59,17 +88,55 @@ class DiffHunkView @JvmOverloads constructor(
             val bg = when {
                 line.startsWith("+") -> bgAdd
                 line.startsWith("-") -> bgRemove
-                line.startsWith("@@") && line.endsWith("@@") -> bgMarker
+                line.startsWith("@@") -> bgMarker
+                else -> bgRegular
+            }
+            val lineBg = when {
+                line.startsWith("+") -> bgLineAdd
+                line.startsWith("-") -> bgLineRemove
+                line.startsWith("@@") -> bgLineMarker
                 else -> bgRegular
             }
 
-            val span = DiffLineSpan(bg, bg, 32, index == 0, index == lines.size - 1, 0)
+            val span = DiffLineSpan(bg, lineBg, 32, index == 0, index == lines.size - 1, lineNumberLength)
             builder.setSpan(span, spanStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         val padding = context.resources.getDimensionPixelSize(R.dimen.diff_line_padding)
         val lineHeightSpan = DiffLineHeightSpan(padding)
         builder.setSpan(lineHeightSpan, 0, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         diffTextView.text = builder
+    }
+
+    private fun SpannableStringBuilder.appendLineNumbers(line: String, fromLineNumber: Int,
+            toLineNumber: Int, numberLength: Int) {
+        val isMarker = line.startsWith("@@")
+        val isAdded = line.startsWith("+")
+        val isRemoved = line.startsWith("-")
+        append("  ")
+        if (!isMarker && !isAdded) {
+            appendSingleNumber(fromLineNumber, numberLength)
+        } else {
+            for (i in 0 until numberLength) {
+                append(" ")
+            }
+        }
+        append("   ")
+        if (!isMarker && !isRemoved) {
+            appendSingleNumber(toLineNumber, numberLength)
+        } else {
+            for (i in 0 until numberLength) {
+                append(" ")
+            }
+        }
+        append(" ")
+    }
+
+    private fun SpannableStringBuilder.appendSingleNumber(number: Int, numberLength: Int) {
+        val numberText = number.toString()
+        for (i in numberText.length until numberLength) {
+            append(" ")
+        }
+        append(numberText)
     }
 
     private class DiffLineHeightSpan(private val padding: Int) : LineHeightSpan {
