@@ -23,12 +23,12 @@ class DiffFragment : BaseFragment<CommitViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        diffWebView.settings.apply {
-            javaScriptEnabled = true
-            builtInZoomControls = true
-            displayZoomControls = false
-            setSupportZoom(true)
-        }
+//        diffWebView.settings.apply {
+//            javaScriptEnabled = true
+//            builtInZoomControls = true
+//            displayZoomControls = false
+//            setSupportZoom(true)
+//        }
     }
 
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
@@ -43,22 +43,26 @@ class DiffFragment : BaseFragment<CommitViewModel>() {
             return
         }
 
-        val builder = StringBuilder()
-        val entries = if (diffFilePath == null) diffEntries
-        else diffEntries.filter { diffFilePath!!.contains(it.oldPath) }
+        val entry = diffEntries.first()
+        val text = viewModel.formatDiffEntry(entry)
+        diffHunkView.setDiff(text)
 
-        for (diffEntry in entries) {
-            val diffText = viewModel.formatDiffEntry(diffEntry).replace("\n", "<br/>")
-
-            builder.apply {
-                append("<div>")
-                append("<h1>").append(diffEntry.newPath).append("</h1>")
-                append("<p><pre><code>").append(diffText).append("</code></pre></p>")
-                append("</div>")
-            }
-        }
-        val diffText = builder.toString()
-        diffWebView.loadData("<body>$diffText</body>", "text/html", "UTF-8")
+//        val builder = StringBuilder()
+//        val entries = if (diffFilePath == null) diffEntries
+//        else diffEntries.filter { diffFilePath!!.contains(it.oldPath) }
+//
+//        for (diffEntry in entries) {
+//            val diffText = viewModel.formatDiffEntry(diffEntry).replace("\n", "<br/>")
+//
+//            builder.apply {
+//                append("<div>")
+//                append("<h1>").append(diffEntry.newPath).append("</h1>")
+//                append("<p><pre><code>").append(diffText).append("</code></pre></p>")
+//                append("</div>")
+//            }
+//        }
+//        val diffText = builder.toString()
+//        diffWebView.loadData("<body>$diffText</body>", "text/html", "UTF-8")
     }
 
     companion object {

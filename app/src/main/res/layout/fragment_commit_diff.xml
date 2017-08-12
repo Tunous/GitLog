@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/diffWebView"
+<me.thanel.gitlog.view.DiffHunkView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/diffHunkView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="wrap_content" />
+<!--<WebView xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:id="@+id/diffWebView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->

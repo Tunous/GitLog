@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_inset">72dp</dimen>
+    <dimen name="diff_line_padding">8dp</dimen>
 </resources>
