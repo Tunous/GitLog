@@ -23,48 +23,43 @@ class DiffHunkViewHolder(
     private val fileNameView = itemView.findViewById<TextView>(R.id.fileNameView)
     private val diffHunkView = itemView.findViewById<DiffHunkView>(R.id.diffHunkView)
     private val actionsMenuButton = itemView.findViewById<ImageView>(R.id.actionsMenu)
-    private val actionsMenu = PopupMenu(context, actionsMenuButton,
-            Gravity.END or Gravity.TOP).apply {
-        inflate(R.menu.diff_hunk)
-        setOnMenuItemClickListener(this@DiffHunkViewHolder)
-    }
+    private val actionsMenu = PopupMenu(context, actionsMenuButton, Gravity.END or Gravity.TOP)
 
     init {
-        fileNameView.setOnClickListener {
-            diffHunkView.visibility = if (diffHunkView.visibility == View.VISIBLE) View.GONE
-            else View.VISIBLE
-            val isVisible = diffHunkView.visibility == View.VISIBLE
-            val arrowResId = if (isVisible) R.drawable.ic_arrow_drop_up
-            else R.drawable.ic_arrow_drop_down
-            fileNameView.setCompoundDrawablesWithIntrinsicBounds(arrowResId, 0, 0, 0)
-        }
-
+        actionsMenu.inflate(R.menu.diff_hunk)
+        actionsMenu.setOnMenuItemClickListener(this)
+        fileNameView.setOnClickListener(this)
         fileNameView.setOnLongClickListener(this)
-        actionsMenuButton.setOnLongClickListener(this)
         actionsMenuButton.setOnClickListener(this)
+        actionsMenuButton.setOnLongClickListener(this)
     }
 
     override fun bind(item: DiffEntry) {
         super.bind(item)
         itemView.tag = item
+        fileNameView.text = getPath(item)
+        fileNameView.setTextColor(getColor(item))
+        diffHunkView.setDiff(viewModel.formatDiffEntry(item))
+        diffHunkView.visibility = View.GONE
+    }
 
-        fileNameView.text = when (item.changeType) {
-            DiffEntry.ChangeType.ADD -> item.newPath
-            DiffEntry.ChangeType.RENAME,
-            DiffEntry.ChangeType.COPY -> "${item.oldPath} -> ${item.newPath}"
-            else -> item.oldPath
-        }
-
-        val color = when (item.changeType) {
+    private fun getColor(item: DiffEntry): Int {
+        return when (item.changeType) {
             DiffEntry.ChangeType.ADD -> Color.GREEN
             DiffEntry.ChangeType.DELETE -> Color.RED
             DiffEntry.ChangeType.RENAME,
             DiffEntry.ChangeType.COPY -> Color.BLUE
             else -> Color.BLACK
         }
-        fileNameView.setTextColor(color)
-        diffHunkView.setDiff(viewModel.formatDiffEntry(item))
-        diffHunkView.visibility = View.GONE
+    }
+
+    private fun getPath(item: DiffEntry): CharSequence? {
+        return when (item.changeType) {
+            DiffEntry.ChangeType.ADD -> item.newPath
+            DiffEntry.ChangeType.RENAME,
+            DiffEntry.ChangeType.COPY -> "${item.oldPath} -> ${item.newPath}"
+            else -> item.oldPath
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -87,6 +82,19 @@ class DiffHunkViewHolder(
     }
 
     override fun onClick(view: View) {
-        actionsMenu.show()
+        if (view != fileNameView) {
+            actionsMenu.show()
+            return
+        }
+        toggleCodeView()
+    }
+
+    private fun toggleCodeView() {
+        diffHunkView.visibility = if (diffHunkView.visibility == View.VISIBLE) View.GONE
+        else View.VISIBLE
+        val isVisible = diffHunkView.visibility == View.VISIBLE
+        val arrowResId = if (isVisible) R.drawable.ic_arrow_drop_up
+        else R.drawable.ic_arrow_drop_down
+        fileNameView.setCompoundDrawablesWithIntrinsicBounds(arrowResId, 0, 0, 0)
     }
 }
