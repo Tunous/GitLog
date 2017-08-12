@@ -13,6 +13,7 @@ import android.text.Spanned
 import android.text.style.LineBackgroundSpan
 import android.text.style.LineHeightSpan
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import me.thanel.gitlog.R
@@ -24,6 +25,7 @@ class DiffHunkView @JvmOverloads constructor(
 ) : HorizontalScrollView(context, attrs, defStyleAttr) {
     private val diffTextView = AppCompatTextView(context).apply {
         typeface = Typeface.MONOSPACE
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
     }
 
     var displayLineNumbers: Boolean = true
