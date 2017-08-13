@@ -5,6 +5,7 @@ import android.widget.TextView
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
 import org.eclipse.jgit.lib.Ref
+import org.eclipse.jgit.lib.Repository
 
 class BranchListAdapter(
         onItemClickListener: (Ref) -> Unit
@@ -20,7 +21,7 @@ class BranchListAdapter(
 
         override fun bind(item: Ref) {
             super.bind(item)
-            branchNameView.text = item.name
+            branchNameView.text = Repository.shortenRefName(item.name)
         }
     }
 }

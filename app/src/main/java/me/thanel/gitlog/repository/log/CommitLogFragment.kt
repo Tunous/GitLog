@@ -17,6 +17,7 @@ import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.api.ListBranchCommand
 import org.eclipse.jgit.lib.Ref
+import org.eclipse.jgit.lib.Repository.shortenRefName
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
@@ -56,7 +57,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             return
         }
         repository = it
-        currentBranchTextView.text = repository.git.repository.fullBranch
+        currentBranchTextView.text = repository.git.repository.branch
         logCommits()
         listBranches()
     }
@@ -83,14 +84,15 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     }
 
     private fun checkout(ref: Ref) {
-        currentBranchTextView.text = ref.name
         branchesBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         launch(UI) {
+            val git = repository.git
             run(CommonPool) {
-                repository.git.checkout()
-                        .setName(ref.name)
+                git.checkout()
+                        .setName(shortenRefName(ref.name))
                         .call()
             }
+            currentBranchTextView.text = git.repository.branch
             logCommits()
         }
     }
