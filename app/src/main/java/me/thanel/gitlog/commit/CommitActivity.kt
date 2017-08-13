@@ -6,6 +6,7 @@ import android.os.Bundle
 import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.commit.view.CommitHeaderView
 import me.thanel.gitlog.repository.RepositoryActivity
+import me.thanel.gitlog.utils.SHORT_SHA_LENGTH
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.observe
 
@@ -18,7 +19,7 @@ class CommitActivity : BaseFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        title = "Commit ${commitSha.substring(0, 7)}"
+        title = "Commit ${commitSha.substring(0, SHORT_SHA_LENGTH)}"
 
         headerView = CommitHeaderView(this)
         addHeaderView(headerView)

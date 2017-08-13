@@ -1,6 +1,5 @@
 package me.thanel.gitlog.utils
 
-import android.app.ProgressDialog
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -43,25 +42,6 @@ fun ViewGroup.inflate(@LayoutRes layoutResId: Int, attachToRoot: Boolean = false
         LayoutInflater.from(context).inflate(layoutResId, this, attachToRoot)
 
 /**
- * Run an operation with a progress dialog. It will be shown before the operation completes and
- * will be hidden when execution finishes.
- *
- * @param title The title of the progress dialog.
- * @param message The body message of the progress dialog.
- * @param indeterminate Whether the progress dialog should be indeterminate.
- * @param body The operation to perform.
- */
-fun Context.withProgressDialog(title: String, message: String, indeterminate: Boolean = false,
-        body: () -> Unit) {
-    val dialog = ProgressDialog.show(this, title, message, indeterminate)
-    try {
-        body()
-    } finally {
-        dialog.dismiss()
-    }
-}
-
-/**
  * Create a new instance of fragment with type [T] and initialize its arguments using the provided
  * [initializer].
  */
@@ -95,9 +75,8 @@ fun String.fromHtml(): Spanned {
     }
 }
 
-class StyleableTag(name: String, val replacement: String, vararg spans: Any) {
+class StyleableTag(name: String, val replacement: String, vararg val spans: Any) {
     val name = "[$name]"
-    val spans = spans
 }
 
 /**
@@ -190,3 +169,5 @@ fun Context.resolveColor(@AttrRes attResId: Int): Int {
 fun showNotImplementedToast(context: Context) {
     Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
 }
+
+const val SHORT_SHA_LENGTH = 7
