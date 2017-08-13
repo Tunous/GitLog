@@ -38,7 +38,7 @@ class DiffHunkAdapter(
 
     override fun getLayoutResId(viewType: Int): Int {
         return when (viewType) {
-            VIEW_TYPE_COMMIT_DETAILS -> R.layout.fragment_commit
+            VIEW_TYPE_COMMIT_DETAILS -> R.layout.item_commit_details
             VIEW_TYPE_SUMMARY -> R.layout.item_changes_summary
             else -> R.layout.item_diff_hunk
         }
