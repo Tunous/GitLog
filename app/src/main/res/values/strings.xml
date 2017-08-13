@@ -9,6 +9,7 @@
     <string name="diff_summary">Showing [changed_files] with [additions] and [deletions].</string>
     <string name="view_whole_file">View whole file</string>
     <string name="view_in_full_screen">View in full-screen</string>
+    <string name="browse_files">Browse files</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import me.thanel.gitlog.base.BaseFragmentActivity
-import me.thanel.gitlog.repository.RepositoryActivity
+import me.thanel.gitlog.repository.FileListActivity
 import me.thanel.gitlog.utils.createIntent
 
 class FileViewerActivity : BaseFragmentActivity() {
@@ -20,7 +20,7 @@ class FileViewerActivity : BaseFragmentActivity() {
     override fun createFragment() = FileViewerFragment.newInstance(filePath)
 
     override fun getSupportParentActivityIntent(): Intent =
-            RepositoryActivity.newIntent(this, repositoryId)
+            FileListActivity.newIntent(this, repositoryId)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {

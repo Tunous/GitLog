@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/browse_files"
+        android:title="@string/browse_files"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/remove"
         android:title="@string/remove"
         android:visible="false"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        tools:visible="true" />
 
 </menu>

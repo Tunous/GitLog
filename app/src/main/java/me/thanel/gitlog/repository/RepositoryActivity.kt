@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.text.style.StyleSpan
 import android.view.Menu
@@ -14,7 +15,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.ActivityResults
 import me.thanel.gitlog.R
-import me.thanel.gitlog.base.BasePagerActivity
+import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.log.CommitLogFragment
@@ -24,7 +25,7 @@ import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.formatTags
 import java.io.File
 
-class RepositoryActivity : BasePagerActivity() {
+class RepositoryActivity : BaseFragmentActivity() {
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
 
     private lateinit var repositoryFile: File
@@ -32,9 +33,6 @@ class RepositoryActivity : BasePagerActivity() {
 
     private var repository: Repository? = null
     private var removeRepositoryItem: MenuItem? = null
-
-    override val pageTitles: Array<CharSequence>
-        get() = arrayOf("Log", "Files")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +50,7 @@ class RepositoryActivity : BasePagerActivity() {
         })
     }
 
-    override fun createFragment(position: Int) = when (position) {
-        0 -> CommitLogFragment.newInstance(repositoryId)
-        1 -> FileListFragment.newInstance(repositoryId)
-        else -> throw IllegalArgumentException("Invalid fragment position")
-    }
+    override fun createFragment(): Fragment = CommitLogFragment.newInstance(repositoryId)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.repository, menu)
@@ -69,8 +63,8 @@ class RepositoryActivity : BasePagerActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.browse_files -> browseFiles()
             R.id.remove -> promptRemoveRepository()
-
             else -> return false
         }
 
@@ -80,6 +74,11 @@ class RepositoryActivity : BasePagerActivity() {
     override fun getSupportParentActivityIntent(): Intent =
             RepositoryListActivity.newIntent(this)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+    private fun browseFiles() {
+        val intent = FileListActivity.newIntent(this, repositoryId)
+        startActivity(intent)
+    }
 
     private fun promptRemoveRepository() {
         val message = getString(R.string.remove_repository_confirm_message)

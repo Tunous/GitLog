@@ -29,6 +29,11 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         tools:text="master" />
 
+    <Spinner
+        android:id="@+id/branchFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/branchListRecyclerView"
         android:layout_width="match_parent"

@@ -2,13 +2,14 @@ package me.thanel.gitlog.repository
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_file_list.*
+import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.file.FileViewerActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
+import me.thanel.gitlog.view.PathBar
 import java.io.File
 
 class FileListFragment : BaseFragment<FileListViewModel>() {
@@ -16,14 +17,18 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
     private val adapter = FileListAdapter(this::moveDown)
     private var currentFile: File? = null
     private var rootFile: File? = null
+    private lateinit var pathBar: PathBar
 
     override val layoutResId: Int
-        get() = R.layout.fragment_file_list
+        get() = R.layout.view_recycler
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fileListRecycler.adapter = adapter
-        fileListRecycler.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        pathBar = PathBar(context)
+        addHeaderView(pathBar)
     }
 
     override fun onCreateViewModel() = FileListViewModel.get(activity, repositoryId)
@@ -55,7 +60,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
             startActivity(intent)
             return
         }
-        val scrollState = fileListRecycler.layoutManager.onSaveInstanceState()
+        val scrollState = recyclerView.layoutManager.onSaveInstanceState()
         viewModel.pushScrollState(scrollState)
         displayContents(file)
     }
@@ -63,7 +68,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
     private fun moveUp() {
         displayContents(currentFile!!.parentFile)
         viewModel.popScrollState()?.let {
-            fileListRecycler.layoutManager.onRestoreInstanceState(it)
+            recyclerView.layoutManager.onRestoreInstanceState(it)
         }
     }
 
