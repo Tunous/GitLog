@@ -5,6 +5,7 @@ import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_commit_log.*
+import kotlinx.android.synthetic.main.view_bottom_sheet_branch_list.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -49,6 +50,19 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             layoutManager = LinearLayoutManager(context)
         }
         branchesBottomSheetBehavior = BottomSheetBehavior.from(branchListBottomSheet)
+        branchListBottomSheetHeader.setOnClickListener {
+            toggleBranchListBottomSheet()
+        }
+    }
+
+    private fun toggleBranchListBottomSheet() {
+        with(branchesBottomSheetBehavior) {
+            if (state == BottomSheetBehavior.STATE_EXPANDED) {
+                state = BottomSheetBehavior.STATE_COLLAPSED
+            } else {
+                state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
     }
 
     private fun onRepositoryLoaded(it: Repository?) {
@@ -57,7 +71,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             return
         }
         repository = it
-        currentBranchTextView.text = repository.git.repository.branch
+        branchListBottomSheetHeader.text = repository.git.repository.branch
         logCommits()
         listBranches()
     }
@@ -92,7 +106,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
                         .setName(shortenRefName(ref.name))
                         .call()
             }
-            currentBranchTextView.text = git.repository.branch
+            branchListBottomSheetHeader.text = git.repository.branch
             logCommits()
         }
     }
