@@ -2,20 +2,17 @@ package me.thanel.gitlog.commit
 
 import android.content.Context
 import android.os.Bundle
-import me.thanel.gitlog.base.BasePagerActivity
+import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.commit.view.CommitHeaderView
 import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.observe
 
-class CommitActivity : BasePagerActivity() {
+class CommitActivity : BaseFragmentActivity() {
     private val commitSha by stringExtra(EXTRA_COMMIT_SHA)
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
 
     private lateinit var headerView: CommitHeaderView
-
-    override val pageTitles: Array<CharSequence>
-        get() = arrayOf("Commit", "Changed Files")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +20,7 @@ class CommitActivity : BasePagerActivity() {
         title = "Commit ${commitSha.substring(0, 7)}"
 
         headerView = CommitHeaderView(this)
-        addViewAboveToolbar(headerView)
+        addHeaderView(headerView)
 
         val viewModel = CommitViewModel.get(this, repositoryId, commitSha)
         observeViewModel(viewModel)
@@ -34,11 +31,7 @@ class CommitActivity : BasePagerActivity() {
         viewModel.commit.observe(this, headerView::displayCommitInformation)
     }
 
-    override fun createFragment(position: Int) = when (position) {
-        0 -> CommitFragment.newInstance(commitSha, repositoryId)
-        1 -> CommitFileListFragment.newInstance(commitSha, repositoryId)
-        else -> throw IllegalArgumentException("Too many fragments")
-    }
+    override fun createFragment() = CommitFragment.newInstance(commitSha, repositoryId)
 
     override fun getSupportParentActivityIntent() = RepositoryActivity.newIntent(this, repositoryId)
 

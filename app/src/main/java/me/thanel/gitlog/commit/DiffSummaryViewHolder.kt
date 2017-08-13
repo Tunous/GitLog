@@ -43,3 +43,4 @@ class DiffSummaryViewHolder(
                         ForegroundColorSpan(removeColor)))
     }
 }
+

@@ -56,6 +56,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             return
         }
         repository = it
+        currentBranchTextView.text = repository.git.repository.fullBranch
         logCommits()
         listBranches()
     }

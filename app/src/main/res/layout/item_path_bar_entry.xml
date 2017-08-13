@@ -8,7 +8,9 @@
     android:clickable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    tools:background="?colorPrimary">
 
     <TextView
         android:id="@+id/titleView"
@@ -23,5 +25,6 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_weight="0"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+        android:tint="?android:textColorSecondary"
+        app:srcCompat="@drawable/ic_chevron_right" />
 </LinearLayout>

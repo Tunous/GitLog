@@ -2,7 +2,7 @@ package me.thanel.gitlog.commit
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_commit_file_list.*
+import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.utils.observe
@@ -15,7 +15,7 @@ class CommitFileListFragment : BaseFragment<CommitViewModel>() {
     private lateinit var adapter: DiffHunkAdapter
 
     override val layoutResId: Int
-        get() = R.layout.fragment_commit_file_list
+        get() = R.layout.view_recycler
 
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
@@ -27,8 +27,8 @@ class CommitFileListFragment : BaseFragment<CommitViewModel>() {
         super.onActivityCreated(savedInstanceState)
 
         adapter = DiffHunkAdapter(viewModel)
-        diffHunkRecyclerView.adapter = adapter
-        diffHunkRecyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     private fun displayDiffs(diffEntries: List<DiffEntry>?) {

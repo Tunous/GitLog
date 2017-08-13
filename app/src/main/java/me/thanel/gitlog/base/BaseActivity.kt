@@ -46,8 +46,8 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     override fun getLifecycle() = lifecycleRegistry
 
-    fun addViewAboveToolbar(view: View) {
-        appBarLayout.addView(view, appBarLayout.childCount - 1, AppBarLayout.LayoutParams(
+    fun addHeaderView(view: View) {
+        appBarLayout.addView(view, appBarLayout.childCount, AppBarLayout.LayoutParams(
                 AppBarLayout.LayoutParams.MATCH_PARENT,
                 AppBarLayout.LayoutParams.WRAP_CONTENT
         ))
