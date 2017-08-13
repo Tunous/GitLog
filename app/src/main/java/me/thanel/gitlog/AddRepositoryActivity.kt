@@ -20,6 +20,7 @@ import kotlinx.coroutines.experimental.run
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.RepositoryActivity
+import me.thanel.gitlog.repositorylist.RepositoryListActivity
 import me.thanel.gitlog.repositorylist.RepositoryListManager
 import me.thanel.gitlog.utils.createIntent
 import org.eclipse.jgit.api.Git
@@ -163,6 +164,10 @@ class AddRepositoryActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun getSupportParentActivityIntent(): Intent =
+            RepositoryListActivity.newIntent(this)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         fun newIntent(context: Context) = context.createIntent<AddRepositoryActivity>()

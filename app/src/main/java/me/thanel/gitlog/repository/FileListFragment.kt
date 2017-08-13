@@ -51,7 +51,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
 
     private fun moveDown(file: File) {
         if (!file.isDirectory) {
-            val intent = FileViewerActivity.newIntent(context, file.absolutePath)
+            val intent = FileViewerActivity.newIntent(context, repositoryId, file.absolutePath)
             startActivity(intent)
             return
         }

@@ -1,5 +1,6 @@
 package me.thanel.gitlog.repositorylist
 
+import android.content.Context
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.coroutines.experimental.CommonPool
@@ -9,6 +10,7 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.db.RepositoryDao
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.observe
 import java.io.File
 
@@ -48,5 +50,9 @@ class RepositoryListActivity : BaseFragmentActivity() {
                 dao.removeRepository(repo)
             }
         }
+    }
+
+    companion object {
+        fun newIntent(context: Context) = context.createIntent<RepositoryListActivity>()
     }
 }

@@ -21,23 +21,18 @@
         </activity>
         <activity
             android:name=".repository.RepositoryActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".repositorylist.RepositoryListActivity" />
         <activity
             android:name=".commit.CommitActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".repository.RepositoryActivity" />
         <activity
             android:name=".AddRepositoryActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".repositorylist.RepositoryListActivity" />
         <activity
             android:name=".diff.DiffViewerActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".commit.CommitActivity" />
         <activity
             android:name=".file.FileViewerActivity"
-            android:launchMode="singleTop"
             android:parentActivityName=".commit.CommitActivity" />
     </application>
 

@@ -63,7 +63,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     }
 
     private fun openCommit(commit: RevCommit) {
-        val intent = CommitActivity.newIntent(context, commit.name, repository.id)
+        val intent = CommitActivity.newIntent(context, repository.id, commit.name)
         startActivity(intent)
     }
 

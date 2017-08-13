@@ -18,6 +18,7 @@ import me.thanel.gitlog.base.BasePagerActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.log.CommitLogFragment
+import me.thanel.gitlog.repositorylist.RepositoryListActivity
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.formatTags
@@ -75,6 +76,10 @@ class RepositoryActivity : BasePagerActivity() {
 
         return true
     }
+
+    override fun getSupportParentActivityIntent(): Intent =
+            RepositoryListActivity.newIntent(this)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     private fun promptRemoveRepository() {
         val message = getString(R.string.remove_repository_confirm_message)
