@@ -2,7 +2,6 @@ package me.thanel.gitlog.commit
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.text.method.LinkMovementMethod
 import android.view.View
 import kotlinx.android.synthetic.main.item_commit_details.view.*
 import me.thanel.gitlog.base.ItemAdapter
@@ -14,9 +13,7 @@ class CommitDetailsViewHolder(
         itemView: View,
         private val repositoryId: Int
 ) : ItemAdapter.ViewHolder<RevCommit>(itemView) {
-    private val commitMessageView = itemView.commitMessageView.apply {
-        commitMessageView.movementMethod = LinkMovementMethod()
-    }
+    private val commitMessageView = itemView.commitMessageView
     private var commitShaRegex = Regex("""[0-9a-f]{40}""")
 
     override fun bind(item: RevCommit) {
