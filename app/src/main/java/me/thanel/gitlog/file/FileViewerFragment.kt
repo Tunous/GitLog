@@ -7,9 +7,11 @@ import me.thanel.gitlog.utils.withArguments
 
 class FileViewerFragment : BaseWebViewerFragment<FileViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
+    private val refName by stringArg(ARG_REF_NAME)
     private val filePath: String by stringArg(ARG_FILE_PATH)
 
-    override fun onCreateViewModel() = FileViewModel.get(activity, repositoryId, filePath)
+    override fun onCreateViewModel() = FileViewModel.get(activity, repositoryId, refName,
+            filePath)
 
     override fun observeViewModel(viewModel: FileViewModel) {
         viewModel.repository.observe(this) {
@@ -23,10 +25,13 @@ class FileViewerFragment : BaseWebViewerFragment<FileViewModel>() {
 
     companion object {
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
+        private const val ARG_REF_NAME = "arg.ref_name"
         private const val ARG_FILE_PATH = "arg.file_path"
 
-        fun newInstance(repositoryId: Int, filePath: String) = FileViewerFragment().withArguments {
+        fun newInstance(repositoryId: Int, refName: String, filePath: String)
+                = FileViewerFragment().withArguments {
             putInt(ARG_REPOSITORY_ID, repositoryId)
+            putString(ARG_REF_NAME, refName)
             putString(ARG_FILE_PATH, filePath)
         }
     }

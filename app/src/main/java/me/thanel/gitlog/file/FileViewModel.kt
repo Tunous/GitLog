@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel
 import android.support.v4.app.FragmentActivity
 import me.thanel.gitlog.GitLogApplication
 import me.thanel.gitlog.utils.getViewModel
-import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
@@ -14,6 +13,7 @@ import java.io.ByteArrayOutputStream
 class FileViewModel(
         application: Application,
         repositoryId: Int,
+        private val refName: String,
         private val filePath: String
 ) : ViewModel() {
     private val db = (application as GitLogApplication).database
@@ -21,7 +21,7 @@ class FileViewModel(
     val repository = db.repositoryDao().getRepository(repositoryId)
 
     fun readFileContent(repository: Repository): String {
-        val head = repository.resolve(Constants.HEAD)
+        val head = repository.resolve(refName)
 
         val revWalk = RevWalk(repository)
         val commit = revWalk.parseCommit(head)
@@ -43,9 +43,9 @@ class FileViewModel(
     }
 
     companion object {
-        fun get(activity: FragmentActivity, repositoryId: Int, filePath: String)
+        fun get(activity: FragmentActivity, repositoryId: Int, refName: String, filePath: String)
                 = getViewModel(activity) {
-            FileViewModel(activity.application, repositoryId, filePath)
+            FileViewModel(activity.application, repositoryId, refName, filePath)
         }
     }
 }

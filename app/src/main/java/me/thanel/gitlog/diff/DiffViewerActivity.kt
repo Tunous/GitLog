@@ -39,7 +39,7 @@ class DiffViewerActivity : BaseFragmentActivity() {
         private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
         private const val EXTRA_DIFF_ID = "extra.diff_id"
 
-        fun newIntent(context: Context, commitSha: String, repositoryId: Int,
+        fun newIntent(context: Context, repositoryId: Int, commitSha: String,
                 diffId: AbbreviatedObjectId) = context.createIntent<DiffViewerActivity> {
             putExtra(EXTRA_COMMIT_SHA, commitSha)
             putExtra(EXTRA_REPOSITORY_ID, repositoryId)
