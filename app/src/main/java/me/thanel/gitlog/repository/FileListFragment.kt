@@ -14,6 +14,7 @@ import org.eclipse.jgit.lib.Constants
 
 class FileListFragment : BaseFragment<FileListViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
+    private val refName by stringArg(ARG_REF_NAME)
     private val adapter = FileListAdapter(this::moveDown)
     private lateinit var pathBar: PathBar
     private lateinit var repository: Repository
@@ -47,7 +48,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         updatePathBar()
     }
 
-    override fun onCreateViewModel() = FileListViewModel.get(activity, repositoryId)
+    override fun onCreateViewModel() = FileListViewModel.get(activity, repositoryId, refName)
 
     override fun observeViewModel(viewModel: FileListViewModel) {
         viewModel.repository.observe(this) {
@@ -109,9 +110,11 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
     companion object {
         private const val STATE_CURRENT_PATH = "state.current_path"
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
+        private const val ARG_REF_NAME = "arg.ref_name"
 
-        fun newInstance(repositoryId: Int) = FileListFragment().withArguments {
+        fun newInstance(repositoryId: Int, refName: String) = FileListFragment().withArguments {
             putInt(ARG_REPOSITORY_ID, repositoryId)
+            putString(ARG_REF_NAME, refName)
         }
     }
 }

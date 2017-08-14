@@ -2,9 +2,13 @@ package me.thanel.gitlog.commit
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
+import me.thanel.gitlog.repository.FileListActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.diff.DiffEntry
@@ -17,6 +21,11 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
@@ -31,6 +40,22 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
         adapter = DiffHunkAdapter(viewModel)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.commit, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.browse_files -> {
+                val intent = FileListActivity.newIntent(context, repositoryId, commitSha)
+                startActivity(intent)
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     private fun displayCommitInformation(commit: RevCommit?) {

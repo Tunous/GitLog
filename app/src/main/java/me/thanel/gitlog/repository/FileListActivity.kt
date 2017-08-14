@@ -8,8 +8,9 @@ import me.thanel.gitlog.utils.createIntent
 
 class FileListActivity : BaseFragmentActivity() {
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
+    private val refName by stringExtra(EXTRA_REF_NAME)
 
-    override fun createFragment(): Fragment = FileListFragment.newInstance(repositoryId)
+    override fun createFragment(): Fragment = FileListFragment.newInstance(repositoryId, refName)
 
     override fun getSupportParentActivityIntent(): Intent =
         RepositoryActivity.newIntent(this, repositoryId)
@@ -17,10 +18,12 @@ class FileListActivity : BaseFragmentActivity() {
 
     companion object {
         private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
+        private const val EXTRA_REF_NAME = "extra.ref_name"
 
-        fun newIntent(context: Context, repositoryId: Int): Intent
+        fun newIntent(context: Context, repositoryId: Int, refName: String): Intent
                 = context.createIntent<FileListActivity> {
             putExtra(EXTRA_REPOSITORY_ID, repositoryId)
+            putExtra(EXTRA_REF_NAME, refName)
         }
     }
 }

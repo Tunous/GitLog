@@ -21,7 +21,7 @@ class FileViewerActivity : BaseFragmentActivity() {
             filePath)
 
     override fun getSupportParentActivityIntent(): Intent =
-            FileListActivity.newIntent(this, repositoryId)
+            FileListActivity.newIntent(this, repositoryId, refName)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {

@@ -23,6 +23,7 @@ import me.thanel.gitlog.repositorylist.RepositoryListActivity
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.formatTags
+import org.eclipse.jgit.lib.Constants
 import java.io.File
 
 class RepositoryActivity : BaseFragmentActivity() {
@@ -76,7 +77,7 @@ class RepositoryActivity : BaseFragmentActivity() {
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     private fun browseFiles() {
-        val intent = FileListActivity.newIntent(this, repositoryId)
+        val intent = FileListActivity.newIntent(this, repositoryId, Constants.HEAD)
         startActivity(intent)
     }
 
