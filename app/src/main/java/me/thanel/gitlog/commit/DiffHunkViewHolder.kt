@@ -42,6 +42,7 @@ class DiffHunkViewHolder(
         fileNameView.setTextColor(getColor(item))
         diffHunkView.setDiff(viewModel.formatDiffEntry(item))
         diffHunkView.visibility = View.GONE
+        updateExpandIcon(false)
     }
 
     private fun getColor(item: DiffEntry): Int {
@@ -95,10 +96,13 @@ class DiffHunkViewHolder(
     }
 
     private fun toggleCodeView() {
-        diffHunkView.visibility = if (diffHunkView.visibility == View.VISIBLE) View.GONE
-        else View.VISIBLE
-        val isVisible = diffHunkView.visibility == View.VISIBLE
-        val arrowResId = if (isVisible) R.drawable.ic_arrow_drop_up
+        val wasVisible = diffHunkView.visibility == View.VISIBLE
+        diffHunkView.visibility = if (wasVisible) View.GONE else View.VISIBLE
+        updateExpandIcon(!wasVisible)
+    }
+
+    private fun updateExpandIcon(isExpanded: Boolean) {
+        val arrowResId = if (isExpanded) R.drawable.ic_arrow_drop_up
         else R.drawable.ic_arrow_drop_down
         fileNameView.setCompoundDrawablesWithIntrinsicBounds(arrowResId, 0, 0, 0)
     }

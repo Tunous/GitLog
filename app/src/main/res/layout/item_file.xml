@@ -12,6 +12,9 @@
         android:id="@+id/fileNameView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_folder"
+        android:gravity="center_vertical"
         tools:text="/path/to/file/name.txt" />
 
 </LinearLayout>
