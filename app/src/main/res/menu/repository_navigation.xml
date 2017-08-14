@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/log"
-        android:icon="@drawable/ic_log"
+        android:icon="@drawable/ic_commit"
         android:title="@string/commit_log" />
 
     <item
