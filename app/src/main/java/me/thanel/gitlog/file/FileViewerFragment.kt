@@ -1,5 +1,6 @@
 package me.thanel.gitlog.file
 
+import android.text.TextUtils
 import me.thanel.gitlog.base.BaseWebViewerFragment
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
@@ -13,8 +14,9 @@ class FileViewerFragment : BaseWebViewerFragment<FileViewModel>() {
     override fun observeViewModel(viewModel: FileViewModel) {
         viewModel.repository.observe(this) {
             it?.let {
-                val content = viewModel.readFileContent(it.git.repository).replace("\n", "<br/>")
-                loadData("<body>$content</body>")
+                val content = viewModel.readFileContent(it.git.repository)
+                val escapedContent = TextUtils.htmlEncode(content).replace("\n", "<br>")
+                loadData("<body><code><pre>$escapedContent</pre></code></body>")
             }
         }
     }
