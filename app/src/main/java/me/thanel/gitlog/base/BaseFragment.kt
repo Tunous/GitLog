@@ -41,6 +41,8 @@ abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
 
     fun addHeaderView(view: View) = baseActivity.addHeaderView(view)
 
+    fun removeHeaderView(view: View) = baseActivity.removeHeaderView(view)
+
     abstract fun onCreateViewModel(): T
 
     open fun observeViewModel(viewModel: T) {}

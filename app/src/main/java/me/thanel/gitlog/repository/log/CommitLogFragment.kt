@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.PopupMenu
-import kotlinx.android.synthetic.main.fragment_commit_log.*
 import kotlinx.android.synthetic.main.view_bottom_sheet_branch_list.*
+import kotlinx.android.synthetic.main.view_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -33,7 +31,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     private lateinit var branchesBottomSheetBehavior: BottomSheetBehavior<ViewGroup>
 
     override val layoutResId: Int
-        get() = R.layout.fragment_commit_log
+        get() = R.layout.view_recycler
 
     override fun onCreateViewModel() = CommitLogViewModel.get(activity, repositoryId)
 
@@ -44,38 +42,38 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        commitLogRecycler.apply {
+        recyclerView.apply {
             adapter = commitLogAdapter
             layoutManager = LinearLayoutManager(context)
         }
-        branchListRecyclerView.apply {
-            adapter = branchListAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
-        branchesBottomSheetBehavior = BottomSheetBehavior.from(branchListBottomSheet)
-        val menu = PopupMenu(context, branchListBottomSheetHeader)
-        with(menu.menu) {
-            add("Local").apply {
-                isCheckable = true
-                isChecked = true
-            }
-            add("Remote").apply {
-                isCheckable = true
-                isChecked = true
-            }
-            add("Tags").apply {
-                isCheckable = true
-            }
-        }
-        branchListBottomSheetHeader.setOnClickListener {
-//            toggleBranchListBottomSheet()
-            menu.show()
-        }
-
-        val adapter = ArrayAdapter.createFromResource(context,
-                R.array.branch_filter, android.R.layout.simple_spinner_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        branchFilter.adapter = adapter
+//        branchListRecyclerView.apply {
+//            adapter = branchListAdapter
+//            layoutManager = LinearLayoutManager(context)
+//        }
+//        branchesBottomSheetBehavior = BottomSheetBehavior.from(branchListBottomSheet)
+//        val menu = PopupMenu(context, branchListBottomSheetHeader)
+//        with(menu.menu) {
+//            add("Local").apply {
+//                isCheckable = true
+//                isChecked = true
+//            }
+//            add("Remote").apply {
+//                isCheckable = true
+//                isChecked = true
+//            }
+//            add("Tags").apply {
+//                isCheckable = true
+//            }
+//        }
+//        branchListBottomSheetHeader.setOnClickListener {
+////            toggleBranchListBottomSheet()
+//            menu.show()
+//        }
+//
+//        val adapter = ArrayAdapter.createFromResource(context,
+//                R.array.branch_filter, android.R.layout.simple_spinner_item)
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        branchFilter.adapter = adapter
     }
 
     private fun toggleBranchListBottomSheet() {
@@ -94,7 +92,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             return
         }
         repository = it
-        branchListBottomSheetHeader.text = repository.git.repository.branch
+//        branchListBottomSheetHeader.text = repository.git.repository.branch
         logCommits()
         listBranches()
     }

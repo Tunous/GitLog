@@ -12,7 +12,7 @@ import java.util.*
 abstract class BasePagerActivity : BaseActivity() {
     private lateinit var adapter: Adapter
 
-    override val layoutResId: Int
+    override final val layoutResId: Int
         get() = R.layout.activity_base_pager
 
     protected abstract val pageTitles: Array<CharSequence>

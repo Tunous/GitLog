@@ -53,6 +53,10 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
         ))
     }
 
+    fun removeHeaderView(view: View) {
+        appBarLayout.removeView(view)
+    }
+
     protected fun <T : Parcelable> parcelableExtra(name: String) = lazy {
         intent.getParcelableExtra<T>(name)
     }

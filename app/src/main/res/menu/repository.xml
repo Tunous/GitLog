@@ -4,11 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/browse_files"
-        android:title="@string/browse_files"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/remove"
         android:title="@string/remove"
         android:visible="false"

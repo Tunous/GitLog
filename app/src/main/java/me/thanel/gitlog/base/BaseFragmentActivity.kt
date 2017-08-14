@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import me.thanel.gitlog.R
 
 abstract class BaseFragmentActivity : BaseActivity() {
-    override val layoutResId: Int
+    override final val layoutResId: Int
         get() = R.layout.activity_base
 
     override fun onCreate(savedInstanceState: Bundle?) {

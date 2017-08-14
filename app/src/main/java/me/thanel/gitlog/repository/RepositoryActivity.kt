@@ -15,7 +15,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.ActivityResults
 import me.thanel.gitlog.R
-import me.thanel.gitlog.base.BaseFragmentActivity
+import me.thanel.gitlog.base.BaseBottomNavigationActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.log.CommitLogFragment
@@ -26,7 +26,7 @@ import me.thanel.gitlog.utils.formatTags
 import org.eclipse.jgit.lib.Constants
 import java.io.File
 
-class RepositoryActivity : BaseFragmentActivity() {
+class RepositoryActivity : BaseBottomNavigationActivity() {
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
 
     private lateinit var repositoryFile: File
@@ -34,6 +34,9 @@ class RepositoryActivity : BaseFragmentActivity() {
 
     private var repository: Repository? = null
     private var removeRepositoryItem: MenuItem? = null
+
+    override val menuResId: Int
+        get() = R.menu.repository_navigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +54,13 @@ class RepositoryActivity : BaseFragmentActivity() {
         })
     }
 
-    override fun createFragment(): Fragment = CommitLogFragment.newInstance(repositoryId)
+    override fun createFragment(itemId: Int): Fragment {
+        return when (itemId) {
+            R.id.log -> CommitLogFragment.newInstance(repositoryId)
+            R.id.files -> FileListFragment.newInstance(repositoryId, Constants.HEAD)
+            else -> throw IllegalAccessException("Unknown fragment id: $itemId")
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.repository, menu)
@@ -64,7 +73,6 @@ class RepositoryActivity : BaseFragmentActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.browse_files -> browseFiles()
             R.id.remove -> promptRemoveRepository()
             else -> return false
         }
@@ -75,11 +83,6 @@ class RepositoryActivity : BaseFragmentActivity() {
     override fun getSupportParentActivityIntent(): Intent =
             RepositoryListActivity.newIntent(this)
                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-    private fun browseFiles() {
-        val intent = FileListActivity.newIntent(this, repositoryId, Constants.HEAD)
-        startActivity(intent)
-    }
 
     private fun promptRemoveRepository() {
         val message = getString(R.string.remove_repository_confirm_message)
