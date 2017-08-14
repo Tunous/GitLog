@@ -23,8 +23,10 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
     override val layoutResId: Int
         get() = R.layout.view_recycler
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         pathBar = PathBar(context)
         pathBar.onPathEntryClicked {
@@ -36,12 +38,6 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
             updatePathBar()
         }
         addHeaderView(pathBar)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
 
         if (savedInstanceState != null) {
             val path = savedInstanceState.getString(STATE_CURRENT_PATH)

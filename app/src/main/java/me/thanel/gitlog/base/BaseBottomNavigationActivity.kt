@@ -24,7 +24,9 @@ abstract class BaseBottomNavigationActivity
         bottomNavigationView.inflateMenu(menuResId)
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
 
-        displayFragment(bottomNavigationView.selectedItemId)
+        if (savedInstanceState == null) {
+            displayFragment(bottomNavigationView.selectedItemId)
+        }
     }
 
     override fun onBackPressed() {
