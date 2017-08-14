@@ -17,7 +17,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
     private lateinit var pathBar: PathBar
     private lateinit var repository: Repository
 
-    private val pathSegments = mutableListOf<String>()
+    private val currentPath = mutableListOf<String>()
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -28,7 +28,22 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         pathBar = PathBar(context)
+        pathBar.onPathEntryClicked {
+            displayFiles(it)
+            currentPath.clear()
+            if (it.isNotEmpty()) {
+                currentPath.addAll(it.split("/"))
+            }
+            updatePathBar()
+        }
         addHeaderView(pathBar)
+
+        if (savedInstanceState != null) {
+            val path = savedInstanceState.getString(STATE_CURRENT_PATH)
+            currentPath.addAll(path.split("/"))
+        }
+
+        updatePathBar()
     }
 
     override fun onCreateViewModel() = FileListViewModel.get(activity, repositoryId)
@@ -40,8 +55,13 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_CURRENT_PATH, currentPath.joinToString("/"))
+    }
+
     override fun onBackPressed(): Boolean {
-        if (pathSegments.isEmpty()) return false
+        if (currentPath.isEmpty()) return false
         moveUp()
         return true
     }
@@ -64,21 +84,28 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         val scrollState = recyclerView.layoutManager.onSaveInstanceState()
         viewModel.pushScrollState(scrollState)
 
-        pathSegments.add(file.name)
+        currentPath.add(file.name)
+        updatePathBar()
+    }
+
+    private fun updatePathBar() {
+        pathBar.setPath(currentPath)
     }
 
     private fun moveUp() {
-        pathSegments.removeAt(pathSegments.size - 1)
+        currentPath.removeAt(currentPath.size - 1)
 
-        displayFiles(pathSegments.joinToString("/"))
+        displayFiles(currentPath.joinToString("/"))
 
         // Restore scroll position
         viewModel.popScrollState()?.let {
             recyclerView.layoutManager.onRestoreInstanceState(it)
         }
+        updatePathBar()
     }
 
     companion object {
+        private const val STATE_CURRENT_PATH = "state.current_path"
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
 
         fun newInstance(repositoryId: Int) = FileListFragment().withArguments {
