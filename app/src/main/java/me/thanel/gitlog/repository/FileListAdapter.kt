@@ -5,7 +5,6 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.item_file.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
-import java.io.File
 
 class FileListAdapter(
         onItemClickListener: (File) -> Unit
@@ -18,11 +17,6 @@ class FileListAdapter(
 
     override fun createViewHolder(itemView: View, viewType: Int) = ViewHolder(itemView)
 
-    fun displayContents(file: File) {
-        val files = file.listFiles().asIterable()
-        replaceAll(files)
-    }
-
     class ViewHolder(itemView: View) : ItemAdapter.ViewHolder<File>(itemView) {
         private val fileNameView: TextView by lazy { itemView.fileNameView }
 
@@ -32,3 +26,5 @@ class FileListAdapter(
         }
     }
 }
+
+data class File(val path: String, val isDirectory: Boolean, val name: String)

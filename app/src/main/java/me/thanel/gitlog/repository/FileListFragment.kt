@@ -6,18 +6,17 @@ import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.file.FileViewerActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import me.thanel.gitlog.view.PathBar
-import java.io.File
 
 class FileListFragment : BaseFragment<FileListViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
     private val adapter = FileListAdapter(this::moveDown)
-    private var currentFile: File? = null
-    private var rootFile: File? = null
     private lateinit var pathBar: PathBar
+    private lateinit var repository: Repository
+
+    private val pathSegments = mutableListOf<String>()
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -35,51 +34,43 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
 
     override fun observeViewModel(viewModel: FileListViewModel) {
         viewModel.repository.observe(this) {
-            rootFile = it?.file
-            displayFiles(it)
+            repository = it!!
+            displayFiles()
         }
     }
 
     override fun onBackPressed(): Boolean {
-        if (currentFile == null || currentFile == rootFile) return false
+        if (pathSegments.isEmpty()) return false
         moveUp()
         return true
     }
 
-    private fun displayFiles(it: Repository?) {
-        if (it == null) {
-            // TODO: Loading
-            return
-        }
-        displayContents(it.file)
+    private fun displayFiles(path: String = "") {
+        val files = viewModel.listFiles(repository, path)
+        adapter.replaceAll(files)
     }
 
     private fun moveDown(file: File) {
-        if (!file.isDirectory) {
-            val intent = FileViewerActivity.newIntent(context, repositoryId, file.absolutePath)
-            startActivity(intent)
-            return
-        }
+        if (!file.isDirectory) return
+
+        displayFiles(file.path)
+
+        // Save scroll state
         val scrollState = recyclerView.layoutManager.onSaveInstanceState()
         viewModel.pushScrollState(scrollState)
-        displayContents(file)
+
+        pathSegments.add(file.name)
     }
 
     private fun moveUp() {
-        displayContents(currentFile!!.parentFile)
+        pathSegments.removeAt(pathSegments.size - 1)
+
+        displayFiles(pathSegments.joinToString("/"))
+
+        // Restore scroll position
         viewModel.popScrollState()?.let {
             recyclerView.layoutManager.onRestoreInstanceState(it)
         }
-    }
-
-    private fun displayContents(file: File) {
-        adapter.displayContents(file)
-        currentFile = file
-
-        val rootPath = rootFile!!.absolutePath
-        val path = file.absolutePath
-        val resultPath = path.removePrefix(rootPath)
-        pathBar.setPath(resultPath)
     }
 
     companion object {

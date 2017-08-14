@@ -14,8 +14,7 @@ data class Repository(
         val url: String,
         val path: String
 ) : Parcelable {
-    val file: File get() = File(path)
-    val git: Git get() = Git.open(file)
+    val git: Git get() = Git.open(File(path))
 
     constructor(parcel: Parcel) : this(
             id = parcel.readInt(),
