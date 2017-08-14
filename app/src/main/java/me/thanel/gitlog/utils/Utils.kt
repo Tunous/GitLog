@@ -27,6 +27,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
+import org.eclipse.jgit.lib.Repository
 
 /**
  * Inflate a new view hierarchy from the specified xml resource.
@@ -171,3 +172,12 @@ fun showNotImplementedToast(context: Context) {
 }
 
 const val SHORT_SHA_LENGTH = 7
+
+fun Repository.getAbbreviatedName(name: String): String? {
+    val ref = getRef(name)
+    if (ref != null && ref.isSymbolic) {
+        return Repository.shortenRefName(ref.target.name)
+    }
+    val objectId = ref?.objectId ?: resolve(name)
+    return objectId?.abbreviate(SHORT_SHA_LENGTH)?.name()
+}

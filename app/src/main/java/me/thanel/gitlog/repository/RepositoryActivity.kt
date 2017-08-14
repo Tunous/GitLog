@@ -23,6 +23,7 @@ import me.thanel.gitlog.repositorylist.RepositoryListActivity
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.formatTags
+import me.thanel.gitlog.utils.getAbbreviatedName
 import org.eclipse.jgit.lib.Constants
 import java.io.File
 
@@ -48,6 +49,7 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
             if (it != null) {
                 repositoryFile = File(filesDir, "repos/${it.name}")
                 title = it.name
+                subtitle = it.git.repository.getAbbreviatedName(Constants.HEAD)
                 repository = it
                 removeRepositoryItem?.isVisible = true
             }

@@ -6,6 +6,8 @@ import android.os.Bundle
 import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.repository.FileListActivity
 import me.thanel.gitlog.utils.createIntent
+import me.thanel.gitlog.utils.getAbbreviatedName
+import me.thanel.gitlog.utils.observe
 
 class FileViewerActivity : BaseFragmentActivity() {
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
@@ -15,6 +17,14 @@ class FileViewerActivity : BaseFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         title = filePath.split("/").last()
+        subtitle
+
+        val viewModel = FileViewModel.get(this, repositoryId, refName, filePath)
+        viewModel.repository.observe(this) {
+            it?.let {
+                subtitle = it.git.repository.getAbbreviatedName(refName)
+            }
+        }
     }
 
     override fun createFragment() = FileViewerFragment.newInstance(repositoryId, refName,

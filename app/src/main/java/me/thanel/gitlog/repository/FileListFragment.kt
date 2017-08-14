@@ -10,7 +10,6 @@ import me.thanel.gitlog.file.FileViewerActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import me.thanel.gitlog.view.PathBar
-import org.eclipse.jgit.lib.Constants
 
 class FileListFragment : BaseFragment<FileListViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
@@ -84,8 +83,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
 
     private fun moveDown(file: File) {
         if (!file.isDirectory) {
-            val intent = FileViewerActivity.newIntent(context, repositoryId, Constants.HEAD,
-                    file.path)
+            val intent = FileViewerActivity.newIntent(context, repositoryId, refName, file.path)
             startActivity(intent)
             return
         }
