@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import me.thanel.gitlog.base.BaseFragmentActivity
+import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.getAbbreviatedName
 import me.thanel.gitlog.utils.observe
@@ -27,7 +28,7 @@ class FileListActivity : BaseFragmentActivity() {
     override fun createFragment(): Fragment = FileListFragment.newInstance(repositoryId, refName)
 
     override fun getSupportParentActivityIntent(): Intent =
-        RepositoryActivity.newIntent(this, repositoryId)
+        CommitActivity.newIntent(this, repositoryId, refName)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
