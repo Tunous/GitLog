@@ -1,7 +1,6 @@
 package me.thanel.gitlog.repository
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -18,6 +17,7 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseBottomNavigationActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.repository.branchlist.BranchListFragment
 import me.thanel.gitlog.repository.filelist.FileListFragment
 import me.thanel.gitlog.repository.log.CommitLogFragment
 import me.thanel.gitlog.repositorylist.RepositoryListActivity
@@ -45,7 +45,7 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
+        viewModel = RepositoryViewModel.get(this)
         viewModel.getRepository(repositoryId).observe(this, Observer {
             if (it != null) {
                 repositoryFile = File(filesDir, "repos/${it.name}")
@@ -61,6 +61,7 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
         return when (itemId) {
             R.id.log -> CommitLogFragment.newInstance(repositoryId)
             R.id.files -> FileListFragment.newInstance(repositoryId, Constants.HEAD)
+            R.id.branches -> BranchListFragment.newInstance(repositoryId)
             else -> throw IllegalAccessException("Unknown fragment id: $itemId")
         }
     }

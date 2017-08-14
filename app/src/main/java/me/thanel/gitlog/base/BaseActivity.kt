@@ -22,7 +22,7 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
             supportActionBar?.title = value
         }
 
-    protected var subtitle: String? = null
+    var subtitle: String? = null
         set(value) {
             field = value
             supportActionBar?.subtitle = value

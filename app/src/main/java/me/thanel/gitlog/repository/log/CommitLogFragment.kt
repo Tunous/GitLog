@@ -16,7 +16,6 @@ import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
-import org.eclipse.jgit.api.ListBranchCommand
 import org.eclipse.jgit.lib.Ref
 import org.eclipse.jgit.lib.Repository.shortenRefName
 import org.eclipse.jgit.revwalk.RevCommit
@@ -46,44 +45,6 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             adapter = commitLogAdapter
             layoutManager = LinearLayoutManager(context)
         }
-//        branchListRecyclerView.apply {
-//            adapter = branchListAdapter
-//            layoutManager = LinearLayoutManager(context)
-//        }
-//        branchesBottomSheetBehavior = BottomSheetBehavior.from(branchListBottomSheet)
-//        val menu = PopupMenu(context, branchListBottomSheetHeader)
-//        with(menu.menu) {
-//            add("Local").apply {
-//                isCheckable = true
-//                isChecked = true
-//            }
-//            add("Remote").apply {
-//                isCheckable = true
-//                isChecked = true
-//            }
-//            add("Tags").apply {
-//                isCheckable = true
-//            }
-//        }
-//        branchListBottomSheetHeader.setOnClickListener {
-////            toggleBranchListBottomSheet()
-//            menu.show()
-//        }
-//
-//        val adapter = ArrayAdapter.createFromResource(context,
-//                R.array.branch_filter, android.R.layout.simple_spinner_item)
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        branchFilter.adapter = adapter
-    }
-
-    private fun toggleBranchListBottomSheet() {
-        with(branchesBottomSheetBehavior) {
-            if (state == BottomSheetBehavior.STATE_EXPANDED) {
-                state = BottomSheetBehavior.STATE_COLLAPSED
-            } else {
-                state = BottomSheetBehavior.STATE_EXPANDED
-            }
-        }
     }
 
     private fun onRepositoryLoaded(it: Repository?) {
@@ -92,9 +53,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             return
         }
         repository = it
-//        branchListBottomSheetHeader.text = repository.git.repository.branch
         logCommits()
-        listBranches()
     }
 
     private fun openCommit(commit: RevCommit) {
@@ -107,15 +66,6 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             repository.git.log().call()
         }
         commitLogAdapter.replaceAll(log)
-    }
-
-    private fun listBranches() = launch(UI) {
-        val branches = run(CommonPool) {
-            repository.git.branchList()
-                    .setListMode(ListBranchCommand.ListMode.ALL)
-                    .call()
-        }
-        branchListAdapter.addAll(branches)
     }
 
     private fun checkout(ref: Ref) {

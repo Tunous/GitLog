@@ -13,6 +13,7 @@
     <string name="browse_files">Browse files</string>
     <string name="commit_log">Commit Log</string>
     <string name="files">Files</string>
+    <string name="branches">Branches</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>
