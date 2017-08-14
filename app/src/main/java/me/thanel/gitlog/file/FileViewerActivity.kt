@@ -17,7 +17,7 @@ class FileViewerActivity : BaseFragmentActivity() {
 
     }
 
-    override fun createFragment() = FileViewerFragment.newInstance(filePath)
+    override fun createFragment() = FileViewerFragment.newInstance(repositoryId, filePath)
 
     override fun getSupportParentActivityIntent(): Intent =
             FileListActivity.newIntent(this, repositoryId)

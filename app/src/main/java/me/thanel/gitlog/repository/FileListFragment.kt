@@ -6,6 +6,7 @@ import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.file.FileViewerActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import me.thanel.gitlog.view.PathBar
@@ -51,7 +52,11 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
     }
 
     private fun moveDown(file: File) {
-        if (!file.isDirectory) return
+        if (!file.isDirectory) {
+            val intent = FileViewerActivity.newIntent(context, repositoryId, file.path)
+            startActivity(intent)
+            return
+        }
 
         displayFiles(file.path)
 
