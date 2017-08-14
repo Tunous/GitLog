@@ -24,7 +24,7 @@
         <activity android:name=".AddRepositoryActivity" />
         <activity android:name=".diff.DiffViewerActivity" />
         <activity android:name=".file.FileViewerActivity" />
-        <activity android:name=".repository.FileListActivity" />
+        <activity android:name=".repository.filelist.FileListActivity" />
     </application>
 
 </manifest>

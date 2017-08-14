@@ -1,4 +1,4 @@
-package me.thanel.gitlog.repository
+package me.thanel.gitlog.repository.filelist
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager

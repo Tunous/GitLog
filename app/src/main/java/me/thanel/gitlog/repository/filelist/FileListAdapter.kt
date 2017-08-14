@@ -1,4 +1,4 @@
-package me.thanel.gitlog.repository
+package me.thanel.gitlog.repository.filelist
 
 import android.view.View
 import kotlinx.android.synthetic.main.item_file.view.*

@@ -18,6 +18,7 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseBottomNavigationActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.repository.filelist.FileListFragment
 import me.thanel.gitlog.repository.log.CommitLogFragment
 import me.thanel.gitlog.repositorylist.RepositoryListActivity
 import me.thanel.gitlog.utils.StyleableTag

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import me.thanel.gitlog.base.BaseFragmentActivity
-import me.thanel.gitlog.repository.FileListActivity
+import me.thanel.gitlog.repository.filelist.FileListActivity
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.getAbbreviatedName
 import me.thanel.gitlog.utils.observe

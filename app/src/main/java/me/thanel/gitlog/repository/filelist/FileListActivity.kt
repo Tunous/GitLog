@@ -1,4 +1,4 @@
-package me.thanel.gitlog.repository
+package me.thanel.gitlog.repository.filelist
 
 import android.content.Context
 import android.content.Intent
