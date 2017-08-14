@@ -3,6 +3,7 @@
     <string name="remove_repository_dialog_title">Remove repository</string>
     <string name="remove_repository_confirm_message">Are you sure you want to remove [repository]? This operation cannot be undone.</string>
     <string name="remove">Remove</string>
+    <string name="remove_repository">Remove repository</string>
     <string name="cancel">Cancel</string>
     <string name="view_diff">View diff</string>
     <string name="deselect_all">Deselect all</string>
