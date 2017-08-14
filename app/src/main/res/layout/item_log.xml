@@ -31,6 +31,6 @@
         android:layout_height="24dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        app:srcCompat="@android:drawable/ic_menu_info_details" />
+        app:srcCompat="@drawable/ic_subject" />
 
 </LinearLayout>
