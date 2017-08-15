@@ -57,13 +57,11 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
         })
     }
 
-    override fun createFragment(itemId: Int): Fragment {
-        return when (itemId) {
-            R.id.log -> CommitLogFragment.newInstance(repositoryId)
-            R.id.files -> FileListFragment.newInstance(repositoryId, Constants.HEAD)
-            R.id.branches -> BranchListFragment.newInstance(repositoryId)
-            else -> throw IllegalAccessException("Unknown fragment id: $itemId")
-        }
+    override fun createFragment(itemId: Int): Fragment = when (itemId) {
+        R.id.log -> CommitLogFragment.newInstance(repositoryId)
+        R.id.files -> FileListFragment.newInstance(repositoryId, Constants.HEAD)
+        R.id.branches -> BranchListFragment.newInstance(repositoryId)
+        else -> throw IllegalAccessException("Unknown fragment id: $itemId")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

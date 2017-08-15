@@ -46,16 +46,13 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     override fun getLifecycle() = lifecycleRegistry
 
-    fun addHeaderView(view: View) {
-        appBarLayout.addView(view, appBarLayout.childCount, AppBarLayout.LayoutParams(
-                AppBarLayout.LayoutParams.MATCH_PARENT,
-                AppBarLayout.LayoutParams.WRAP_CONTENT
-        ))
-    }
+    fun addHeaderView(view: View) =
+            appBarLayout.addView(view, appBarLayout.childCount, AppBarLayout.LayoutParams(
+                    AppBarLayout.LayoutParams.MATCH_PARENT,
+                    AppBarLayout.LayoutParams.WRAP_CONTENT
+            ))
 
-    fun removeHeaderView(view: View) {
-        appBarLayout.removeView(view)
-    }
+    fun removeHeaderView(view: View) = appBarLayout.removeView(view)
 
     protected fun <T : Parcelable> parcelableExtra(name: String) = lazy {
         intent.getParcelableExtra<T>(name)

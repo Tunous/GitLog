@@ -34,9 +34,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
 
     override fun onCreateViewModel() = CommitLogViewModel.get(activity, repositoryId)
 
-    override fun observeViewModel(viewModel: CommitLogViewModel) {
-        viewModel.repository.observe(this, this::onRepositoryLoaded)
-    }
+    override fun observeViewModel(viewModel: CommitLogViewModel) = viewModel.repository.observe(this, this::onRepositoryLoaded)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

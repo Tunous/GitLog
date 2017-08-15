@@ -22,7 +22,5 @@ abstract class BaseWebViewerFragment<T : ViewModel> : BaseFragment<T>() {
         }
     }
 
-    protected fun loadData(data: String) {
-        webView.loadData(data, "text/html", "UTF-8")
-    }
+    protected fun loadData(data: String) = webView.loadData(data, "text/html", "UTF-8")
 }

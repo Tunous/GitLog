@@ -13,13 +13,11 @@ class FileViewerFragment : BaseWebViewerFragment<FileViewModel>() {
     override fun onCreateViewModel() = FileViewModel.get(activity, repositoryId, refName,
             filePath)
 
-    override fun observeViewModel(viewModel: FileViewModel) {
-        viewModel.repository.observe(this) {
-            it?.let {
-                val content = viewModel.readFileContent(it.git.repository)
-                val escapedContent = TextUtils.htmlEncode(content).replace("\n", "<br>")
-                loadData("<body><code><pre>$escapedContent</pre></code></body>")
-            }
+    override fun observeViewModel(viewModel: FileViewModel) = viewModel.repository.observe(this) {
+        it?.let {
+            val content = viewModel.readFileContent(it.git.repository)
+            val escapedContent = TextUtils.htmlEncode(content).replace("\n", "<br>")
+            loadData("<body><code><pre>$escapedContent</pre></code></body>")
         }
     }
 

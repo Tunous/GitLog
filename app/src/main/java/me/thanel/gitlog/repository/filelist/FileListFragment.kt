@@ -54,11 +54,9 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
 
     override fun onCreateViewModel() = FileListViewModel.get(activity, repositoryId, refName)
 
-    override fun observeViewModel(viewModel: FileListViewModel) {
-        viewModel.repository.observe(this) {
-            repository = it!!
-            displayFiles()
-        }
+    override fun observeViewModel(viewModel: FileListViewModel) = viewModel.repository.observe(this) {
+        repository = it!!
+        displayFiles()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -94,9 +92,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         updatePathBar()
     }
 
-    private fun updatePathBar() {
-        pathBar.setPath(currentPath)
-    }
+    private fun updatePathBar() = pathBar.setPath(currentPath)
 
     private fun moveUp() {
         currentPath.removeAt(currentPath.size - 1)

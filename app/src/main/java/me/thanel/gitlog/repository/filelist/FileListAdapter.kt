@@ -8,9 +8,7 @@ import me.thanel.gitlog.base.ItemAdapter
 class FileListAdapter(
         onItemClickListener: (File) -> Unit
 ) : ItemAdapter<File, FileListAdapter.ViewHolder>(onItemClickListener) {
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
 
     override fun getLayoutResId(viewType: Int) = R.layout.item_file
 

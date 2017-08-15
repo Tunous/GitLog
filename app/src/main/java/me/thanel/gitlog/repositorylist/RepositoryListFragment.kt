@@ -31,20 +31,15 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
 
     override fun onCreateViewModel() = RepositoryViewModel.get(activity)
 
-    override fun observeViewModel(viewModel: RepositoryViewModel) {
-        viewModel.listRepositories().observe(this, this::displayRepositories)
+    override fun observeViewModel(viewModel: RepositoryViewModel) = viewModel.listRepositories().observe(this, this::displayRepositories)
+
+    private fun displayRepositories(repositories: List<Repository>?) = if (repositories != null) {
+        adapter.replaceAll(repositories)
+    } else {
+        adapter.clear()
     }
 
-    private fun displayRepositories(repositories: List<Repository>?) {
-        if (repositories != null) {
-            adapter.replaceAll(repositories)
-        } else {
-            adapter.clear()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
 //            REQUEST_CLONE_REPOSITORY -> if (resultCode == Activity.RESULT_OK) {
 //                val newRepository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY_ID)
 //                adapter.add(newRepository)
@@ -56,8 +51,7 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
 //                adapter.remove(repository)
 //            }
 
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
+        else -> super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun showAddRepositoryScreen() {

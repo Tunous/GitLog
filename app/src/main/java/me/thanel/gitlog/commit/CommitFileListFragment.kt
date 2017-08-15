@@ -19,9 +19,7 @@ class CommitFileListFragment : BaseFragment<CommitViewModel>() {
 
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
-    override fun observeViewModel(viewModel: CommitViewModel) {
-        viewModel.diffEntries.observe(this, this::displayDiffs)
-    }
+    override fun observeViewModel(viewModel: CommitViewModel) = viewModel.diffEntries.observe(this, this::displayDiffs)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

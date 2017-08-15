@@ -45,23 +45,19 @@ class DiffHunkViewHolder(
         updateExpandIcon(false)
     }
 
-    private fun getColor(item: DiffEntry): Int {
-        return when (item.changeType) {
-            DiffEntry.ChangeType.ADD -> Color.GREEN
-            DiffEntry.ChangeType.DELETE -> Color.RED
-            DiffEntry.ChangeType.RENAME,
-            DiffEntry.ChangeType.COPY -> Color.BLUE
-            else -> Color.BLACK
-        }
+    private fun getColor(item: DiffEntry): Int = when (item.changeType) {
+        DiffEntry.ChangeType.ADD -> Color.GREEN
+        DiffEntry.ChangeType.DELETE -> Color.RED
+        DiffEntry.ChangeType.RENAME,
+        DiffEntry.ChangeType.COPY -> Color.BLUE
+        else -> Color.BLACK
     }
 
-    private fun getPath(item: DiffEntry): CharSequence? {
-        return when (item.changeType) {
-            DiffEntry.ChangeType.ADD -> item.newPath
-            DiffEntry.ChangeType.RENAME,
-            DiffEntry.ChangeType.COPY -> "${item.oldPath} -> ${item.newPath}"
-            else -> item.oldPath
-        }
+    private fun getPath(item: DiffEntry): CharSequence? = when (item.changeType) {
+        DiffEntry.ChangeType.ADD -> item.newPath
+        DiffEntry.ChangeType.RENAME,
+        DiffEntry.ChangeType.COPY -> "${item.oldPath} -> ${item.newPath}"
+        else -> item.oldPath
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

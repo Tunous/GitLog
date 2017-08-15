@@ -34,10 +34,9 @@ class BranchListFragment : BaseFragment<RepositoryViewModel>() {
 
     override fun onCreateViewModel() = RepositoryViewModel.get(activity)
 
-    override fun observeViewModel(viewModel: RepositoryViewModel) {
-        viewModel.getRepository(repositoryId).observe(this) {
-            listBranches(it!!)
-        }
+    override fun observeViewModel(viewModel: RepositoryViewModel) = viewModel.getRepository(
+            repositoryId).observe(this) {
+        listBranches(it!!)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -32,12 +32,8 @@ data class Repository(
     override fun describeContents() = 0
 
     companion object CREATOR : Parcelable.Creator<Repository> {
-        override fun createFromParcel(parcel: Parcel): Repository {
-            return Repository(parcel)
-        }
+        override fun createFromParcel(parcel: Parcel): Repository = Repository(parcel)
 
-        override fun newArray(size: Int): Array<Repository?> {
-            return arrayOfNulls(size)
-        }
+        override fun newArray(size: Int): Array<Repository?> = arrayOfNulls(size)
     }
 }

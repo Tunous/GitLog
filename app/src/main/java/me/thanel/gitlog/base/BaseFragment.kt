@@ -28,9 +28,7 @@ abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?): View {
-        return inflater.inflate(layoutResId, container, false)
-    }
+            savedInstanceState: Bundle?): View = inflater.inflate(layoutResId, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -45,7 +43,7 @@ abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
 
     abstract fun onCreateViewModel(): T
 
-    open fun observeViewModel(viewModel: T) {}
+    open fun observeViewModel(viewModel: T) = Unit
 
     open fun onBackPressed(): Boolean = false
 

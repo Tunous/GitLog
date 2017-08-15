@@ -68,12 +68,10 @@ inline fun <reified T : AppCompatActivity> Context.createIntent(
  * Returns displayable styled text from the provided HTML string.
  */
 @Suppress("DEPRECATION")
-fun String.fromHtml(): Spanned {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-        Html.fromHtml(this)
-    }
+fun String.fromHtml(): Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+} else {
+    Html.fromHtml(this)
 }
 
 class StyleableTag(name: String, val replacement: String, vararg val spans: Any) {
@@ -107,9 +105,7 @@ fun String.formatTags(vararg tags: StyleableTag): SpannableStringBuilder {
     return builder
 }
 
-inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {
-    observe(owner, Observer { observer(it) })
-}
+inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) = observe(owner, Observer { observer(it) })
 
 /**
  * Applies the given function on CommonPool background thread to each value emitted by this
@@ -142,9 +138,7 @@ class BackgroundLoadLiveData<X, Y>(input: X, func: (X) -> Y) : MutableLiveData<Y
     }
 }
 
-inline fun <reified T : ViewModel> getViewModel(activity: FragmentActivity): T {
-    return ViewModelProviders.of(activity).get(T::class.java)
-}
+inline fun <reified T : ViewModel> getViewModel(activity: FragmentActivity): T = ViewModelProviders.of(activity).get(T::class.java)
 
 inline fun <reified T : ViewModel> getViewModel(activity: FragmentActivity,
         crossinline onCreateFactory: () -> T): T {
@@ -167,9 +161,7 @@ fun Context.resolveColor(@AttrRes attResId: Int): Int {
 }
 
 @Suppress("unused")
-fun showNotImplementedToast(context: Context) {
-    Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
-}
+fun showNotImplementedToast(context: Context) = Toast.makeText(context, "Not implemented", Toast.LENGTH_SHORT).show()
 
 const val SHORT_SHA_LENGTH = 7
 

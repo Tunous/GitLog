@@ -36,20 +36,16 @@ class DiffHunkAdapter(
         }
     }
 
-    override fun getLayoutResId(viewType: Int): Int {
-        return when (viewType) {
-            VIEW_TYPE_COMMIT_DETAILS -> R.layout.item_commit_details
-            VIEW_TYPE_SUMMARY -> R.layout.item_changes_summary
-            else -> R.layout.item_diff_hunk
-        }
+    override fun getLayoutResId(viewType: Int): Int = when (viewType) {
+        VIEW_TYPE_COMMIT_DETAILS -> R.layout.item_commit_details
+        VIEW_TYPE_SUMMARY -> R.layout.item_changes_summary
+        else -> R.layout.item_diff_hunk
     }
 
-    override fun createViewHolder(itemView: View, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            VIEW_TYPE_COMMIT_DETAILS -> CommitDetailsViewHolder(itemView, viewModel.repositoryId)
-            VIEW_TYPE_SUMMARY -> DiffSummaryViewHolder(itemView, viewModel)
-            else -> DiffHunkViewHolder(itemView, viewModel)
-        }
+    override fun createViewHolder(itemView: View, viewType: Int): RecyclerView.ViewHolder = when (viewType) {
+        VIEW_TYPE_COMMIT_DETAILS -> CommitDetailsViewHolder(itemView, viewModel.repositoryId)
+        VIEW_TYPE_SUMMARY -> DiffSummaryViewHolder(itemView, viewModel)
+        else -> DiffHunkViewHolder(itemView, viewModel)
     }
 
     companion object {

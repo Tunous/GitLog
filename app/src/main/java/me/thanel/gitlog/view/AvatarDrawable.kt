@@ -75,9 +75,7 @@ class AvatarDrawable(userName: String, identifier: Any?) : Drawable() {
         mColor = COLOR_PALETTE[colorIndex]
     }
 
-    override fun getConstantState(): Drawable.ConstantState? {
-        return mState
-    }
+    override fun getConstantState(): Drawable.ConstantState? = mState
 
     override fun draw(canvas: Canvas) {
         val bounds = bounds
@@ -115,9 +113,7 @@ class AvatarDrawable(userName: String, identifier: Any?) : Drawable() {
         mPaint.colorFilter = cf
     }
 
-    override fun getOpacity(): Int {
-        return android.graphics.PixelFormat.OPAQUE
-    }
+    override fun getOpacity() = PixelFormat.OPAQUE
 
     private class UserNameState(
             val userName: String,
