@@ -31,7 +31,8 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
 
     override fun onCreateViewModel() = RepositoryViewModel.get(activity)
 
-    override fun observeViewModel(viewModel: RepositoryViewModel) = viewModel.listRepositories().observe(this, this::displayRepositories)
+    override fun observeViewModel(viewModel: RepositoryViewModel) =
+        viewModel.listRepositories().observe(this, this::displayRepositories)
 
     private fun displayRepositories(repositories: List<Repository>?) = if (repositories != null) {
         adapter.replaceAll(repositories)
@@ -39,17 +40,18 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
         adapter.clear()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = when (requestCode) {
-//            REQUEST_CLONE_REPOSITORY -> if (resultCode == Activity.RESULT_OK) {
-//                val newRepository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY_ID)
-//                adapter.add(newRepository)
-//                openRepository(newRepository)
-//            }
-//
-//            REQUEST_OPEN_REPOSITORY -> if (resultCode == ActivityResults.RESULT_REPOSITORY_REMOVED) {
-//                val repository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY_ID)
-//                adapter.remove(repository)
-//            }
+    override fun onActivityResult(requestCode: Int, resultCode: Int,
+            data: Intent?) = when (requestCode) {
+    //            REQUEST_CLONE_REPOSITORY -> if (resultCode == Activity.RESULT_OK) {
+    //                val newRepository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY_ID)
+    //                adapter.add(newRepository)
+    //                openRepository(newRepository)
+    //            }
+    //
+    //            REQUEST_OPEN_REPOSITORY -> if (resultCode == ActivityResults.RESULT_REPOSITORY_REMOVED) {
+    //                val repository = data!!.getParcelableExtra<Repo>(RepositoryActivity.EXTRA_REPOSITORY_ID)
+    //                adapter.remove(repository)
+    //            }
 
         else -> super.onActivityResult(requestCode, resultCode, data)
     }

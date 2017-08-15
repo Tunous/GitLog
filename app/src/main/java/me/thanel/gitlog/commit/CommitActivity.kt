@@ -36,17 +36,17 @@ class CommitActivity : BaseFragmentActivity() {
     override fun createFragment() = CommitFragment.newInstance(commitSha, repositoryId)
 
     override fun getSupportParentActivityIntent(): Intent =
-            RepositoryActivity.newIntent(this, repositoryId)
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        RepositoryActivity.newIntent(this, repositoryId)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         private const val EXTRA_COMMIT_SHA = "extra.commit_sha"
         private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
 
         fun newIntent(context: Context, repositoryId: Int, commitSha: String) =
-                context.createIntent<CommitActivity> {
-                    putExtra(EXTRA_COMMIT_SHA, commitSha)
-                    putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-                }
+            context.createIntent<CommitActivity> {
+                putExtra(EXTRA_COMMIT_SHA, commitSha)
+                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
+            }
     }
 }

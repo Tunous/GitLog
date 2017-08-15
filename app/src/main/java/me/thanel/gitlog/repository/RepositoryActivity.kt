@@ -83,8 +83,8 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     }
 
     override fun getSupportParentActivityIntent(): Intent =
-            RepositoryListActivity.newIntent(this)
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        RepositoryListActivity.newIntent(this)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     private fun promptRemoveRepository() {
         val message = getString(R.string.remove_repository_confirm_message)
@@ -115,8 +115,8 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
         const val EXTRA_REPOSITORY = "extra.repository"
 
         fun newIntent(context: Context, repositoryId: Int) =
-                context.createIntent<RepositoryActivity> {
-                    putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-                }
+            context.createIntent<RepositoryActivity> {
+                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
+            }
     }
 }

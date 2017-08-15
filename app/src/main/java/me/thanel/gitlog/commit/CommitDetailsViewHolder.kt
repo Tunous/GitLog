@@ -36,7 +36,8 @@ class CommitDetailsViewHolder(
             val sha = match.value
             val span = ClickableShaSpan(repositoryId, sha)
             builder.replace(start, end, match.value.substring(0, SHORT_SHA_LENGTH))
-            builder.setSpan(span, start, start + SHORT_SHA_LENGTH, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.setSpan(span, start, start + SHORT_SHA_LENGTH,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             start += SHORT_SHA_LENGTH
         }
         return builder

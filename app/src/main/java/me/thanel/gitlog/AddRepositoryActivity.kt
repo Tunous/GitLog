@@ -48,7 +48,8 @@ class AddRepositoryActivity : AppCompatActivity() {
                 repositoryUrlInputView.error = null
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int,
+                    after: Int) = Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
@@ -58,7 +59,8 @@ class AddRepositoryActivity : AppCompatActivity() {
                 repositoryNameInputView.error = null
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int,
+                    after: Int) = Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
@@ -162,8 +164,8 @@ class AddRepositoryActivity : AppCompatActivity() {
     }
 
     override fun getSupportParentActivityIntent(): Intent =
-            RepositoryListActivity.newIntent(this)
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        RepositoryListActivity.newIntent(this)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         fun newIntent(context: Context) = context.createIntent<AddRepositoryActivity>()

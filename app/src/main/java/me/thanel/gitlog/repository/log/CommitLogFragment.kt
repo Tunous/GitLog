@@ -20,7 +20,6 @@ import org.eclipse.jgit.lib.Ref
 import org.eclipse.jgit.lib.Repository.shortenRefName
 import org.eclipse.jgit.revwalk.RevCommit
 
-
 class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
     private val commitLogAdapter = CommitLogAdapter(this::openCommit)
@@ -34,7 +33,8 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
 
     override fun onCreateViewModel() = CommitLogViewModel.get(activity, repositoryId)
 
-    override fun observeViewModel(viewModel: CommitLogViewModel) = viewModel.repository.observe(this, this::onRepositoryLoaded)
+    override fun observeViewModel(viewModel: CommitLogViewModel) =
+        viewModel.repository.observe(this, this::onRepositoryLoaded)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

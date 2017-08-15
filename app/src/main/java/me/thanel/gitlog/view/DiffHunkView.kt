@@ -104,7 +104,8 @@ class DiffHunkView @JvmOverloads constructor(
                 else -> bgRegular
             }
 
-            val span = DiffLineSpan(bg, lineBg, 32, index == 0, index == lines.size - 1, lineNumberLength)
+            val span = DiffLineSpan(bg, lineBg, 32, index == 0, index == lines.size - 1,
+                    lineNumberLength)
             builder.setSpan(span, spanStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         val padding = context.resources.getDimensionPixelSize(R.dimen.diff_line_padding)
@@ -164,8 +165,9 @@ class DiffHunkView @JvmOverloads constructor(
             private val isLastLine: Boolean,
             private val lineNumberLength: Int
     ) : LineBackgroundSpan {
-        override fun drawBackground(c: Canvas, p: Paint, left: Int, right: Int, top: Int, baseline: Int,
-                bottom: Int, text: CharSequence, start: Int, end: Int, lineNumber: Int) {
+        override fun drawBackground(c: Canvas, p: Paint, left: Int, right: Int, top: Int,
+                baseline: Int, bottom: Int, text: CharSequence, start: Int, end: Int,
+                lineNumber: Int) {
             val paintColor = p.color
             val width = p.measureText(text, start, start + lineNumberLength)
             val paddingTop = (top - if (isFirstLine) padding else 0).toFloat()

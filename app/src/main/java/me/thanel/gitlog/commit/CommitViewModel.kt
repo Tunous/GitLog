@@ -65,8 +65,8 @@ class CommitViewModel(
 
     companion object {
         fun get(activity: FragmentActivity, repositoryId: Int, commitSha: String) =
-                getViewModel(activity) {
-                    CommitViewModel(activity.application, repositoryId, commitSha)
-                }
+            getViewModel(activity) {
+                CommitViewModel(activity.application, repositoryId, commitSha)
+            }
     }
 }

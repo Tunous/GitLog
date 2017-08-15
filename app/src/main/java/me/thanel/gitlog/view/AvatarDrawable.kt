@@ -88,9 +88,9 @@ class AvatarDrawable(userName: String, identifier: Any?) : Drawable() {
         val centerY = bounds.centerY().toFloat()
         val radius = (minDimension / 2).toFloat()
 
-//        mPaint.color = 0xff3f51b5.toInt()
-//        canvas.drawRect(centerX - 5, bounds.top.toFloat(), centerX + 5, bounds.bottom.toFloat(), mPaint)
-//        canvas.drawCircle(centerX, centerY, radius, mPaint)
+        //        mPaint.color = 0xff3f51b5.toInt()
+        //        canvas.drawRect(centerX - 5, bounds.top.toFloat(), centerX + 5, bounds.bottom.toFloat(), mPaint)
+        //        canvas.drawCircle(centerX, centerY, radius, mPaint)
 
         mPaint.color = mColor
 

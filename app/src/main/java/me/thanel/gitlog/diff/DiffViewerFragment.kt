@@ -14,7 +14,8 @@ class DiffViewerFragment : BaseWebViewerFragment<CommitViewModel>() {
 
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
-    override fun observeViewModel(viewModel: CommitViewModel) = viewModel.getDiffEntry(diffId).observe(this, this::displayDiff)
+    override fun observeViewModel(viewModel: CommitViewModel) =
+        viewModel.getDiffEntry(diffId).observe(this, this::displayDiff)
 
     private fun displayDiff(diffEntry: DiffEntry?) {
         if (diffEntry == null) {

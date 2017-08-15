@@ -19,7 +19,8 @@ class CommitFileListFragment : BaseFragment<CommitViewModel>() {
 
     override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
 
-    override fun observeViewModel(viewModel: CommitViewModel) = viewModel.diffEntries.observe(this, this::displayDiffs)
+    override fun observeViewModel(viewModel: CommitViewModel) = viewModel.diffEntries.observe(this,
+            this::displayDiffs)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -43,9 +44,9 @@ class CommitFileListFragment : BaseFragment<CommitViewModel>() {
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
 
         fun newInstance(commitSha: String, repositoryId: Int) =
-                CommitFileListFragment().withArguments {
-                    putString(ARG_COMMIT_SHA, commitSha)
-                    putInt(ARG_REPOSITORY_ID, repositoryId)
-                }
+            CommitFileListFragment().withArguments {
+                putString(ARG_COMMIT_SHA, commitSha)
+                putInt(ARG_REPOSITORY_ID, repositoryId)
+            }
     }
 }

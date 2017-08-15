@@ -31,8 +31,8 @@ class FileViewerActivity : BaseFragmentActivity() {
             filePath)
 
     override fun getSupportParentActivityIntent(): Intent =
-            FileListActivity.newIntent(this, repositoryId, refName)
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        FileListActivity.newIntent(this, repositoryId, refName)
+                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         private const val EXTRA_FILE_PATH = "extra.file_path"

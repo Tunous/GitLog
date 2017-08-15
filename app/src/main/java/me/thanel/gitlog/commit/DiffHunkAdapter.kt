@@ -42,7 +42,8 @@ class DiffHunkAdapter(
         else -> R.layout.item_diff_hunk
     }
 
-    override fun createViewHolder(itemView: View, viewType: Int): RecyclerView.ViewHolder = when (viewType) {
+    override fun createViewHolder(itemView: View,
+            viewType: Int): RecyclerView.ViewHolder = when (viewType) {
         VIEW_TYPE_COMMIT_DETAILS -> CommitDetailsViewHolder(itemView, viewModel.repositoryId)
         VIEW_TYPE_SUMMARY -> DiffSummaryViewHolder(itemView, viewModel)
         else -> DiffHunkViewHolder(itemView, viewModel)
