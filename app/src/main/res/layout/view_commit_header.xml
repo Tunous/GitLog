@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="16dp"
-    android:paddingTop="8dp"
+    android:paddingBottom="@dimen/small_spacing"
+    android:paddingTop="@dimen/small_spacing"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    tools:background="@color/colorPrimary">
+    tools:background="@color/colorPrimary"
+    tools:parentTag="android.support.constraint.ConstraintLayout">
 
     <TextView
         android:id="@+id/titleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:ellipsize="end"
         android:maxLines="2"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="@+id/guideline"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/expandDropDown"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Long message so it should wrap and then ellipsize when getting longer than the 2 lines visible here" />
 
@@ -29,8 +29,6 @@
         android:id="@+id/repositoryNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@+id/guideline"
@@ -42,7 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         app:layout_constraintLeft_toRightOf="@+id/repositoryNameView"
         app:layout_constraintTop_toBottomOf="@+id/titleView"
@@ -53,15 +50,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="72dp" />
+        app:layout_constraintGuide_begin="72dp"
+        tools:layout_editor_absoluteX="72dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <me.thanel.gitlog.commit.view.AvatarView
         android:id="@+id/avatarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
         android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/repositoryNameView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/expandDropDown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/repositoryNameView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?selectableItemBackgroundBorderless"
+        app:layout_constraintVertical_bias="0.511"
+        app:srcCompat="@drawable/ic_arrow_drop_down_white" />
+
+    <me.thanel.gitlog.commit.view.PersonHeaderView
+        android:id="@+id/authorDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_spacing"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repositoryNameView"
+        tools:visibility="visible" />
+
+    <me.thanel.gitlog.commit.view.PersonHeaderView
+        android:id="@+id/committerDetails"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/authorDetails" />
+
+</merge>

@@ -24,6 +24,20 @@ class AvatarView @JvmOverloads constructor(
     private val bigAvatarView = root.bigAvatarView
     private val smallAvatarView = root.smallAvatarView
 
+    init {
+        if (isInEditMode) {
+            bigAvatarView.setImageResource(R.mipmap.ic_launcher_round)
+            smallAvatarView.setImageResource(R.mipmap.ic_launcher_round)
+            smallAvatarView.visibility = View.VISIBLE
+        }
+    }
+
+    fun setFromIdent(ident: PersonIdent) {
+        val drawable = AvatarDrawable(ident.name, ident)
+        loadAvatar(ident, drawable, bigAvatarView)
+        smallAvatarView.visibility = View.GONE
+    }
+
     fun setFromCommit(revCommit: RevCommit, allowMergeIndicator: Boolean = false) {
         if (allowMergeIndicator && revCommit.parentCount > 1) {
             bigAvatarView.setImageDrawable(SmallCircleDrawable())

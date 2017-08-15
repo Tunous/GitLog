@@ -2,6 +2,7 @@ package me.thanel.gitlog.base
 
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
+import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.LayoutRes
@@ -15,6 +16,7 @@ import java.io.Serializable
 abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
     private val appBarLayout by lazy { findViewById<AppBarLayout>(R.id.appBarLayout) }
+    val headerContext: Context get() = appBarLayout.context
 
     protected var title: String? = null
         set(value) {

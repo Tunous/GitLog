@@ -21,7 +21,7 @@ class CommitActivity : BaseFragmentActivity() {
 
         title = "Commit ${commitSha.substring(0, SHORT_SHA_LENGTH)}"
 
-        headerView = CommitHeaderView(this)
+        headerView = CommitHeaderView(headerContext)
         addHeaderView(headerView)
 
         val viewModel = CommitViewModel.get(this, repositoryId, commitSha)

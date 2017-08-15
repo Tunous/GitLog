@@ -10,6 +10,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.annotation.AttrRes
 import android.support.annotation.ColorInt
@@ -150,6 +151,13 @@ fun Context.resolveColor(@AttrRes attResId: Int): Int {
     val color = a.getColor(0, 0)
     a.recycle()
     return color
+}
+
+fun Context.resolveDrawable(@AttrRes attResId: Int): Drawable {
+    val a = obtainStyledAttributes(intArrayOf(attResId))
+    val drawable = a.getDrawable(0)
+    a.recycle()
+    return drawable
 }
 
 @Suppress("unused")
