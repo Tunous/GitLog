@@ -29,6 +29,7 @@ ext {
     supportVersion = '26.0.1'
     coroutinesVersion = '0.16'
     archVersion = '1.0.0-alpha5'
+    picassoVersion = '2.5.2'
 }
 
 dependencies {
@@ -46,6 +47,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    compile "com.squareup.picasso:picasso:$picassoVersion"
 
     compile "android.arch.lifecycle:runtime:$archVersion"
     compile "android.arch.lifecycle:extensions:$archVersion"

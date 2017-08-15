@@ -55,7 +55,7 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="72dp" />
 
-    <me.thanel.gitlog.commit.view.StackedAvatarView
+    <me.thanel.gitlog.commit.view.AvatarView
         android:id="@+id/avatarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

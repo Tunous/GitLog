@@ -26,6 +26,8 @@ import android.widget.Toast
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import org.eclipse.jgit.lib.Repository
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 /**
  * Inflate a new view hierarchy from the specified xml resource.
@@ -163,4 +165,29 @@ fun Repository.getAbbreviatedName(name: String): String? {
     }
     val objectId = ref?.objectId ?: resolve(name)
     return objectId?.abbreviate(SHORT_SHA_LENGTH)?.name()
+}
+
+// From: https://stackoverflow.com/a/4846511/2630152
+fun String.md5(): String {
+    try {
+        // Create MD5 Hash
+        val digest = MessageDigest.getInstance("MD5")
+        digest.update(toByteArray())
+        val messageDigest = digest.digest()
+
+        // Create Hex String
+        val hexString = StringBuilder()
+        for (aMessageDigest in messageDigest) {
+            var hex = Integer.toHexString(0xFF and aMessageDigest.toInt())
+            while (hex.length < 2) {
+                hex = "0" + hex
+            }
+            hexString.append(hex)
+        }
+        return hexString.toString()
+    } catch (e: NoSuchAlgorithmException) {
+        e.printStackTrace()
+    }
+
+    return ""
 }
