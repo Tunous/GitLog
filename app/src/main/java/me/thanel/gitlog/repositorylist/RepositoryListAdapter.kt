@@ -1,7 +1,6 @@
 package me.thanel.gitlog.repositorylist
 
 import android.view.View
-import android.widget.TextView
 import kotlinx.android.synthetic.main.item_repository.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
@@ -17,7 +16,7 @@ class RepositoryListAdapter(
     override fun createViewHolder(itemView: View, viewType: Int) = ViewHolder(itemView)
 
     class ViewHolder(itemView: View) : ItemAdapter.ViewHolder<Repository>(itemView) {
-        private val repositoryNameView: TextView by lazy { itemView.repositoryNameView }
+        private val repositoryNameView = itemView.repositoryNameView
 
         override fun bind(item: Repository) {
             super.bind(item)

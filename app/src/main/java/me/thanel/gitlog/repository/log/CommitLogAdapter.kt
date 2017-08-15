@@ -1,8 +1,6 @@
 package me.thanel.gitlog.repository.log
 
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import kotlinx.android.synthetic.main.item_log.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
@@ -20,9 +18,9 @@ class CommitLogAdapter(
     override fun createViewHolder(itemView: View, viewType: Int) = ViewHolder(itemView)
 
     class ViewHolder(itemView: View) : ItemAdapter.ViewHolder<RevCommit>(itemView) {
-        private val logMessage: TextView by lazy { itemView.logMessage }
-        private val avatarView: ImageView by lazy { itemView.commitAuthorAvatarView }
-        private val detailsIndicator: ImageView by lazy { itemView.commitDetailsIndicator }
+        private val logMessage =  itemView.logMessage
+        private val avatarView =  itemView.commitAuthorAvatarView
+        private val detailsIndicator =  itemView.commitDetailsIndicator
 
         override fun bind(item: RevCommit) {
             super.bind(item)

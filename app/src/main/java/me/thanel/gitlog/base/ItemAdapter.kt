@@ -43,14 +43,6 @@ abstract class ItemAdapter<E, VH : RecyclerView.ViewHolder>(
         notifyItemInserted(items.size)
     }
 
-    fun remove(item: E) {
-        val position = items.indexOf(item)
-        if (position >= 0) {
-            items.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
-
     fun clear() {
         val itemCount = items.size
         items.clear()

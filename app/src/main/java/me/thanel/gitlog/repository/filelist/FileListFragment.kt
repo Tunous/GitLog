@@ -101,9 +101,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         displayFiles(currentPath.joinToString("/"))
 
         // Restore scroll position
-        viewModel.popScrollState()?.let {
-            recyclerView.layoutManager.onRestoreInstanceState(it)
-        }
+        viewModel.popScrollState()?.let(recyclerView.layoutManager::onRestoreInstanceState)
         updatePathBar()
     }
 
