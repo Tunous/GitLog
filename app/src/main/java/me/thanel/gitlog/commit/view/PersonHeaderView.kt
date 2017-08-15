@@ -19,6 +19,6 @@ class PersonHeaderView @JvmOverloads constructor(
 
     fun bind(ident: PersonIdent) {
         avatarView.setFromIdent(ident)
-        nameView.text = ident.name
+        nameView.text = "${ident.name} <${ident.emailAddress}>"
     }
 }
