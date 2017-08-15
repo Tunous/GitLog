@@ -62,10 +62,10 @@ class AvatarDrawable(userName: String, identifier: Any?) : Drawable() {
         val colorIndex: Int
         if (TextUtils.isEmpty(userName)) {
             mLetter[0] = '?'
-            if (mState.identifier != null) {
-                colorIndex = Math.abs((mState.identifier as Any).hashCode()) % COLOR_PALETTE.size
+            colorIndex = if (mState.identifier != null) {
+                Math.abs((mState.identifier as Any).hashCode()) % COLOR_PALETTE.size
             } else {
-                colorIndex = (Math.random() * COLOR_PALETTE.size).toInt()
+                (Math.random() * COLOR_PALETTE.size).toInt()
             }
         } else {
             mLetter[0] = Character.toUpperCase(userName[0])

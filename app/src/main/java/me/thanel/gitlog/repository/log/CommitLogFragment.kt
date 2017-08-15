@@ -1,10 +1,7 @@
 package me.thanel.gitlog.repository.log
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.LinearLayoutManager
-import android.view.ViewGroup
-import kotlinx.android.synthetic.main.view_bottom_sheet_branch_list.*
 import kotlinx.android.synthetic.main.view_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -16,17 +13,12 @@ import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
-import org.eclipse.jgit.lib.Ref
-import org.eclipse.jgit.lib.Repository.shortenRefName
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
     private val commitLogAdapter = CommitLogAdapter(this::openCommit)
-    private val branchListAdapter = BranchListAdapter(this::checkout)
-
     private lateinit var repository: Repository
-    private lateinit var branchesBottomSheetBehavior: BottomSheetBehavior<ViewGroup>
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -64,20 +56,6 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             repository.git.log().call()
         }
         commitLogAdapter.replaceAll(log)
-    }
-
-    private fun checkout(ref: Ref) {
-        branchesBottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        launch(UI) {
-            val git = repository.git
-            run(CommonPool) {
-                git.checkout()
-                        .setName(shortenRefName(ref.name))
-                        .call()
-            }
-            branchListBottomSheetHeader.text = git.repository.branch
-            logCommits()
-        }
     }
 
     companion object {

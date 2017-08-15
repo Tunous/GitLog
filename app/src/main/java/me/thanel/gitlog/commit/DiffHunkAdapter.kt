@@ -26,12 +26,8 @@ class DiffHunkAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            VIEW_TYPE_COMMIT_DETAILS -> {
-                commit?.let((holder as CommitDetailsViewHolder)::bind)
-            }
-            VIEW_TYPE_SUMMARY -> {
-                (holder as DiffSummaryViewHolder).bind(items)
-            }
+            VIEW_TYPE_COMMIT_DETAILS -> commit?.let((holder as CommitDetailsViewHolder)::bind)
+            VIEW_TYPE_SUMMARY -> (holder as DiffSummaryViewHolder).bind(items)
             else -> (holder as DiffHunkViewHolder).bind(items[position - HEADER_VIEWS])
         }
     }
@@ -42,12 +38,12 @@ class DiffHunkAdapter(
         else -> R.layout.item_diff_hunk
     }
 
-    override fun createViewHolder(itemView: View,
-            viewType: Int): RecyclerView.ViewHolder = when (viewType) {
-        VIEW_TYPE_COMMIT_DETAILS -> CommitDetailsViewHolder(itemView, viewModel.repositoryId)
-        VIEW_TYPE_SUMMARY -> DiffSummaryViewHolder(itemView, viewModel)
-        else -> DiffHunkViewHolder(itemView, viewModel)
-    }
+    override fun createViewHolder(itemView: View, viewType: Int): RecyclerView.ViewHolder =
+        when (viewType) {
+            VIEW_TYPE_COMMIT_DETAILS -> CommitDetailsViewHolder(itemView, viewModel.repositoryId)
+            VIEW_TYPE_SUMMARY -> DiffSummaryViewHolder(itemView, viewModel)
+            else -> DiffHunkViewHolder(itemView, viewModel)
+        }
 
     companion object {
         private const val VIEW_TYPE_COMMIT_DETAILS = 1

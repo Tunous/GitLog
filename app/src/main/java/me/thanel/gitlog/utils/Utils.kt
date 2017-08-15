@@ -10,7 +10,6 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.annotation.AttrRes
 import android.support.annotation.ColorInt
@@ -18,7 +17,6 @@ import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
-import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.view.LayoutInflater
@@ -63,16 +61,6 @@ inline fun <reified T : AppCompatActivity> Context.createIntent(): Intent =
  */
 inline fun <reified T : AppCompatActivity> Context.createIntent(
         initializer: Intent.() -> Unit): Intent = createIntent<T>().apply(initializer)
-
-/**
- * Returns displayable styled text from the provided HTML string.
- */
-@Suppress("DEPRECATION")
-fun String.fromHtml(): Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-    Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
-} else {
-    Html.fromHtml(this)
-}
 
 class StyleableTag(name: String, val replacement: String, vararg val spans: Any) {
     val name = "[$name]"

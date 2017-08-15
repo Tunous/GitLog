@@ -70,11 +70,11 @@ class FileListViewModel(
 
         treeWalk.release()
 
-        items.sortWith(Comparator { left, right ->
-            if (left.isDirectory != right.isDirectory) {
-                return@Comparator right.isDirectory.compareTo(left.isDirectory)
+        items.sortWith(Comparator { (leftPath, leftIsDir), (rightPath, rightIsDir) ->
+            if (leftIsDir != rightIsDir) {
+                return@Comparator rightIsDir.compareTo(leftIsDir)
             }
-            return@Comparator left.path.toUpperCase().compareTo(right.path.toUpperCase())
+            return@Comparator leftPath.toUpperCase().compareTo(rightPath.toUpperCase())
         })
 
         return items
