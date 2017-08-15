@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <ImageView
+        android:id="@+id/bigAvatarView"
+        android:layout_width="@dimen/avatar_size"
+        android:layout_height="@dimen/avatar_size"
+        tools:src="@mipmap/ic_launcher_round" />
+
+    <ImageView
+        android:id="@+id/smallAvatarView"
+        android:layout_width="@dimen/small_avatar_size"
+        android:layout_height="@dimen/small_avatar_size"
+        android:layout_gravity="end|bottom"
+        android:layout_marginStart="@dimen/small_avatar_margin"
+        android:layout_marginTop="@dimen/small_avatar_margin"
+        android:visibility="gone"
+        tools:src="@mipmap/ic_launcher_round"
+        tools:visibility="visible" />
+
+</merge>

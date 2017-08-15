@@ -6,7 +6,6 @@ import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.view_commit_header.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.view.AvatarDrawable
 import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.util.RelativeDateFormatter
 import java.util.*
@@ -18,7 +17,7 @@ class CommitHeaderView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     private val view = inflate(context, R.layout.view_commit_header, this)
     private val titleView = view.titleView
-    private val commitAuthorAvatarView = view.commitAuthorAvatarView
+    private val avatarView = view.avatarView
     private val commitDateView = view.commitDateView
     private val repositoryNameView = view.repositoryNameView
 
@@ -29,10 +28,7 @@ class CommitHeaderView @JvmOverloads constructor(
         }
 
         titleView.text = commit.shortMessage
-
-        val authorName = commit.authorIdent?.name ?: ""
-        val avatarDrawable = AvatarDrawable(authorName, commit.name)
-        commitAuthorAvatarView.setImageDrawable(avatarDrawable)
+        avatarView.setFromCommit(commit)
 
         val date = Date(commit.commitTime * 1000L)
         commitDateView.text = RelativeDateFormatter.format(date)
