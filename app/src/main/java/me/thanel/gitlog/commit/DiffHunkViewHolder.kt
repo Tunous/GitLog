@@ -26,6 +26,7 @@ class DiffHunkViewHolder(
     }
     private val fileNameView = itemView.fileNameView
     private val diffHunkView = itemView.diffHunkView
+    private val expandDropDown = itemView.expandDropDown
     private val actionsMenuButton = itemView.actionsMenu.apply {
         setOnClickListener(this@DiffHunkViewHolder)
     }
@@ -33,8 +34,9 @@ class DiffHunkViewHolder(
         inflate(R.menu.diff_hunk)
         setOnMenuItemClickListener(this@DiffHunkViewHolder)
     }
+
     private val lineNumbersItem = actionsMenu.menu.findItem(R.id.toggle_line_numbers)
-    private val expandDropDown = itemView.expandDropDown
+    private val viewWholeFileItem = actionsMenu.menu.findItem(R.id.view_whole_file)
 
     override fun bind(item: DiffEntry) {
         super.bind(item)
@@ -43,8 +45,10 @@ class DiffHunkViewHolder(
         fileNameView.setTextColor(getColor(item))
         diffHunkView.setDiff(viewModel.formatDiffEntry(item))
         diffHunkView.visibility = View.GONE
-        lineNumbersItem.isChecked = true
         expandDropDown.rotation = 0f
+
+        lineNumbersItem.isChecked = true
+        viewWholeFileItem.isVisible = item.changeType != DiffEntry.ChangeType.DELETE
     }
 
     private fun getColor(item: DiffEntry): Int = when (item.changeType) {
