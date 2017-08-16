@@ -35,20 +35,20 @@ class DiffHunkViewHolder(
         setOnMenuItemClickListener(this@DiffHunkViewHolder)
     }
 
-    private val lineNumbersItem = actionsMenu.menu.findItem(R.id.toggle_line_numbers)
     private val viewWholeFileItem = actionsMenu.menu.findItem(R.id.view_whole_file)
 
-    override fun bind(item: DiffEntry) {
+    fun bind(item: DiffEntry, displayLineNumbers: Boolean) {
         super.bind(item)
         itemView.tag = item
         fileNameView.text = getPath(item)
         fileNameView.setTextColor(getColor(item))
-        diffHunkView.setDiff(viewModel.formatDiffEntry(item))
-        diffHunkView.visibility = View.GONE
         expandDropDown.rotation = 0f
 
-        lineNumbersItem.isChecked = true
         viewWholeFileItem.isVisible = item.changeType != DiffEntry.ChangeType.DELETE
+
+        diffHunkView.setDiff(viewModel.formatDiffEntry(item))
+        diffHunkView.setLineNumbersVisible(displayLineNumbers)
+        diffHunkView.visibility = View.GONE
     }
 
     private fun getColor(item: DiffEntry): Int = when (item.changeType) {
@@ -78,10 +78,6 @@ class DiffHunkViewHolder(
                 val intent = FileViewerActivity.newIntent(context, viewModel.repositoryId,
                         viewModel.commitSha, diffEntry.newPath)
                 context.startActivity(intent)
-            }
-            R.id.toggle_line_numbers -> {
-                item.isChecked = !item.isChecked
-                diffHunkView.setLineNumbersVisible(item.isChecked)
             }
             else -> return false
         }

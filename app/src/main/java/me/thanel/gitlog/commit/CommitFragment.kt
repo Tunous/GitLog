@@ -17,7 +17,7 @@ import org.eclipse.jgit.revwalk.RevCommit
 class CommitFragment : BaseFragment<CommitViewModel>() {
     private val commitSha by stringArg(ARG_COMMIT_SHA)
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
-    private lateinit var adapter: DiffHunkAdapter
+    private var adapter: DiffHunkAdapter? = null
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -37,9 +37,18 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = DiffHunkAdapter(viewModel)
+        adapter = DiffHunkAdapter(viewModel).apply {
+            displayLineNumbers = savedInstanceState?.getBoolean(STATE_LINE_NUMBERS, true) ?: true
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        adapter?.let {
+            outState.putBoolean(STATE_LINE_NUMBERS, it.displayLineNumbers)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -53,6 +62,12 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
                 val intent = FileListActivity.newIntent(context, repositoryId, commitSha)
                 startActivity(intent)
             }
+            R.id.line_numbers -> {
+                adapter?.let {
+                    item.isChecked = !item.isChecked
+                    it.displayLineNumbers = item.isChecked
+                }
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -63,7 +78,7 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
             // TODO: Loading indicator
             return
         }
-        adapter.commit = commit
+        adapter!!.commit = commit
     }
 
     private fun displayDiffs(diffEntries: List<DiffEntry>?) {
@@ -72,12 +87,13 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
             return
         }
 
-        adapter.replaceAll(diffEntries)
+        adapter!!.replaceAll(diffEntries)
     }
 
     companion object {
         private const val ARG_COMMIT_SHA = "arg.commit_sha"
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
+        private const val STATE_LINE_NUMBERS = "state.line_numbers"
 
         fun newInstance(commitSha: String, repositoryId: Int) = CommitFragment().withArguments {
             putString(ARG_COMMIT_SHA, commitSha)

@@ -7,4 +7,11 @@
         android:title="@string/browse_files"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/line_numbers"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/line_numbers"
+        app:showAsAction="never" />
+
 </menu>

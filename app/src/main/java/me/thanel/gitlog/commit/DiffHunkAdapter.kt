@@ -16,6 +16,12 @@ class DiffHunkAdapter(
             notifyDataSetChanged()
         }
 
+    var displayLineNumbers: Boolean = true
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     override fun getItemCount() = super.getItemCount() + HEADER_VIEWS
 
     override fun getItemViewType(position: Int) = when (position) {
@@ -28,7 +34,8 @@ class DiffHunkAdapter(
         when (holder) {
             is CommitDetailsViewHolder -> commit?.let(holder::bind)
             is DiffSummaryViewHolder -> holder.bind(items)
-            else -> (holder as DiffHunkViewHolder).bind(items[position - HEADER_VIEWS])
+            else -> (holder as DiffHunkViewHolder).bind(items[position - HEADER_VIEWS],
+                    displayLineNumbers)
         }
     }
 
