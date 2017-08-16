@@ -20,7 +20,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/expandDropDown"
+                android:id="@+id/expandArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="?selectableItemBackgroundBorderless"

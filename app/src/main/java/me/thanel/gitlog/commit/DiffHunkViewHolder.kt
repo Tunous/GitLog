@@ -26,7 +26,7 @@ class DiffHunkViewHolder(
     }
     private val fileNameView = itemView.fileNameView
     private val diffHunkView = itemView.diffHunkView
-    private val expandDropDown = itemView.expandDropDown
+    private val expandDropDown = itemView.expandArrow
     private val actionsMenuButton = itemView.actionsMenu.apply {
         setOnClickListener(this@DiffHunkViewHolder)
     }

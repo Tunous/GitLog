@@ -199,3 +199,9 @@ fun String.md5(): String {
 
     return ""
 }
+
+var View.isVisible: Boolean
+    get() = visibility == View.VISIBLE
+    set(visible) {
+        visibility = if (visible) View.VISIBLE else View.GONE
+    }
