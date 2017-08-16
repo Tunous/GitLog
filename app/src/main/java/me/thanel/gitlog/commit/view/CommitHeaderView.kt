@@ -1,10 +1,15 @@
 package me.thanel.gitlog.commit.view
 
-import android.animation.LayoutTransition
 import android.content.Context
 import android.support.constraint.ConstraintLayout
+import android.support.transition.ChangeBounds
+import android.support.transition.ChangeTransform
+import android.support.transition.Fade
+import android.support.transition.TransitionManager
+import android.support.transition.TransitionSet
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import kotlinx.android.synthetic.main.view_commit_header.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.model.Repository
@@ -33,8 +38,6 @@ class CommitHeaderView @JvmOverloads constructor(
         val regularSpacing = context.resources.getDimensionPixelSize(R.dimen.regular_spacing)
 
         setPadding(0, smallSpacing, 0, regularSpacing)
-
-        layoutTransition = LayoutTransition()
 
         setOnClickListener {
             val wasVisible = authorView.visibility == View.VISIBLE
@@ -72,13 +75,14 @@ class CommitHeaderView @JvmOverloads constructor(
     }
 
     private fun setDetailsVisible(visible: Boolean) {
+        TransitionManager.beginDelayedTransition(parent as ViewGroup, TransitionSet()
+                .addTransition(ChangeTransform())
+                .addTransition(ChangeBounds())
+                .addTransition(Fade()))
+
         authorView.visibility = if (visible) View.VISIBLE else View.GONE
         committerView.visibility = if (visible && shouldDisplayCommitter) View.VISIBLE else View.GONE
-
-        val resId = if (visible) R.drawable.ic_arrow_drop_up_white
-        else R.drawable.ic_arrow_drop_down_white
-        expandDropDown.expandDropDown.setImageResource(resId)
-
+        expandDropDown.rotation = if (visible) 180f else 0f
         avatarView.visibility = if (visible) View.GONE else View.VISIBLE
     }
 }
