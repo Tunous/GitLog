@@ -19,17 +19,18 @@ class DiffHunkViewHolder(
 ) : ItemAdapter.ViewHolder<DiffEntry>(itemView),
         PopupMenu.OnMenuItemClickListener,
         View.OnClickListener {
-    private val fileNameView = itemView.fileNameView
-    private val diffHunkView = itemView.diffHunkView
-    private val actionsMenuButton = itemView.actionsMenu
-    private val actionsMenu = PopupMenu(context, actionsMenuButton)
-
-    init {
-        actionsMenu.inflate(R.menu.diff_hunk)
-        actionsMenu.setOnMenuItemClickListener(this)
-        fileNameView.setOnClickListener(this)
-        actionsMenuButton.setOnClickListener(this)
+    private val fileNameView = itemView.fileNameView.apply {
+        setOnClickListener(this@DiffHunkViewHolder)
     }
+    private val diffHunkView = itemView.diffHunkView
+    private val actionsMenuButton = itemView.actionsMenu.apply {
+        setOnClickListener(this@DiffHunkViewHolder)
+    }
+    private val actionsMenu = PopupMenu(context, actionsMenuButton).apply {
+        inflate(R.menu.diff_hunk)
+        setOnMenuItemClickListener(this@DiffHunkViewHolder)
+    }
+    private val lineNumbersItem = actionsMenu.menu.findItem(R.id.toggle_line_numbers)
 
     override fun bind(item: DiffEntry) {
         super.bind(item)
@@ -38,6 +39,7 @@ class DiffHunkViewHolder(
         fileNameView.setTextColor(getColor(item))
         diffHunkView.setDiff(viewModel.formatDiffEntry(item))
         diffHunkView.visibility = View.GONE
+        lineNumbersItem.isChecked = true
         updateExpandIcon(false)
     }
 
@@ -68,6 +70,10 @@ class DiffHunkViewHolder(
                 val intent = FileViewerActivity.newIntent(context, viewModel.repositoryId,
                         viewModel.commitSha, diffEntry.newPath)
                 context.startActivity(intent)
+            }
+            R.id.toggle_line_numbers -> {
+                item.isChecked = !item.isChecked
+                diffHunkView.setLineNumbersVisible(item.isChecked)
             }
             else -> return false
         }

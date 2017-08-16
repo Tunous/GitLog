@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:background="?selectableItemBackgroundBorderless"
             android:drawableLeft="@drawable/ic_arrow_drop_down"
             android:drawablePadding="8dp"
             android:focusable="true"
