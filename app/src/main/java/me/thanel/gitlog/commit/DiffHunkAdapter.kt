@@ -25,9 +25,9 @@ class DiffHunkAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (getItemViewType(position)) {
-            VIEW_TYPE_COMMIT_DETAILS -> commit?.let((holder as CommitDetailsViewHolder)::bind)
-            VIEW_TYPE_SUMMARY -> (holder as DiffSummaryViewHolder).bind(items)
+        when (holder) {
+            is CommitDetailsViewHolder -> commit?.let(holder::bind)
+            is DiffSummaryViewHolder -> holder.bind(items)
             else -> (holder as DiffHunkViewHolder).bind(items[position - HEADER_VIEWS])
         }
     }
