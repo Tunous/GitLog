@@ -29,7 +29,9 @@ class CommitActivity : BaseFragmentActivity() {
     }
 
     private fun observeViewModel(viewModel: CommitViewModel) {
-        viewModel.repository.observe(this, headerView::displayRepositoryInformation)
+        viewModel.repository.observe(this) {
+            subtitle = it?.name
+        }
         viewModel.commit.observe(this, headerView::displayCommitInformation)
     }
 

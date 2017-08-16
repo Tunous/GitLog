@@ -15,6 +15,10 @@
     <string name="files">Files</string>
     <string name="branches">Branches</string>
     <string name="line_numbers">Line numbers</string>
+    <string name="committed">Committed on [time]</string>
+    <string name="authored">Authored on [time]</string>
+    <string name="committed_alone">[committer] committed [time]</string>
+    <string name="committed_together">[author] committed with [committer] [time]</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

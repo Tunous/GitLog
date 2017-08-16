@@ -1,12 +1,17 @@
 package me.thanel.gitlog.commit.view
 
 import android.content.Context
+import android.graphics.Typeface
+import android.support.annotation.StringRes
 import android.support.constraint.ConstraintLayout
 import android.text.format.DateUtils
+import android.text.style.StyleSpan
 import android.util.AttributeSet
 import android.view.View
 import kotlinx.android.synthetic.main.view_avatar_header.view.*
 import me.thanel.gitlog.R
+import me.thanel.gitlog.utils.StyleableTag
+import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.isVisible
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.revwalk.RevCommit
@@ -35,9 +40,15 @@ class AvatarHeaderView @JvmOverloads constructor(
     }
 
     var isAvatarVisible: Boolean
-        get() = avatarView.visibility == View.VISIBLE
+        get() = avatarView.isVisible
         set(visible) {
             avatarView.isVisible = visible
+        }
+
+    var areDetailsVisible: Boolean
+        get() = detailsView.isVisible
+        set(visible) {
+            detailsView.isVisible = visible
         }
 
     var expandArrowRotation: Float
@@ -50,13 +61,25 @@ class AvatarHeaderView @JvmOverloads constructor(
         avatarView.setFromCommit(commit)
         titleView.text = commit.shortMessage
         val date = Date(commit.commitTime * 1000L)
-        detailsView.text = RelativeDateFormatter.format(date)
+        val dateString = RelativeDateFormatter.format(date)
+        val message = if (commit.authorIdent?.emailAddress == commit.committerIdent?.emailAddress) {
+            context.getString(R.string.committed_alone).formatTags(
+                    StyleableTag("committer", commit.committerIdent.name, StyleSpan(Typeface.BOLD)),
+                    StyleableTag("time", dateString))
+        } else {
+            context.getString(R.string.committed_together).formatTags(
+                    StyleableTag("author", commit.authorIdent.name, StyleSpan(Typeface.BOLD)),
+                    StyleableTag("committer", commit.committerIdent.name, StyleSpan(Typeface.BOLD)),
+                    StyleableTag("time", dateString))
+        }
+        detailsView.text = message
     }
 
-    fun bind(ident: PersonIdent) {
+    fun bind(ident: PersonIdent, @StringRes messageResId: Int) {
         avatarView.setFromIdent(ident)
         titleView.text = "${ident.name} <${ident.emailAddress}>"
-        detailsView.text = DateUtils.formatDateTime(context, ident.`when`.time,
+        val time = DateUtils.formatDateTime(context, ident.`when`.time,
                 DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_YEAR)
+        detailsView.text = context.getString(messageResId).formatTags(StyleableTag("time", time))
     }
 }

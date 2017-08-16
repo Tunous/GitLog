@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.view_commit_header.view.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.utils.isVisible
 import org.eclipse.jgit.revwalk.RevCommit
 
@@ -51,22 +50,14 @@ class CommitHeaderView @JvmOverloads constructor(
 
         val authorIdent = commit.authorIdent
         val committerIdent = commit.committerIdent
-        authorView.bind(authorIdent)
         shouldDisplayCommitter = committerIdent != null &&
                 committerIdent.emailAddress != authorIdent.emailAddress
-
         if (shouldDisplayCommitter) {
-            committerView.bind(committerIdent)
+            authorView.bind(authorIdent, R.string.authored)
+            committerView.bind(committerIdent, R.string.committed)
+        } else {
+            authorView.bind(committerIdent, R.string.committed)
         }
-    }
-
-    fun displayRepositoryInformation(repository: Repository?) {
-        if (repository == null) {
-            // TODO: Loading
-            return
-        }
-
-//        repositoryNameView.text = repository.name
     }
 
     private fun setDetailsVisible(visible: Boolean) {
@@ -78,6 +69,7 @@ class CommitHeaderView @JvmOverloads constructor(
         authorView.isVisible = visible
         committerView.isVisible = visible && shouldDisplayCommitter
         headerView.isAvatarVisible = !visible
+        headerView.areDetailsVisible = !visible
         headerView.expandArrowRotation = if (visible) 180f else 0f
     }
 }
