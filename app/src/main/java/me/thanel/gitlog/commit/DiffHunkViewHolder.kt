@@ -1,7 +1,9 @@
 package me.thanel.gitlog.commit
 
 import android.graphics.Color
+import android.support.transition.ChangeTransform
 import android.support.transition.TransitionManager
+import android.support.transition.TransitionSet
 import android.support.v7.widget.PopupMenu
 import android.view.MenuItem
 import android.view.View
@@ -19,9 +21,10 @@ class DiffHunkViewHolder(
 ) : ItemAdapter.ViewHolder<DiffEntry>(itemView),
         PopupMenu.OnMenuItemClickListener,
         View.OnClickListener {
-    private val fileNameView = itemView.fileNameView.apply {
+    private val diffHeader = itemView.diffHeader.apply {
         setOnClickListener(this@DiffHunkViewHolder)
     }
+    private val fileNameView = itemView.fileNameView
     private val diffHunkView = itemView.diffHunkView
     private val actionsMenuButton = itemView.actionsMenu.apply {
         setOnClickListener(this@DiffHunkViewHolder)
@@ -31,6 +34,7 @@ class DiffHunkViewHolder(
         setOnMenuItemClickListener(this@DiffHunkViewHolder)
     }
     private val lineNumbersItem = actionsMenu.menu.findItem(R.id.toggle_line_numbers)
+    private val expandDropDown = itemView.expandDropDown
 
     override fun bind(item: DiffEntry) {
         super.bind(item)
@@ -40,7 +44,7 @@ class DiffHunkViewHolder(
         diffHunkView.setDiff(viewModel.formatDiffEntry(item))
         diffHunkView.visibility = View.GONE
         lineNumbersItem.isChecked = true
-        updateExpandIcon(false)
+        expandDropDown.rotation = 0f
     }
 
     private fun getColor(item: DiffEntry): Int = when (item.changeType) {
@@ -81,23 +85,20 @@ class DiffHunkViewHolder(
     }
 
     override fun onClick(view: View) {
-        if (view == fileNameView) {
-            toggleCodeView()
-        } else {
-            actionsMenu.show()
+        when (view) {
+            diffHeader -> toggleCodeView()
+            actionsMenuButton -> actionsMenu.show()
         }
     }
 
     private fun toggleCodeView() {
-        TransitionManager.beginDelayedTransition(itemView.parent as ViewGroup)
+        TransitionManager.beginDelayedTransition(itemView.parent as ViewGroup, TransitionSet()
+                // Animate only the drop-down, expand animation breaks when scrolling...
+                .addTransition(ChangeTransform().addTarget(expandDropDown))
+        )
+
         val wasVisible = diffHunkView.visibility == View.VISIBLE
         diffHunkView.visibility = if (wasVisible) View.GONE else View.VISIBLE
-        updateExpandIcon(!wasVisible)
-    }
-
-    private fun updateExpandIcon(isExpanded: Boolean) {
-        val arrowResId = if (isExpanded) R.drawable.ic_arrow_drop_up
-        else R.drawable.ic_arrow_drop_down
-        fileNameView.setCompoundDrawablesWithIntrinsicBounds(arrowResId, 0, 0, 0)
+        expandDropDown.rotation = if (wasVisible) 0f else 180f
     }
 }
