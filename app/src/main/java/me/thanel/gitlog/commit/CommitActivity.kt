@@ -4,35 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import me.thanel.gitlog.base.BaseFragmentActivity
-import me.thanel.gitlog.commit.view.CommitHeaderView
 import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.utils.SHORT_SHA_LENGTH
+import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.createIntent
-import me.thanel.gitlog.utils.observe
+import me.thanel.gitlog.utils.formatTags
 
 class CommitActivity : BaseFragmentActivity() {
     private val commitSha by stringExtra(EXTRA_COMMIT_SHA)
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
 
-    private lateinit var headerView: CommitHeaderView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        title = "Commit ${commitSha.substring(0, SHORT_SHA_LENGTH)}"
-
-        headerView = CommitHeaderView(headerContext)
-        addHeaderView(headerView)
-
-        val viewModel = CommitViewModel.get(this, repositoryId, commitSha)
-        observeViewModel(viewModel)
-    }
-
-    private fun observeViewModel(viewModel: CommitViewModel) {
-        viewModel.repository.observe(this) {
-            subtitle = it?.name
-        }
-        viewModel.commit.observe(this, headerView::displayCommitInformation)
+        val shortSha = commitSha.substring(0, SHORT_SHA_LENGTH)
+        toolbarTitle = "Commit [sha]".formatTags(StyleableTag("sha", shortSha))
     }
 
     override fun createFragment() = CommitFragment.newInstance(commitSha, repositoryId)

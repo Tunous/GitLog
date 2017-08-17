@@ -20,7 +20,7 @@ class FileListActivity : BaseFragmentActivity() {
         val viewModel = FileListViewModel.get(this, repositoryId, refName)
         viewModel.repository.observe(this) {
             it?.let {
-                subtitle = it.git.repository.getAbbreviatedName(refName)
+                toolbarSubtitle = it.git.repository.getAbbreviatedName(refName)
             }
         }
     }

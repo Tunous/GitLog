@@ -25,8 +25,8 @@ class BranchListFragment : BaseFragment<RepositoryViewModel>() {
         //   - Set active branch
         //   - Switch to log view
         //   - Make baseActivity private
-        //   - Make subtitle protected
-        baseActivity.subtitle = shortenRefName(it.name)
+        //   - Make toolbarSubtitle protected
+        baseActivity.toolbarSubtitle = shortenRefName(it.name)
     }
 
     override val layoutResId: Int

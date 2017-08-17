@@ -18,13 +18,13 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private val appBarLayout by lazy { findViewById<AppBarLayout>(R.id.appBarLayout) }
     val headerContext: Context get() = appBarLayout.context
 
-    protected var title: String? = null
+    protected var toolbarTitle: CharSequence? = null
         set(value) {
             field = value
             supportActionBar?.title = value
         }
 
-    var subtitle: String? = null
+    var toolbarSubtitle: CharSequence? = null
         set(value) {
             field = value
             supportActionBar?.subtitle = value
@@ -48,11 +48,15 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     override fun getLifecycle() = lifecycleRegistry
 
-    fun addHeaderView(view: View) =
-        appBarLayout.addView(view, appBarLayout.childCount, AppBarLayout.LayoutParams(
+    fun addHeaderView(view: View, addToTop: Boolean = false) {
+        val position = if (addToTop) 0 else appBarLayout.childCount
+        val layoutParams = AppBarLayout.LayoutParams(
                 AppBarLayout.LayoutParams.MATCH_PARENT,
-                AppBarLayout.LayoutParams.WRAP_CONTENT
-        ))
+                AppBarLayout.LayoutParams.WRAP_CONTENT).apply {
+            scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
+        }
+        appBarLayout.addView(view, position, layoutParams)
+    }
 
     fun removeHeaderView(view: View) = appBarLayout.removeView(view)
 

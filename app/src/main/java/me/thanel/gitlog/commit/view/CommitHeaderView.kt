@@ -29,11 +29,6 @@ class CommitHeaderView @JvmOverloads constructor(
 
     init {
         orientation = VERTICAL
-
-        val smallSpacing = context.resources.getDimensionPixelSize(R.dimen.small_spacing)
-        val regularSpacing = context.resources.getDimensionPixelSize(R.dimen.regular_spacing)
-        setPadding(0, smallSpacing, 0, regularSpacing)
-
         headerView.setOnClickListener {
             val wasVisible = authorView.visibility == View.VISIBLE
             setDetailsVisible(!wasVisible)
@@ -61,7 +56,7 @@ class CommitHeaderView @JvmOverloads constructor(
     }
 
     private fun setDetailsVisible(visible: Boolean) {
-        TransitionManager.beginDelayedTransition(parent as ViewGroup, TransitionSet()
+        TransitionManager.beginDelayedTransition(parent.parent as ViewGroup, TransitionSet()
                 .addTransition(ChangeTransform())
                 .addTransition(ChangeBounds())
                 .addTransition(Fade()))

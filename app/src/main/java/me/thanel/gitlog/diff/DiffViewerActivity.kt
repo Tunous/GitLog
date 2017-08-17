@@ -21,10 +21,10 @@ class DiffViewerActivity : BaseFragmentActivity() {
         val viewModel = CommitViewModel.get(this, repositoryId, commitSha)
 
         viewModel.repository.observe(this) {
-            subtitle = it?.name
+            toolbarSubtitle = it?.name
         }
         viewModel.getDiffEntry(diffId).observe(this) {
-            title = it?.newPath?.split("/")?.lastOrNull()
+            toolbarTitle = it?.newPath?.split("/")?.lastOrNull()
         }
     }
 

@@ -14,6 +14,7 @@ class CommitDetailsViewHolder(
         private val repositoryId: Int
 ) : ItemAdapter.ViewHolder<RevCommit>(itemView) {
     private val commitMessageView = itemView.commitMessageView
+    private val headerView = itemView.commitHeaderView
     private var commitShaRegex = Regex("""[0-9a-f]{40}""")
 
     override fun bind(item: RevCommit) {
@@ -23,6 +24,8 @@ class CommitDetailsViewHolder(
         // Setting this on each bind fixes issue where text selection stops working
         commitMessageView.setTextIsSelectable(true)
         commitMessageView.isFocusable = true
+
+        headerView.displayCommitInformation(item)
     }
 
     private fun formatMessage(item: RevCommit): CharSequence {

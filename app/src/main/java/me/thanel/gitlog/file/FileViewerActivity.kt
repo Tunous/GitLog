@@ -16,13 +16,13 @@ class FileViewerActivity : BaseFragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        title = filePath.split("/").last()
-        subtitle
+        toolbarTitle = filePath.split("/").last()
+        toolbarSubtitle
 
         val viewModel = FileViewModel.get(this, repositoryId, refName, filePath)
         viewModel.repository.observe(this) {
             it?.let {
-                subtitle = it.git.repository.getAbbreviatedName(refName)
+                toolbarSubtitle = it.git.repository.getAbbreviatedName(refName)
             }
         }
     }

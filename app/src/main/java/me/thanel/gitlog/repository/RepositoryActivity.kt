@@ -49,8 +49,8 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
         viewModel.getRepository(repositoryId).observe(this, Observer {
             if (it != null) {
                 repositoryFile = File(filesDir, "repos/${it.name}")
-                title = it.name
-                subtitle = it.git.repository.getAbbreviatedName(Constants.HEAD)
+                toolbarTitle = it.name
+                toolbarSubtitle = it.git.repository.getAbbreviatedName(Constants.HEAD)
                 repository = it
                 removeRepositoryItem?.isVisible = true
             }
