@@ -23,13 +23,8 @@ class AvatarHeaderView @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
-    private val root = View.inflate(context, R.layout.view_avatar_header, this)
-    private val avatarView = root.avatarView
-    private val titleView = root.titleView
-    private val detailsView = root.detailsView
-    private val expandArrow = root.expandArrow
-
     init {
+        View.inflate(context, R.layout.view_avatar_header, this)
         val a = context.obtainStyledAttributes(attrs, R.styleable.AvatarHeaderView)
         val showExpandArrow = a.getBoolean(R.styleable.AvatarHeaderView_showExpandArrow, false)
         expandArrow.isVisible = showExpandArrow

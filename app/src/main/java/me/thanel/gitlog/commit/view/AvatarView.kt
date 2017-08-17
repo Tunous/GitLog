@@ -20,11 +20,8 @@ class AvatarView @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    private val root = View.inflate(context, R.layout.view_stacked_avatar, this)
-    private val bigAvatarView = root.bigAvatarView
-    private val smallAvatarView = root.smallAvatarView
-
     init {
+        View.inflate(context, R.layout.view_stacked_avatar, this)
         if (isInEditMode) {
             bigAvatarView.setImageResource(R.mipmap.ic_launcher_round)
             smallAvatarView.setImageResource(R.mipmap.ic_launcher_round)

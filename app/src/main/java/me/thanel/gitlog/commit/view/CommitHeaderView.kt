@@ -20,14 +20,10 @@ class CommitHeaderView @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : LinearLayoutCompat(context, attrs, defStyleAttr) {
-    private val root = inflate(context, R.layout.view_commit_header, this)
-    private val headerView = root.headerView
-    private val authorView = root.authorView
-    private val committerView = root.committerView
-
     private var shouldDisplayCommitter = false
 
     init {
+        inflate(context, R.layout.view_commit_header, this)
         orientation = VERTICAL
         headerView.setOnClickListener {
             val wasVisible = authorView.visibility == View.VISIBLE

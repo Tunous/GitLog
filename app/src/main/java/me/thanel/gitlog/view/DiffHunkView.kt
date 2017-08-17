@@ -21,11 +21,8 @@ class DiffHunkView @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : HorizontalScrollView(context, attrs, defStyleAttr) {
-    private val root = View.inflate(context, R.layout.view_diff_hunk, this)
-    private val lineNumbersView = root.lineNumbersView
-    private val diffTextView = root.diffTextView
-
     init {
+        View.inflate(context, R.layout.view_diff_hunk, this)
         isFillViewport = true
 
         if (isInEditMode) {
@@ -102,13 +99,15 @@ class DiffHunkView @JvmOverloads constructor(
             val span = DiffLineSpan(bg, 32, index == 0, index == lines.size - 1)
             builder.setSpan(span, spanStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-            val lineNumberSpan = DiffLineSpan(lineBg, 32, index == 0, index == lines.size -1)
-            lineNumberBuilder.setSpan(lineNumberSpan, lineNumberSpanStart, lineNumberBuilder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val lineNumberSpan = DiffLineSpan(lineBg, 32, index == 0, index == lines.size - 1)
+            lineNumberBuilder.setSpan(lineNumberSpan, lineNumberSpanStart, lineNumberBuilder.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         val padding = context.resources.getDimensionPixelSize(R.dimen.diff_line_padding)
         val lineHeightSpan = DiffLineHeightSpan(padding)
         builder.setSpan(lineHeightSpan, 0, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        lineNumberBuilder.setSpan(lineHeightSpan, 0, lineNumberBuilder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        lineNumberBuilder.setSpan(lineHeightSpan, 0, lineNumberBuilder.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         diffTextView.text = builder
         lineNumbersView.text = lineNumberBuilder
     }
