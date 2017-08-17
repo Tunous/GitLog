@@ -22,6 +22,7 @@ import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.RepositoryActivity
 import me.thanel.gitlog.repositorylist.RepositoryListActivity
 import me.thanel.gitlog.repositorylist.RepositoryListManager
+import me.thanel.gitlog.ssh.TransportCallback
 import me.thanel.gitlog.utils.createIntent
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.InvalidRemoteException
@@ -130,6 +131,7 @@ class AddRepositoryActivity : AppCompatActivity() {
                                     }
                                 }
                             })
+                            .setTransportConfigCallback(TransportCallback(this@AddRepositoryActivity))
                             .call()
                             .close()
 
