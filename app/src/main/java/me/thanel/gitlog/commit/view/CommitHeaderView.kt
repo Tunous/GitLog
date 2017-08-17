@@ -56,7 +56,7 @@ class CommitHeaderView @JvmOverloads constructor(
     }
 
     private fun setDetailsVisible(visible: Boolean) {
-        TransitionManager.beginDelayedTransition(parent.parent as ViewGroup, TransitionSet()
+        TransitionManager.beginDelayedTransition(parent as ViewGroup, TransitionSet()
                 .addTransition(ChangeTransform())
                 .addTransition(ChangeBounds())
                 .addTransition(Fade()))
