@@ -5,13 +5,15 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorSecondary">#303F9F</color>
 
-    <color name="diffAddBackground">#e6ffed</color>
-    <color name="diffRemoveBackground">#ffeef0</color>
-    <color name="diffMarkerBackground">#f1f8ff</color>
-    <color name="diffLineAddBackground">#cdffd8</color>
-    <color name="diffLineRemoveBackground">#ffdce0</color>
-    <color name="diffLineMarkerBackground">#dbedff</color>
+    <color name="diffAddBackground">#E6FFED</color>
+    <color name="diffRemoveBackground">#FFEEF0</color>
+    <color name="diffMarkerBackground">#F1F8FF</color>
+    <color name="diffLineAddBackground">#CDFFD8</color>
+    <color name="diffLineRemoveBackground">#FFDCE0</color>
+    <color name="diffLineMarkerBackground">#DBEDFF</color>
 
-    <color name="diffAddForeground">#2cbe4e</color>
-    <color name="diffRemoveForeground">#cb2431</color>
+    <color name="diffAddForeground">#2CBE4E</color>
+    <color name="diffRemoveForeground">#CB2431</color>
+
+    <color name="grey">#E0E0E0</color>
 </resources>

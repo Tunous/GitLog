@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,29 +8,71 @@
     android:gravity="center_vertical"
     android:minHeight="52dp"
     android:orientation="horizontal"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp">
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp">
 
     <me.thanel.gitlog.commit.view.AvatarView
         android:id="@+id/avatarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@mipmap/ic_launcher_round" />
+
+    <TextView
+        android:id="@+id/branchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="?colorPrimary"
+        android:textStyle="bold"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/logMessageView"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Branch"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/logMessageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_marginRight="16dp"
+        android:ellipsize="end"
+        android:maxEms="70"
+        android:maxLines="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintRight_toLeftOf="@+id/commitDetailsIndicator"
+        app:layout_constraintTop_toBottomOf="@+id/branchView"
         tools:text="Commit message" />
 
     <ImageView
         android:id="@+id/commitDetailsIndicator"
         android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
-        app:srcCompat="@drawable/ic_subject" />
+        android:layout_height="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/logMessageView"
+        app:layout_constraintLeft_toRightOf="@+id/logMessageView"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/logMessageView"
+        app:layout_constraintVertical_bias="0.5"
+        app:srcCompat="@drawable/ic_more_horiz" />
 
-</LinearLayout>
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="72dp" />
+
+</android.support.constraint.ConstraintLayout>

@@ -43,6 +43,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             return
         }
         repository = it
+        loadRefs()
         logCommits()
     }
 
@@ -52,10 +53,20 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     }
 
     private fun logCommits() = launch(UI) {
+        @Suppress("ConvertLambdaToReference")
         val log = run(CommonPool) {
-            repository.git.log().call()
+            repository.git.log()
+                    .all()
+                    .call()
         }
         commitLogAdapter.replaceAll(log)
+    }
+
+    private fun loadRefs() = launch(UI) {
+        val refs = run(CommonPool) {
+            repository.git.repository.allRefsByPeeledObjectId
+        }
+        commitLogAdapter.replaceRefs(refs)
     }
 
     companion object {
