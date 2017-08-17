@@ -21,7 +21,11 @@
         </activity>
         <activity android:name=".repository.RepositoryActivity" />
         <activity android:name=".commit.CommitActivity" />
-        <activity android:name=".AddRepositoryActivity" />
+        <activity
+            android:name=".AddRepositoryActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/clone_repository"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />
         <activity android:name=".diff.DiffViewerActivity" />
         <activity android:name=".file.FileViewerActivity" />
         <activity android:name=".repository.filelist.FileListActivity" />

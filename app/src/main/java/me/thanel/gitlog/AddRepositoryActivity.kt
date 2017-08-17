@@ -121,9 +121,8 @@ class AddRepositoryActivity : AppCompatActivity() {
                     Git.cloneRepository()
                             .setURI(repoUrl)
                             .setDirectory(rootFile)
-                            .setBare(false)
+                            .setBare(true)
                             .setCloneAllBranches(true)
-                            .setRemote("origin")
                             .setProgressMonitor(object : EmptyProgressMonitor() {
                                 override fun beginTask(title: String, totalWork: Int) {
                                     launch(UI) {
