@@ -30,6 +30,7 @@ ext {
     coroutinesVersion = '0.16'
     archVersion = '1.0.0-alpha5'
     picassoVersion = '2.5.2'
+    kotprefVersion = '2.1.2'
 }
 
 dependencies {
@@ -48,6 +49,7 @@ dependencies {
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     compile "com.squareup.picasso:picasso:$picassoVersion"
+    compile "com.chibatching.kotpref:kotpref:$kotprefVersion"
 
     compile "android.arch.lifecycle:runtime:$archVersion"
     compile "android.arch.lifecycle:extensions:$archVersion"

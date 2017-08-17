@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_diff_hunk.view.*
+import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
 import me.thanel.gitlog.diff.DiffViewerActivity
@@ -37,7 +38,7 @@ class DiffHunkViewHolder(
 
     private val viewWholeFileItem = actionsMenu.menu.findItem(R.id.view_whole_file)
 
-    fun bind(item: DiffEntry, displayLineNumbers: Boolean) {
+    override fun bind(item: DiffEntry) {
         super.bind(item)
         itemView.tag = item
         fileNameView.text = getPath(item)
@@ -47,7 +48,7 @@ class DiffHunkViewHolder(
         viewWholeFileItem.isVisible = item.changeType != DiffEntry.ChangeType.DELETE
 
         diffHunkView.setDiff(viewModel.formatDiffEntry(item))
-        diffHunkView.setLineNumbersVisible(displayLineNumbers)
+        diffHunkView.setLineNumbersVisible(Preferences.showLineNumbers)
         diffHunkView.visibility = View.GONE
     }
 
