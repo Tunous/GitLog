@@ -31,6 +31,8 @@ ext {
     archVersion = '1.0.0-alpha5'
     picassoVersion = '2.5.2'
     kotprefVersion = '2.1.2'
+    okhttpVersion = '3.8.1'
+    okhttpDownloaderVersion = '1.1.0'
 }
 
 dependencies {
@@ -50,6 +52,8 @@ dependencies {
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     compile "com.squareup.picasso:picasso:$picassoVersion"
     compile "com.chibatching.kotpref:kotpref:$kotprefVersion"
+    compile "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    compile "com.jakewharton.picasso:picasso2-okhttp3-downloader:$okhttpDownloaderVersion"
 
     compile "android.arch.lifecycle:runtime:$archVersion"
     compile "android.arch.lifecycle:extensions:$archVersion"
