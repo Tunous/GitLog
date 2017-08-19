@@ -1,14 +1,17 @@
 package me.thanel.gitlog.repository.log
 
 import android.content.Context
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_log.view.*
 import me.thanel.gitlog.R
+import me.thanel.gitlog.utils.dpToPx
 import me.thanel.gitlog.utils.inflate
 import me.thanel.gitlog.utils.isVisible
+import me.thanel.gitlog.utils.md5
 import org.eclipse.jgit.revplot.PlotCommit
 import org.eclipse.jgit.revplot.PlotCommitList
 import org.eclipse.jgit.revplot.PlotLane
@@ -21,8 +24,7 @@ class CommitLogAdapter(
     private val lanesWidth: Int
     init {
         val lanes = plotCommitList.maxBy { it.lane.position }?.lane?.position ?: 0
-        lanesWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                ((lanes + 1) * 6 + 4).toFloat(), context.resources.displayMetrics).toInt()
+        lanesWidth = context.dpToPx(((lanes + 1) * 24 + 4).toFloat()).toInt()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -48,14 +50,24 @@ class CommitLogAdapter(
         private val avatarView = itemView.avatarView
         private val detailsIndicator = itemView.commitDetailsIndicator
         private val branchView = itemView.branchView
-        private val laneView = itemView.laneView.apply {
-            layoutParams = layoutParams.apply {
-                width = lanesWidth
-            }
-        }
+        private val laneView = itemView.laneView
 
         fun bind(item: PlotCommit<PlotLane>) {
             itemView.tag = item
+
+            laneView.tag = item.shortMessage
+
+            // TODO: Extract to method
+            val GRAVATAR_URL = "https://www.gravatar.com/avatar"
+            val hash = item.authorIdent.emailAddress.trim().toLowerCase().md5()
+            val url = Uri.parse(GRAVATAR_URL).buildUpon()
+                    .appendPath(hash)
+                    .appendQueryParameter("d", "identicon")
+                    .toString()
+
+            Picasso.with(itemView.context)
+                    .load(url)
+                    .into(laneView)
 
             laneView.mainLane = item.lane.position
             laneView.clearLines()
@@ -70,6 +82,8 @@ class CommitLogAdapter(
             for (i in 0 until item.parentCount) {
                 laneView.addParentLane((item.getParent(i) as PlotCommit<*>).lane.position)
             }
+            laneView.invalidate()
+            laneView.requestLayout()
 
             branchView.isVisible = false
 
