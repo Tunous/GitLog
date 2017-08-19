@@ -20,6 +20,7 @@ import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -205,3 +206,8 @@ var View.isVisible: Boolean
     set(visible) {
         visibility = if (visible) View.VISIBLE else View.GONE
     }
+
+fun Context.dpToPx(valueInDp: Float): Float {
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp,
+            resources.displayMetrics)
+}

@@ -13,11 +13,16 @@ import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
+import org.eclipse.jgit.errors.IncorrectObjectTypeException
+import org.eclipse.jgit.errors.MissingObjectException
+import org.eclipse.jgit.revplot.PlotCommitList
+import org.eclipse.jgit.revplot.PlotLane
+import org.eclipse.jgit.revplot.PlotWalk
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
-    private val commitLogAdapter = CommitLogAdapter(this::openCommit)
+    private lateinit var commitLogAdapter: CommitLogAdapter
     private lateinit var repository: Repository
 
     override val layoutResId: Int
@@ -32,7 +37,6 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
         super.onActivityCreated(savedInstanceState)
 
         recyclerView.apply {
-            adapter = commitLogAdapter
             layoutManager = LinearLayoutManager(context)
         }
     }
@@ -43,7 +47,6 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             return
         }
         repository = it
-        loadRefs()
         logCommits()
     }
 
@@ -53,20 +56,36 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     }
 
     private fun logCommits() = launch(UI) {
-        @Suppress("ConvertLambdaToReference")
-        val log = run(CommonPool) {
-            repository.git.log()
-                    .all()
-                    .call()
-        }
-        commitLogAdapter.replaceAll(log)
-    }
+        val plotCommitList = run(CommonPool + context) {
+            val repo = repository.git.repository
+            val plotWalk = PlotWalk(repo)
 
-    private fun loadRefs() = launch(UI) {
-        val refs = run(CommonPool) {
-            repository.git.repository.allRefsByPeeledObjectId
+            for (ref in repo.allRefs.values) {
+                val peeledRef = if (!ref.isPeeled) repo.peel(ref) else ref
+                val objectId = peeledRef.peeledObjectId ?: peeledRef.objectId
+                try {
+                    val commit = plotWalk.parseCommit(objectId)
+                    plotWalk.markStart(plotWalk.lookupCommit(commit))
+                } catch (e: MissingObjectException) {
+                    // ignore: the ref points to an object that does not exist;
+                    // it should be ignored as traversal starting point.
+                } catch (e: IncorrectObjectTypeException) {
+                    // ignore: the ref points to an object that is not a commit
+                    // (e.g. a tree or a blob);
+                    // it should be ignored as traversal starting point.
+                }
+            }
+
+            val plotCommitList = PlotCommitList<PlotLane>()
+            plotCommitList.source(plotWalk)
+            plotCommitList.fillTo(Int.MAX_VALUE)
+            return@run plotCommitList
         }
-        commitLogAdapter.replaceRefs(refs)
+
+        commitLogAdapter = CommitLogAdapter(this@CommitLogFragment.context, plotCommitList,
+                this@CommitLogFragment::openCommit)
+        commitLogAdapter.notifyDataSetChanged()
+        recyclerView.adapter = commitLogAdapter
     }
 
     companion object {
