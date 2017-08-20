@@ -82,6 +82,7 @@ class CommitLogAdapter(
             if (commit.refCount > 0) {
                 val refNames = (0 until commit.refCount)
                         .map(commit::getRef)
+                        .filterNot { it.isSymbolic }
                         .joinToString { Repository.shortenRefName(it.name) }
                 branchView.text = refNames
                 branchView.isVisible = true
