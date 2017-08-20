@@ -70,7 +70,7 @@ class CommitLogAdapter(
                     .into(laneView)
 
             laneView.mainLane = item.lane.position
-            laneView.clearLines()
+            laneView.clearLanes()
 
             val passing = mutableListOf<PlotLane>()
             plotCommitList.findPassingThrough(item, passing)
