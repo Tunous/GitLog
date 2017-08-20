@@ -12,6 +12,7 @@ import me.thanel.gitlog.utils.dpToPx
 import me.thanel.gitlog.utils.inflate
 import me.thanel.gitlog.utils.isVisible
 import me.thanel.gitlog.utils.md5
+import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.revplot.PlotCommit
 import org.eclipse.jgit.revplot.PlotCommitList
 import org.eclipse.jgit.revplot.PlotLane
@@ -52,14 +53,12 @@ class CommitLogAdapter(
         private val branchView = itemView.branchView
         private val laneView = itemView.laneView
 
-        fun bind(item: PlotCommit<PlotLane>) {
-            itemView.tag = item
-
-            laneView.tag = item.shortMessage
+        fun bind(commit: PlotCommit<PlotLane>) {
+            itemView.tag = commit
 
             // TODO: Extract to method
             val GRAVATAR_URL = "https://www.gravatar.com/avatar"
-            val hash = item.authorIdent.emailAddress.trim().toLowerCase().md5()
+            val hash = commit.authorIdent.emailAddress.trim().toLowerCase().md5()
             val url = Uri.parse(GRAVATAR_URL).buildUpon()
                     .appendPath(hash)
                     .appendQueryParameter("d", "identicon")
@@ -69,38 +68,39 @@ class CommitLogAdapter(
                     .load(url)
                     .into(laneView)
 
-            laneView.mainLane = item.lane.position
+            laneView.mainLane = commit.lane.position
             laneView.clearLanes()
 
             val passing = mutableListOf<PlotLane>()
-            plotCommitList.findPassingThrough(item, passing)
+            plotCommitList.findPassingThrough(commit, passing)
             laneView.setPassing(passing)
 
-            for (i in 0 until item.childCount) {
-                laneView.addChildLane(item.getChild(i).lane.position)
+            for (i in 0 until commit.childCount) {
+                laneView.addChildLane(commit.getChild(i).lane.position)
             }
-            for (i in 0 until item.parentCount) {
-                laneView.addParentLane((item.getParent(i) as PlotCommit<*>).lane.position)
+            for (i in 0 until commit.parentCount) {
+                laneView.addParentLane((commit.getParent(i) as PlotCommit<*>).lane.position)
             }
             laneView.invalidate()
             laneView.requestLayout()
 
-            branchView.isVisible = false
+            markRefs(commit)
 
-            logMessage.text = item.shortMessage
-            avatarView.setFromCommit(item, allowMergeIndicator = true)
-            detailsIndicator.isVisible = item.fullMessage.trim().split("\n").size > 1
+            logMessage.text = commit.shortMessage
+            avatarView.setFromCommit(commit, allowMergeIndicator = true)
+            detailsIndicator.isVisible = commit.fullMessage.trim().split("\n").size > 1
         }
 
-//        private fun markBranches() {
-//            val matchingRefs = refs[item]
-//            if (matchingRefs != null) {
-//                val name = matchingRefs.joinToString { Repository.shortenRefName(it.name) }
-//                branchView.text = name
-//                branchView.isVisible = true
-//            } else {
-//                branchView.isVisible = false
-//            }
-//        }
+        private fun markRefs(commit: PlotCommit<PlotLane>) {
+            if (commit.refCount > 0) {
+                val refNames = (0 until commit.refCount)
+                        .map(commit::getRef)
+                        .joinToString { Repository.shortenRefName(it.name) }
+                branchView.text = refNames
+                branchView.isVisible = true
+            } else {
+                branchView.isVisible = false
+            }
+        }
     }
 }
