@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/logMessageView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
         android:ellipsize="end"
@@ -49,7 +49,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toRightOf="@+id/laneView"
-        app:layout_constraintRight_toLeftOf="@+id/commitDetailsIndicator"
         app:layout_constraintTop_toBottomOf="@+id/branchView"
         tools:text="Commit message" />
 
@@ -61,6 +60,7 @@
         android:layout_marginRight="16dp"
         android:background="@color/grey"
         app:layout_constraintBottom_toBottomOf="@+id/logMessageView"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintLeft_toRightOf="@+id/logMessageView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/logMessageView"

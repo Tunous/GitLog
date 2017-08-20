@@ -26,7 +26,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     private lateinit var repository: Repository
 
     override val layoutResId: Int
-        get() = R.layout.view_recycler
+        get() = R.layout.view_horizontal_recycler
 
     override fun onCreateViewModel() = CommitLogViewModel.get(activity, repositoryId)
 
