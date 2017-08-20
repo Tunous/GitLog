@@ -106,6 +106,8 @@ class PlotLaneView @JvmOverloads constructor(
         val mainLaneX = getLaneX(mainLane)
         val centerY = (height / 2).toFloat()
 
+        var isMerge = false
+
         for (lanePosition in childLanes) {
             val targetLanePosition = if (passingLanes.contains(lanePosition)) mainLane
             else lanePosition
@@ -115,8 +117,12 @@ class PlotLaneView @JvmOverloads constructor(
         }
 
         for (lanePosition in parentLanes) {
-            val targetLanePosition = if (passingLanes.contains(lanePosition)) mainLane
-            else lanePosition
+            val targetLanePosition = if (passingLanes.contains(lanePosition)) {
+                mainLane
+            } else {
+                isMerge = isMerge || lanePosition != mainLane
+                lanePosition
+            }
             val laneX = getLaneX(targetLanePosition)
             paint.color = getColor(targetLanePosition)
             canvas.drawLine(mainLaneX, centerY, laneX, height.toFloat(), paint)
@@ -128,10 +134,12 @@ class PlotLaneView @JvmOverloads constructor(
             canvas.drawLine(laneX, 0f, laneX, height.toFloat(), paint)
         }
 
-        paint.color = getColor(mainLane)
-        canvas.drawCircle(mainLaneX, centerY, circleRadius, paint)
+        val radius = if (isMerge) circleRadius / 2 else circleRadius
 
-        if (bitmap != null) {
+        paint.color = getColor(mainLane)
+        canvas.drawCircle(mainLaneX, centerY, radius, paint)
+
+        if (!isMerge && bitmap != null) {
             val saveCount = canvas.save()
             val drawableCenterX = drawableRect.centerX()
             val drawableCenterY = drawableRect.centerY()
