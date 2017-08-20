@@ -38,6 +38,7 @@ class PlotLaneView @JvmOverloads constructor(
     private val drawableSize: Float
     private val drawableBorderSize: Float
     private val laneSpacing: Float
+    private val maxLanes: Int
 
     private var bitmap: Bitmap? = null
     private var bitmapShader: BitmapShader? = null
@@ -61,6 +62,7 @@ class PlotLaneView @JvmOverloads constructor(
                 context.dpToPx(2f))
         paint.strokeWidth = a.getDimension(R.styleable.PlotLaneView_lineWidth, context.dpToPx(3f))
         laneSpacing = a.getDimension(R.styleable.PlotLaneView_laneSpacing, context.dpToPx(8f))
+        maxLanes = a.getInteger(R.styleable.PlotLaneView_maxLanes, -1)
         a.recycle()
 
         circleRadius = drawableSize / 2 + drawableBorderSize
@@ -106,32 +108,34 @@ class PlotLaneView @JvmOverloads constructor(
         val mainLaneX = getLaneX(mainLane)
         val centerY = (height / 2).toFloat()
 
+        for (lane in childLanes) {
+            val targetLane = getTargetLane(lane)
+            if (!canDrawConnections(targetLane)) continue
+
+            val targetLaneX = getLaneX(targetLane)
+            paint.color = getColor(targetLane)
+            canvas.drawLine(mainLaneX, centerY, targetLaneX, 0f, paint)
+        }
+
         var isMerge = false
 
-        for (lanePosition in childLanes) {
-            val targetLanePosition = if (passingLanes.contains(lanePosition)) mainLane
-            else lanePosition
-            val laneX = getLaneX(targetLanePosition)
-            paint.color = getColor(targetLanePosition)
-            canvas.drawLine(mainLaneX, centerY, laneX, 0f, paint)
+        for (lane in parentLanes) {
+            isMerge = isMerge || !passingLanes.contains(lane) && lane != mainLane
+
+            val targetLane = getTargetLane(lane)
+            if (!canDrawConnections(targetLane)) continue
+
+            val targetLaneX = getLaneX(targetLane)
+            paint.color = getColor(targetLane)
+            canvas.drawLine(mainLaneX, centerY, targetLaneX, height.toFloat(), paint)
         }
 
-        for (lanePosition in parentLanes) {
-            val targetLanePosition = if (passingLanes.contains(lanePosition)) {
-                mainLane
-            } else {
-                isMerge = isMerge || lanePosition != mainLane
-                lanePosition
-            }
-            val laneX = getLaneX(targetLanePosition)
-            paint.color = getColor(targetLanePosition)
-            canvas.drawLine(mainLaneX, centerY, laneX, height.toFloat(), paint)
-        }
+        for (lane in passingLanes) {
+            if (!canDrawConnections(lane)) continue
 
-        for (lanePosition in passingLanes) {
-            val laneX = getLaneX(lanePosition)
-            paint.color = getColor(lanePosition)
-            canvas.drawLine(laneX, 0f, laneX, height.toFloat(), paint)
+            val targetLaneX = getLaneX(lane)
+            paint.color = getColor(lane)
+            canvas.drawLine(targetLaneX, 0f, targetLaneX, height.toFloat(), paint)
         }
 
         val radius = if (isMerge) circleRadius / 2 else circleRadius
@@ -256,8 +260,15 @@ class PlotLaneView @JvmOverloads constructor(
         highestLane = Math.max(highestLane, newLane)
     }
 
-    private fun getLaneX(lanePosition: Int) = (lanePosition + 1) * circleRadius +
-            (lanePosition * laneSpacing) + paddingLeft
+    private fun getLaneX(lanePosition: Int): Float {
+        val position = if (maxLanes > 0) Math.min(lanePosition, maxLanes - 1) else lanePosition
+        return (position + 1) * circleRadius + (position * laneSpacing) + paddingLeft
+    }
+
+    private fun canDrawConnections(lanePosition: Int) =
+        maxLanes <= 0 || lanePosition < maxLanes - 1
+
+    private fun getTargetLane(lane: Int) = if (passingLanes.contains(lane)) mainLane else lane
 
     companion object {
         private const val COLORDRAWABLE_DIMENSION = 2
