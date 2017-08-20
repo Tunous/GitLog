@@ -3,4 +3,11 @@
     <declare-styleable name="AvatarHeaderView">
         <attr name="showExpandArrow" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="PlotLaneView">
+        <attr name="circleRadius" format="dimension" />
+        <attr name="drawableBorderSize" format="dimension" />
+        <attr name="lineWidth" format="dimension" />
+        <attr name="laneSpacing" format="dimension" />
+    </declare-styleable>
 </resources>

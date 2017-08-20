@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.View
+import me.thanel.gitlog.R
 import me.thanel.gitlog.utils.dpToPx
 import org.eclipse.jgit.revplot.PlotLane
 
@@ -17,20 +18,38 @@ class PlotLaneView @JvmOverloads constructor(
     private val childLanes = mutableListOf<Int>()
     private val parentLanes = mutableListOf<Int>()
     private val passingLanes = mutableSetOf<Int>()
-    private val radius = context.dpToPx(12f)
+
+    private val circleRadius: Float
+    private val drawableBorderSize: Float
+    private val drawableSize: Int
+    private val laneSpacing: Float
+
     private val paint = Paint().apply {
         style = Paint.Style.FILL
-        strokeWidth = context.dpToPx(3f)
     }
-    private val oneDp = context.dpToPx(1f)
-    private val drawableSize = (radius * 2 - oneDp * 6).toInt()
 
     var mainLane = 0
+
+    init {
+        val a = context.obtainStyledAttributes(attrs, R.styleable.PlotLaneView)
+        circleRadius = a.getDimension(R.styleable.PlotLaneView_circleRadius, context.dpToPx(12f))
+        drawableBorderSize = a.getDimension(R.styleable.PlotLaneView_drawableBorderSize,
+                context.dpToPx(3f))
+        paint.strokeWidth = a.getDimension(R.styleable.PlotLaneView_lineWidth, context.dpToPx(3f))
+        laneSpacing = a.getDimension(R.styleable.PlotLaneView_laneSpacing, context.dpToPx(8f))
+        a.recycle()
+
+        drawableSize = ((circleRadius - drawableBorderSize) * 2).toInt()
+
+        if (isInEditMode) {
+            passingLanes.add(0)
+        }
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val maxLane = (childLanes + parentLanes + passingLanes).max() ?: 0
         val lane = Math.max(mainLane, maxLane) + 1
-        val minWidth = radius * lane + radius
+        val minWidth = circleRadius * lane + circleRadius + (laneSpacing * (lane - 1))
         val width = View.resolveSizeAndState(minWidth.toInt(), widthMeasureSpec, 0)
 
         setMeasuredDimension(width, heightMeasureSpec)
@@ -63,11 +82,12 @@ class PlotLaneView @JvmOverloads constructor(
         }
 
         paint.color = getColor(mainLane)
-        canvas.drawCircle(mainLaneX, centerY, radius, paint)
+        canvas.drawCircle(mainLaneX, centerY, circleRadius, paint)
 
         if (drawable != null) {
             val saveCount = canvas.save()
-            canvas.translate(mainLaneX - radius + oneDp * 3, centerY - radius + oneDp * 3)
+            canvas.translate(mainLaneX - circleRadius + drawableBorderSize,
+                    centerY - circleRadius + drawableBorderSize)
             drawable.setBounds(0, 0, drawableSize, drawableSize)
             drawable.draw(canvas)
             canvas.restoreToCount(saveCount)
@@ -92,7 +112,8 @@ class PlotLaneView @JvmOverloads constructor(
         passingLanes.addAll(newPassing.map { it.position })
     }
 
-    private fun getLaneX(lanePosition: Int) = (lanePosition + 1) * radius
+    private fun getLaneX(lanePosition: Int) = (lanePosition + 1) * circleRadius +
+            (lanePosition * laneSpacing)
 
     companion object {
         private val COLORS = intArrayOf(
