@@ -82,8 +82,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             return@run plotCommitList
         }
 
-        commitLogAdapter = CommitLogAdapter(this@CommitLogFragment.context, plotCommitList,
-                this@CommitLogFragment::openCommit)
+        commitLogAdapter = CommitLogAdapter(plotCommitList, this@CommitLogFragment::openCommit)
         commitLogAdapter.notifyDataSetChanged()
         recyclerView.adapter = commitLogAdapter
     }

@@ -1,16 +1,13 @@
 package me.thanel.gitlog.commit.view
 
 import android.content.Context
-import android.net.Uri
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.view_stacked_avatar.view.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.utils.md5
-import me.thanel.gitlog.view.AvatarDrawable
+import me.thanel.gitlog.utils.loadAvatar
 import me.thanel.gitlog.view.SmallCircleDrawable
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.revwalk.RevCommit
@@ -30,8 +27,7 @@ class AvatarView @JvmOverloads constructor(
     }
 
     fun setFromIdent(ident: PersonIdent) {
-        val drawable = AvatarDrawable(ident.name, ident)
-        loadAvatar(ident, drawable, bigAvatarView)
+        loadAvatar(ident, bigAvatarView)
         smallAvatarView.visibility = View.GONE
     }
 
@@ -43,39 +39,22 @@ class AvatarView @JvmOverloads constructor(
         }
 
         val author: PersonIdent? = revCommit.authorIdent
-        val authorName = author?.name ?: "UNKNOWN AUTHOR"
-        val authorDrawable = AvatarDrawable(authorName, author)
-        loadAvatar(author, authorDrawable, bigAvatarView)
+        loadAvatar(author, bigAvatarView)
 
         val committer: PersonIdent? = revCommit.committerIdent
         if (committer != null && committer.emailAddress != author?.emailAddress) {
-            val committerDrawable = AvatarDrawable(committer.name, committer)
-            loadAvatar(committer, committerDrawable, smallAvatarView)
+            loadAvatar(committer, smallAvatarView)
             smallAvatarView.visibility = View.VISIBLE
         } else {
             smallAvatarView.visibility = View.GONE
         }
     }
 
-    private fun loadAvatar(ident: PersonIdent?, defaultDrawable: AvatarDrawable, view: ImageView) {
+    private fun loadAvatar(ident: PersonIdent?, view: ImageView) {
         if (ident == null) {
-            view.setImageDrawable(defaultDrawable)
-            return
+            view.setImageDrawable(null)
+        } else {
+            context.loadAvatar(ident.emailAddress, view)
         }
-
-        val hash = ident.emailAddress.trim().toLowerCase().md5()
-        val url = Uri.parse(GRAVATAR_URL).buildUpon()
-                .appendPath(hash)
-                .appendQueryParameter("d", "identicon")
-                .toString()
-
-        Picasso.with(context)
-                .load(url)
-                .placeholder(defaultDrawable)
-                .into(view)
-    }
-
-    companion object {
-        private const val GRAVATAR_URL = "https://www.gravatar.com/avatar"
     }
 }

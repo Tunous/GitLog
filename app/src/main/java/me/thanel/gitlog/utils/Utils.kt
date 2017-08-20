@@ -11,6 +11,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.AttrRes
 import android.support.annotation.ColorInt
@@ -24,7 +25,9 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import org.eclipse.jgit.lib.Repository
@@ -210,4 +213,17 @@ var View.isVisible: Boolean
 fun Context.dpToPx(valueInDp: Float): Float {
     return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp,
             resources.displayMetrics)
+}
+
+const val GRAVATAR_URL = "https://www.gravatar.com/avatar"
+
+fun Context.loadAvatar(emailAddress: String, targetView: ImageView) {
+    val hash = emailAddress.trim().toLowerCase().md5()
+    val url = Uri.parse(GRAVATAR_URL).buildUpon()
+            .appendPath(hash)
+            .appendQueryParameter("d", "identicon")
+            .toString()
+    Picasso.with(this)
+            .load(url)
+            .into(targetView)
 }

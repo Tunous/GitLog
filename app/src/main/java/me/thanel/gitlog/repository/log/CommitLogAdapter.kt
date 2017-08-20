@@ -1,33 +1,23 @@
 package me.thanel.gitlog.repository.log
 
-import android.content.Context
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_log.view.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.utils.dpToPx
 import me.thanel.gitlog.utils.inflate
 import me.thanel.gitlog.utils.isVisible
-import me.thanel.gitlog.utils.md5
+import me.thanel.gitlog.utils.loadAvatar
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.revplot.PlotCommit
 import org.eclipse.jgit.revplot.PlotCommitList
 import org.eclipse.jgit.revplot.PlotLane
 
 class CommitLogAdapter(
-        context: Context,
         private val plotCommitList: PlotCommitList<PlotLane>,
         private val onItemClickListener: (PlotCommit<PlotLane>) -> Unit
 ) : RecyclerView.Adapter<CommitLogAdapter.ViewHolder>() {
-    private val lanesWidth: Int
-    init {
-        val lanes = plotCommitList.maxBy { it.lane.position }?.lane?.position ?: 0
-        lanesWidth = context.dpToPx(((lanes + 1) * 24 + 4).toFloat()).toInt()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(parent.inflate(R.layout.item_log).apply {
             setOnClickListener {
@@ -35,7 +25,7 @@ class CommitLogAdapter(
                 val commit = it.tag as PlotCommit<PlotLane>
                 onItemClickListener(commit)
             }
-        }, lanesWidth, plotCommitList)
+        }, plotCommitList)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(plotCommitList[position])
@@ -44,11 +34,9 @@ class CommitLogAdapter(
 
     class ViewHolder(
             itemView: View,
-            lanesWidth: Int,
             private val plotCommitList: PlotCommitList<PlotLane>
     ) : RecyclerView.ViewHolder(itemView) {
         private val logMessage = itemView.logMessageView
-        private val avatarView = itemView.avatarView
         private val detailsIndicator = itemView.commitDetailsIndicator
         private val branchView = itemView.branchView
         private val laneView = itemView.laneView
@@ -56,17 +44,21 @@ class CommitLogAdapter(
         fun bind(commit: PlotCommit<PlotLane>) {
             itemView.tag = commit
 
-            // TODO: Extract to method
-            val GRAVATAR_URL = "https://www.gravatar.com/avatar"
-            val hash = commit.authorIdent.emailAddress.trim().toLowerCase().md5()
-            val url = Uri.parse(GRAVATAR_URL).buildUpon()
-                    .appendPath(hash)
-                    .appendQueryParameter("d", "identicon")
-                    .toString()
+            bindLaneView(commit)
+            markRefs(commit)
 
-            Picasso.with(itemView.context)
-                    .load(url)
-                    .into(laneView)
+            logMessage.text = commit.shortMessage
+            detailsIndicator.isVisible = commit.fullMessage.trim().split("\n").size > 1
+        }
+
+        private fun bindLaneView(commit: PlotCommit<PlotLane>) {
+            val committerIdent = commit.committerIdent
+            if (committerIdent != null) {
+                itemView.context.loadAvatar(committerIdent.emailAddress, laneView)
+            } else {
+                Picasso.with(itemView.context).cancelRequest(laneView)
+                laneView.setImageDrawable(null)
+            }
 
             laneView.mainLane = commit.lane.position
             laneView.clearLanes()
@@ -81,14 +73,9 @@ class CommitLogAdapter(
             for (i in 0 until commit.parentCount) {
                 laneView.addParentLane((commit.getParent(i) as PlotCommit<*>).lane.position)
             }
+
             laneView.invalidate()
             laneView.requestLayout()
-
-            markRefs(commit)
-
-            logMessage.text = commit.shortMessage
-            avatarView.setFromCommit(commit, allowMergeIndicator = true)
-            detailsIndicator.isVisible = commit.fullMessage.trim().split("\n").size > 1
         }
 
         private fun markRefs(commit: PlotCommit<PlotLane>) {
