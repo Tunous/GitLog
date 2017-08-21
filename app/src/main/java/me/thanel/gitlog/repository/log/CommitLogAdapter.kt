@@ -41,6 +41,14 @@ class CommitLogAdapter(
         private val branchView = itemView.branchView
         private val laneView = itemView.laneView
 
+        init {
+            val highestLane = plotCommitList.maxBy { it.lane.position }?.lane?.position ?: 0
+            val minimumGraphWidth = laneView.calculateMinimumGraphWidth(highestLane)
+            itemView.layoutParams = itemView.layoutParams.apply {
+                width = minimumGraphWidth + itemView.minimumWidth
+            }
+        }
+
         fun bind(commit: PlotCommit<PlotLane>) {
             itemView.tag = commit
 

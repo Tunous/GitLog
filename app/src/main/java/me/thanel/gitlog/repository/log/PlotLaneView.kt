@@ -98,9 +98,13 @@ class PlotLaneView @JvmOverloads constructor(
         highestLane = mainLane
     }
 
+    fun calculateMinimumGraphWidth(lane: Int) =
+        (getLaneX(lane) + circleRadius + paddingRight).toInt()
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val minWidth = getLaneX(highestLane) + circleRadius + paddingRight
-        val width = View.resolveSizeAndState(minWidth.toInt(), widthMeasureSpec, 0)
+        val minGraphWidth = calculateMinimumGraphWidth(highestLane)
+        val minWidth = Math.max(suggestedMinimumWidth, minGraphWidth)
+        val width = View.resolveSizeAndState(minWidth, widthMeasureSpec, 0)
         setMeasuredDimension(width, heightMeasureSpec)
     }
 
