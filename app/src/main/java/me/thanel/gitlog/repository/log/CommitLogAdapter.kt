@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_log.view.*
+import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.utils.inflate
 import me.thanel.gitlog.utils.isVisible
@@ -52,6 +53,7 @@ class CommitLogAdapter(
         fun bind(commit: PlotCommit<PlotLane>) {
             itemView.tag = commit
 
+            laneView.maxLanes = if (Preferences.showGraph) 0 else 1
             bindLaneView(commit)
             markRefs(commit)
 

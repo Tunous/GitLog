@@ -2,11 +2,15 @@ package me.thanel.gitlog.repository.log
 
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.view_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.run
+import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.commit.CommitActivity
@@ -28,6 +32,11 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     override val layoutResId: Int
         get() = R.layout.view_horizontal_recycler
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateViewModel() = CommitLogViewModel.get(activity, repositoryId)
 
     override fun observeViewModel(viewModel: CommitLogViewModel) =
@@ -39,6 +48,28 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.commit_log, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.show_graph).isChecked = Preferences.showGraph
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.show_graph -> {
+                item.isChecked = !item.isChecked
+                Preferences.showGraph = item.isChecked
+                commitLogAdapter.notifyDataSetChanged()
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     private fun onRepositoryLoaded(it: Repository?) {

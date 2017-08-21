@@ -38,7 +38,6 @@ class PlotLaneView @JvmOverloads constructor(
     private val drawableSize: Float
     private val drawableBorderSize: Float
     private val laneSpacing: Float
-    private val maxLanes: Int
 
     private var bitmap: Bitmap? = null
     private var bitmapShader: BitmapShader? = null
@@ -55,6 +54,8 @@ class PlotLaneView @JvmOverloads constructor(
             updateHighestLane(value)
         }
 
+    var maxLanes = 0
+
     init {
         val a = context.obtainStyledAttributes(attrs, R.styleable.PlotLaneView)
         drawableSize = a.getDimension(R.styleable.PlotLaneView_drawableSize, context.dpToPx(24f))
@@ -62,7 +63,7 @@ class PlotLaneView @JvmOverloads constructor(
                 context.dpToPx(2f))
         paint.strokeWidth = a.getDimension(R.styleable.PlotLaneView_lineWidth, context.dpToPx(3f))
         laneSpacing = a.getDimension(R.styleable.PlotLaneView_laneSpacing, context.dpToPx(8f))
-        maxLanes = a.getInteger(R.styleable.PlotLaneView_maxLanes, -1)
+        maxLanes = a.getInteger(R.styleable.PlotLaneView_maxLanes, 0)
         a.recycle()
 
         circleRadius = drawableSize / 2 + drawableBorderSize
