@@ -1,5 +1,6 @@
 package me.thanel.gitlog.repository
 
+import android.app.ProgressDialog
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,8 @@ import android.text.style.StyleSpan
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.ActivityResults
 import me.thanel.gitlog.R
@@ -26,16 +29,13 @@ import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getAbbreviatedName
 import org.eclipse.jgit.lib.Constants
-import java.io.File
 
 class RepositoryActivity : BaseBottomNavigationActivity() {
     private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
 
-    private lateinit var repositoryFile: File
     private lateinit var viewModel: RepositoryViewModel
 
     private var repository: Repository? = null
-    private var removeRepositoryItem: MenuItem? = null
 
     override val menuResId: Int
         get() = R.menu.repository_navigation
@@ -48,11 +48,10 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
         viewModel = RepositoryViewModel.get(this)
         viewModel.getRepository(repositoryId).observe(this, Observer {
             if (it != null) {
-                repositoryFile = File(filesDir, "repos/${it.name}")
                 toolbarTitle = it.name
                 toolbarSubtitle = it.git.repository.getAbbreviatedName(Constants.HEAD)
                 repository = it
-                removeRepositoryItem?.isVisible = true
+                invalidateOptionsMenu()
             }
         })
     }
@@ -66,20 +65,32 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.repository, menu)
-        removeRepositoryItem = menu.findItem(R.id.remove)
-        if (repository != null) {
-            removeRepositoryItem?.isVisible = true
-        }
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.remove)?.isVisible = repository != null
+        menu.findItem(R.id.fetch)?.isVisible = repository != null
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.remove -> promptRemoveRepository()
+            R.id.fetch -> fetch()
             else -> return false
         }
 
         return true
+    }
+
+    private fun fetch() = launch(UI) {
+        val dialog = ProgressDialog.show(this@RepositoryActivity, "Fetch", "Fetching...", true)
+        async(CommonPool) {
+            repository!!.git.fetch().call()
+        }.await()
+        dialog.dismiss()
+        recreate()
     }
 
     override fun getSupportParentActivityIntent(): Intent =

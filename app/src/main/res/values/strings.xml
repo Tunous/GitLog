@@ -21,6 +21,7 @@
     <string name="committed_together">[author] committed with [committer] [time]</string>
     <string name="clone_repository">Clone repository</string>
     <string name="show_graph">Show graph</string>
+    <string name="fetch">Fetch</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>
