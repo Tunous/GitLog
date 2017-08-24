@@ -10,6 +10,7 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragmentActivity
 import me.thanel.gitlog.db.RepositoryDao
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.ssh.SshPrivateKeyListActivity
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.observe
 import java.io.File
@@ -27,6 +28,7 @@ class RepositoryListActivity : BaseFragmentActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.remove_all_repositories -> removeAllRepositories()
+            R.id.manage_ssh_keys -> browseSshKeys()
             else -> return false
         }
         return true
@@ -52,7 +54,13 @@ class RepositoryListActivity : BaseFragmentActivity() {
         }
     }
 
+    private fun browseSshKeys() {
+        val intent = SshPrivateKeyListActivity.newIntent(this)
+        startActivityForResult(intent, REQUEST_BROWSE_SSH)
+    }
+
     companion object {
+        private const val REQUEST_BROWSE_SSH = 1
         fun newIntent(context: Context) = context.createIntent<RepositoryListActivity>()
     }
 }

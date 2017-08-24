@@ -22,6 +22,9 @@
     <string name="clone_repository">Clone repository</string>
     <string name="show_graph">Show graph</string>
     <string name="fetch">Fetch</string>
+    <string name="generate_ssh_key">Generate SSH key</string>
+    <string name="remove_all_repositories">Remove all repositories</string>
+    <string name="manage_ssh_keys">Manage SSH keys</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

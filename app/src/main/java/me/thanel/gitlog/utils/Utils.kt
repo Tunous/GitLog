@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import org.eclipse.jgit.lib.Repository
+import java.io.File
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -227,3 +228,23 @@ fun Context.loadAvatar(emailAddress: String, targetView: ImageView) {
             .load(url)
             .into(targetView)
 }
+
+private fun File.requireExists() {
+    if (!exists()) {
+        mkdirs()
+    }
+}
+
+val Context.sshDir: File
+    get() {
+        val file = File(filesDir, "ssh")
+        file.requireExists()
+        return file
+    }
+
+val Context.sshPublicDir: File
+    get() {
+        val file = File(filesDir, "ssh_pub")
+        file.requireExists()
+        return file
+    }

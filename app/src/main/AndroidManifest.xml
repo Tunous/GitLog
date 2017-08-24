@@ -3,6 +3,8 @@
     package="me.thanel.gitlog">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".GitLogApplication"
@@ -29,6 +31,7 @@
         <activity android:name=".diff.DiffViewerActivity" />
         <activity android:name=".file.FileViewerActivity" />
         <activity android:name=".repository.filelist.FileListActivity" />
+        <activity android:name=".ssh.SshPrivateKeyListActivity" />
     </application>
 
 </manifest>
