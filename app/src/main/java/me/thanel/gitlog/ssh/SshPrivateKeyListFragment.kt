@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.explorer.FileListAdapter
+import me.thanel.gitlog.explorer.OnSshKeyMenuItemClickListener
 import me.thanel.gitlog.utils.getViewModel
 import me.thanel.gitlog.utils.sshDir
 import me.thanel.gitlog.utils.sshPublicDir
@@ -35,7 +36,27 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>() {
         super.onActivityCreated(savedInstanceState)
 
         rootFolder = context.sshDir
-        adapter = FileListAdapter()
+        adapter = FileListAdapter(object : OnSshKeyMenuItemClickListener {
+            override fun onRename(key: File) {
+                TODO()
+            }
+
+            override fun onShowPublicKey(key: File) {
+                TODO()
+            }
+
+            override fun onShowPrivateKey(key: File) {
+                TODO()
+            }
+
+            override fun onEditPassword(key: File) {
+                TODO()
+            }
+
+            override fun onDelete(key: File) {
+                TODO()
+            }
+        })
 
         recyclerView.apply {
             adapter = this@SshPrivateKeyListFragment.adapter
@@ -46,7 +67,7 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.ssh_private_key_list, menu)
+        inflater.inflate(R.menu.ssh_key_list, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 

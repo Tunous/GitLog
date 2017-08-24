@@ -15,14 +15,18 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.annotation.AttrRes
 import android.support.annotation.ColorInt
+import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -248,3 +252,10 @@ val Context.sshPublicDir: File
         file.requireExists()
         return file
     }
+
+fun Menu.setItemTextColor(@IdRes itemId: Int, @ColorInt color: Int) {
+    val item = findItem(itemId)
+    item.title = SpannableString(item.title).apply {
+        setSpan(ForegroundColorSpan(color), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }
+}

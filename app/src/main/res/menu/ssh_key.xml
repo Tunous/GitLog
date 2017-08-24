@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/rename"
+        android:title="Rename" />
+
+    <item
+        android:id="@+id/show_public_key"
+        android:title="Show public key" />
+
+    <item
+        android:id="@+id/show_private_key"
+        android:title="Show private key" />
+
+    <item
+        android:id="@+id/edit_password"
+        android:title="Edit password" />
+
+    <item
+        android:id="@+id/delete"
+        android:title="Delete" />
+
+</menu>
