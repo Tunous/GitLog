@@ -21,8 +21,7 @@ import me.thanel.gitlog.explorer.FileViewerActivity
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getViewModel
-import me.thanel.gitlog.utils.sshPrivateDir
-import me.thanel.gitlog.utils.sshPublicDir
+import me.thanel.gitlog.utils.sshDir
 import java.io.File
 import java.io.FileOutputStream
 
@@ -48,7 +47,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        rootFolder = context.sshPrivateDir
+        rootFolder = context.sshDir
         adapter = SshKeyListAdapter(this)
 
         recyclerView.apply {
@@ -81,11 +80,11 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     override fun onShowPublicKey(name: String) {
-        showFileContent(File(context.sshPublicDir, name))
+        showFileContent(File(context.sshDir, "$name.pub"))
     }
 
     override fun onShowPrivateKey(name: String) {
-        showFileContent(File(context.sshPrivateDir, name))
+        showFileContent(File(context.sshDir, name))
     }
 
     override fun onEditKeyPassword(name: String) {
@@ -111,7 +110,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
             if (resultCode == Activity.RESULT_OK) {
                 val filePath = data!!.getStringExtra(FilePickerActivity.EXTRA_FILE_PATH)
                 val keyFile = File(filePath)
-                val newKey = File(context.sshPrivateDir, keyFile.name)
+                val newKey = File(context.sshDir, keyFile.name)
                 keyFile.copyTo(newKey)
                 refresh()
             }
@@ -121,13 +120,14 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     private fun removeSshKey(name: String) {
-        File(context.sshPublicDir, name).delete()
-        File(context.sshPrivateDir, name).delete()
+        File(context.sshDir, name).delete()
+        File(context.sshDir, "$name.pub").delete()
         refresh()
     }
 
     private fun refresh() {
         val files = rootFolder.listFiles()
+                .filterNot { it.startsWith(".pub") }
         val jSch = JSch()
         val keys = mutableListOf<Pair<String, KeyPair>>()
         for (file in files) {
@@ -145,8 +145,8 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
 
     private fun generateSshKey() {
         val fileName = "test"
-        val privateKey = File(context.sshPrivateDir, fileName)
-        val publicKey = File(context.sshPublicDir, fileName)
+        val privateKey = File(context.sshDir, fileName)
+        val publicKey = File(context.sshDir, "$fileName.pub")
 
         val jsch = JSch()
         with(KeyPair.genKeyPair(jsch, KeyPair.RSA)) {

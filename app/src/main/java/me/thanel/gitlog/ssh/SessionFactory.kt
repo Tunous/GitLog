@@ -3,7 +3,7 @@ package me.thanel.gitlog.ssh
 import android.content.Context
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
-import me.thanel.gitlog.utils.sshPrivateDir
+import me.thanel.gitlog.utils.sshDir
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.CredentialsProviderUserInfo
 import org.eclipse.jgit.transport.JschConfigSessionFactory
@@ -20,9 +20,9 @@ class SessionFactory(private val context: Context) : JschConfigSessionFactory() 
 
     override fun createDefaultJSch(fs: FS): JSch {
         val jsch = JSch()
-        for (file in context.sshPrivateDir.listFiles()) {
-            jsch.addIdentity(file.absolutePath)
-        }
+        context.sshDir.listFiles()
+                .filterNot { it.endsWith(".pub") }
+                .forEach { jsch.addIdentity(it.absolutePath) }
         return jsch
     }
 }

@@ -239,16 +239,9 @@ private fun File.requireExists() {
     }
 }
 
-val Context.sshPrivateDir: File
+val Context.sshDir: File
     get() {
         val file = File(filesDir, "ssh")
-        file.requireExists()
-        return file
-    }
-
-val Context.sshPublicDir: File
-    get() {
-        val file = File(filesDir, "ssh_pub")
         file.requireExists()
         return file
     }
