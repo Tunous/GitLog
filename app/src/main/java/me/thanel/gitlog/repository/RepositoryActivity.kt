@@ -21,7 +21,7 @@ import me.thanel.gitlog.base.BaseBottomNavigationActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.branchlist.BranchListFragment
-import me.thanel.gitlog.repository.filelist.FileListFragment
+import me.thanel.gitlog.repository.filelist.GitFileListFragment
 import me.thanel.gitlog.repository.log.CommitLogFragment
 import me.thanel.gitlog.repositorylist.RepositoryListActivity
 import me.thanel.gitlog.utils.StyleableTag
@@ -58,7 +58,7 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
 
     override fun createFragment(itemId: Int): Fragment = when (itemId) {
         R.id.log -> CommitLogFragment.newInstance(repositoryId)
-        R.id.files -> FileListFragment.newInstance(repositoryId, Constants.HEAD)
+        R.id.files -> GitFileListFragment.newInstance(repositoryId, Constants.HEAD)
         R.id.branches -> BranchListFragment.newInstance(repositoryId)
         else -> throw IllegalAccessException("Unknown fragment id: $itemId")
     }

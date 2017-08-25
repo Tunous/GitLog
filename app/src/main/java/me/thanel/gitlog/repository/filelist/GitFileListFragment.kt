@@ -6,15 +6,15 @@ import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.file.FileViewerActivity
+import me.thanel.gitlog.repository.file.GitFileViewerActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import me.thanel.gitlog.view.PathBar
 
-class FileListFragment : BaseFragment<FileListViewModel>() {
+class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
     private val refName by stringArg(ARG_REF_NAME)
-    private val adapter = FileListAdapter(this::moveDown)
+    private val adapter = GitFileListAdapter(this::moveDown)
     private lateinit var pathBar: PathBar
     private lateinit var repository: Repository
 
@@ -52,9 +52,9 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         super.onDestroy()
     }
 
-    override fun onCreateViewModel() = FileListViewModel.get(activity, repositoryId, refName)
+    override fun onCreateViewModel() = GitFileListViewModel.get(activity, repositoryId, refName)
 
-    override fun observeViewModel(viewModel: FileListViewModel) =
+    override fun observeViewModel(viewModel: GitFileListViewModel) =
         viewModel.repository.observe(this) {
             repository = it!!
             displayFiles()
@@ -76,9 +76,9 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         adapter.replaceAll(files)
     }
 
-    private fun moveDown(file: File) {
+    private fun moveDown(file: GitFile) {
         if (!file.isDirectory) {
-            val intent = FileViewerActivity.newIntent(context, repositoryId, refName, file.path)
+            val intent = GitFileViewerActivity.newIntent(context, repositoryId, refName, file.path)
             startActivity(intent)
             return
         }
@@ -110,7 +110,7 @@ class FileListFragment : BaseFragment<FileListViewModel>() {
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
         private const val ARG_REF_NAME = "arg.ref_name"
 
-        fun newInstance(repositoryId: Int, refName: String) = FileListFragment().withArguments {
+        fun newInstance(repositoryId: Int, refName: String) = GitFileListFragment().withArguments {
             putInt(ARG_REPOSITORY_ID, repositoryId)
             putString(ARG_REF_NAME, refName)
         }

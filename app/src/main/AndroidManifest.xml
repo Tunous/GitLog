@@ -29,8 +29,8 @@
             android:label="@string/clone_repository"
             android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />
         <activity android:name=".diff.DiffViewerActivity" />
-        <activity android:name=".file.FileViewerActivity" />
-        <activity android:name=".repository.filelist.FileListActivity" />
+        <activity android:name="me.thanel.gitlog.repository.file.GitFileViewerActivity" />
+        <activity android:name=".repository.filelist.GitFileListActivity" />
         <activity android:name=".ssh.SshPrivateKeyListActivity" />
     </application>
 

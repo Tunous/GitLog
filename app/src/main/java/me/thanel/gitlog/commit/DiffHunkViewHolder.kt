@@ -13,7 +13,7 @@ import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
 import me.thanel.gitlog.diff.DiffViewerActivity
-import me.thanel.gitlog.file.FileViewerActivity
+import me.thanel.gitlog.repository.file.GitFileViewerActivity
 import org.eclipse.jgit.diff.DiffEntry
 
 class DiffHunkViewHolder(
@@ -76,7 +76,7 @@ class DiffHunkViewHolder(
                 context.startActivity(intent)
             }
             R.id.view_whole_file -> {
-                val intent = FileViewerActivity.newIntent(context, viewModel.repositoryId,
+                val intent = GitFileViewerActivity.newIntent(context, viewModel.repositoryId,
                         viewModel.commitSha, diffEntry.newPath)
                 context.startActivity(intent)
             }

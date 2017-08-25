@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
-import me.thanel.gitlog.repository.filelist.FileListActivity
+import me.thanel.gitlog.repository.filelist.GitFileListActivity
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.diff.DiffEntry
@@ -56,7 +56,7 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.browse_files -> {
-                val intent = FileListActivity.newIntent(context, repositoryId, commitSha)
+                val intent = GitFileListActivity.newIntent(context, repositoryId, commitSha)
                 startActivity(intent)
             }
             R.id.line_numbers -> {

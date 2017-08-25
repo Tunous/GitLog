@@ -1,4 +1,4 @@
-package me.thanel.gitlog.file
+package me.thanel.gitlog.repository.file
 
 import android.app.Application
 import android.arch.lifecycle.ViewModel
@@ -10,7 +10,7 @@ import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
 import java.io.ByteArrayOutputStream
 
-class FileViewModel(
+class GitFileViewModel(
         application: Application,
         repositoryId: Int,
         private val refName: String,
@@ -45,7 +45,7 @@ class FileViewModel(
     companion object {
         fun get(activity: FragmentActivity, repositoryId: Int, refName: String, filePath: String)
                 = getViewModel(activity) {
-            FileViewModel(activity.application, repositoryId, refName, filePath)
+            GitFileViewModel(activity.application, repositoryId, refName, filePath)
         }
     }
 }

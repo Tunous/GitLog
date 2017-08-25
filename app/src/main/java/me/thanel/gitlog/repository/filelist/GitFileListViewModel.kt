@@ -17,7 +17,7 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.*
 
-class FileListViewModel(
+class GitFileListViewModel(
         application: Application,
         private val repositoryId: Int,
         private val refName: String
@@ -32,17 +32,17 @@ class FileListViewModel(
 
     fun popScrollState(): Parcelable? = scrollStateStack.pop()
 
-    fun listFiles(repo: Repository, path: String = ""): List<File> {
+    fun listFiles(repo: Repository, path: String = ""): List<GitFile> {
         val gitRepo = repo.git.repository
         val head = gitRepo.resolve(refName)
         return readFiles(gitRepo, head.name, path)
     }
 
     private fun readFiles(repository: org.eclipse.jgit.lib.Repository, commit: String,
-            path: String): List<File> {
+            path: String): List<GitFile> {
         val revCommit = buildRevCommit(repository, commit)
 
-        val items = mutableListOf<File>()
+        val items = mutableListOf<GitFile>()
         val tree = if (path.isNotEmpty()) {
             val walk = TreeWalk.forPath(repository, path, revCommit.tree) ?:
                     throw FileNotFoundException("Did not find expected file '$path'.")
@@ -65,7 +65,7 @@ class FileListViewModel(
         while (treeWalk.next()) {
             val name = treeWalk.nameString
             val filePath = "$path/$name".trim { it == '/' }
-            items.add(File(filePath, treeWalk.isSubtree, name))
+            items.add(GitFile(filePath, treeWalk.isSubtree, name))
         }
 
         treeWalk.release()
@@ -92,7 +92,7 @@ class FileListViewModel(
     companion object {
         fun get(activity: FragmentActivity, repositoryId: Int, refName: String)
                 = getViewModel(activity) {
-            FileListViewModel(activity.application, repositoryId, refName)
+            GitFileListViewModel(activity.application, repositoryId, refName)
         }
     }
 }
