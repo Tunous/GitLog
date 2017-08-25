@@ -1,4 +1,4 @@
-package me.thanel.gitlog.explorer
+package me.thanel.gitlog.ssh
 
 import android.graphics.Color
 import android.support.v7.widget.PopupMenu
@@ -68,12 +68,4 @@ class SshKeyListAdapter(
             return true
         }
     }
-}
-
-interface OnSshKeyMenuItemClickListener {
-    fun onRenameKey(name: String)
-    fun onShowPublicKey(name: String)
-    fun onShowPrivateKey(name: String)
-    fun onEditKeyPassword(name: String)
-    fun onRemoveKey(name: String)
 }

@@ -15,8 +15,6 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.base.dialog.InputDialog
 import me.thanel.gitlog.explorer.FileViewerActivity
-import me.thanel.gitlog.explorer.OnSshKeyMenuItemClickListener
-import me.thanel.gitlog.explorer.SshKeyListAdapter
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getViewModel
