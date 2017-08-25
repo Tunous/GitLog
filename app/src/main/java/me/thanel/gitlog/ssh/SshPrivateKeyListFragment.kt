@@ -1,7 +1,10 @@
 package me.thanel.gitlog.ssh
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.text.style.StyleSpan
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -13,6 +16,8 @@ import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.base.dialog.InputDialog
 import me.thanel.gitlog.explorer.FileListAdapter
 import me.thanel.gitlog.explorer.OnSshKeyMenuItemClickListener
+import me.thanel.gitlog.utils.StyleableTag
+import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getViewModel
 import me.thanel.gitlog.utils.sshDir
 import me.thanel.gitlog.utils.sshPublicDir
@@ -84,8 +89,24 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>(),
         TODO()
     }
 
-    override fun onDelete(key: File) {
-        TODO()
+    override fun onRemove(key: File) {
+        val message = getString(R.string.remove_confirm_message)
+                .formatTags(StyleableTag("target", key.name, StyleSpan(Typeface.BOLD)))
+
+        AlertDialog.Builder(context)
+                .setTitle(R.string.remove_ssh_key)
+                .setMessage(message)
+                .setPositiveButton(R.string.remove) { _, _ ->
+                    removeSshKey(key.name)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .show()
+    }
+
+    private fun removeSshKey(name: String) {
+        File(context.sshPublicDir, name).delete()
+        File(context.sshDir, name).delete()
+        refresh()
     }
 
     private fun refresh() {

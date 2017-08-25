@@ -98,8 +98,8 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     private fun promptRemoveRepository() {
-        val message = getString(R.string.remove_repository_confirm_message)
-                .formatTags(StyleableTag("repository", repository!!.name, StyleSpan(Typeface.BOLD)))
+        val message = getString(R.string.remove_confirm_message)
+                .formatTags(StyleableTag("target", repository!!.name, StyleSpan(Typeface.BOLD)))
 
         AlertDialog.Builder(this)
                 .setTitle(R.string.remove_repository_dialog_title)

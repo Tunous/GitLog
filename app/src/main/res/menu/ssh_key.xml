@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/rename"
-        android:title="Rename" />
+        android:title="@string/rename" />
 
     <item
         android:id="@+id/show_public_key"
@@ -18,7 +18,7 @@
         android:title="Edit password" />
 
     <item
-        android:id="@+id/delete"
-        android:title="Delete" />
+        android:id="@+id/remove"
+        android:title="@string/remove" />
 
 </menu>

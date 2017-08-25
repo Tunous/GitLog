@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">GitLog</string>
     <string name="remove_repository_dialog_title">Remove repository</string>
-    <string name="remove_repository_confirm_message">Are you sure you want to remove [repository]? This operation cannot be undone.</string>
+    <string name="remove_confirm_message">Are you sure you want to remove [target]? This operation cannot be undone.</string>
     <string name="remove">Remove</string>
     <string name="remove_repository">Remove repository</string>
     <string name="cancel">Cancel</string>
@@ -28,6 +28,7 @@
     <string name="rename">Rename</string>
     <string name="new_ssh_key_name">New SSH Key name</string>
     <string name="rename_ssh_key">Rename SSH Key</string>
+    <string name="remove_ssh_key">Remove SSH Key</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

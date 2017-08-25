@@ -31,7 +31,7 @@ class FileListAdapter(
         private val fileNameView = itemView.fileNameView
         private val popupMenu = PopupMenu(context, itemView, Gravity.END).apply {
             inflate(R.menu.ssh_key)
-            menu.setItemTextColor(R.id.delete, Color.RED)
+            menu.setItemTextColor(R.id.remove, Color.RED)
             setOnMenuItemClickListener(this@ViewHolder)
         }
         private var boundItem: File? = null
@@ -61,7 +61,7 @@ class FileListAdapter(
                     R.id.show_public_key -> onShowPublicKey(key)
                     R.id.show_private_key -> onShowPrivateKey(key)
                     R.id.edit_password -> onEditPassword(key)
-                    R.id.delete -> onDelete(key)
+                    R.id.remove -> onRemove(key)
                     else -> return false
                 }
             }
@@ -76,5 +76,5 @@ interface OnSshKeyMenuItemClickListener {
     fun onShowPublicKey(key: File)
     fun onShowPrivateKey(key: File)
     fun onEditPassword(key: File)
-    fun onDelete(key: File)
+    fun onRemove(key: File)
 }
