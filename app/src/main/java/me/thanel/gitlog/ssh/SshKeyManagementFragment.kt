@@ -24,7 +24,6 @@ import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getViewModel
 import me.thanel.gitlog.utils.sshDir
 import java.io.File
-import java.io.FileOutputStream
 
 class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         OnSshKeyMenuItemClickListener {
@@ -38,8 +37,11 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         if (savedInstanceState != null) {
-            val dialog = fragmentManager.findFragmentByTag(TAG_DIALOG_RENAME) as? InputDialog
-            dialog?.setOnSubmitListener(this::refresh)
+            (fragmentManager.findFragmentByTag(TAG_DIALOG_RENAME) as? InputDialog)
+                    ?.setOnSubmitListener(this::refresh)
+
+            (fragmentManager.findFragmentByTag(TAG_DIALOG_GENERATE_KEY) as? InputDialog)
+                    ?.setOnSubmitListener(this::refresh)
         }
     }
 
@@ -158,18 +160,9 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     private fun generateSshKey() {
-        val fileName = "test"
-        val privateKey = File(context.sshDir, fileName)
-        val publicKey = File(context.sshDir, "$fileName.pub")
-
-        val jsch = JSch()
-        with(KeyPair.genKeyPair(jsch, KeyPair.RSA)) {
-            writePrivateKey(FileOutputStream(privateKey))
-            writePublicKey(FileOutputStream(publicKey), getString(R.string.app_name))
-            dispose()
-        }
-
-        refresh()
+        GenerateSshKeyDialog.newInstance()
+                .setOnSubmitListener(this::refresh)
+                .show(fragmentManager, TAG_DIALOG_GENERATE_KEY)
     }
 
     private fun showFileContent(file: File) {
@@ -185,6 +178,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     companion object {
         private const val TAG_DIALOG_RENAME = "dialog.rename"
         private const val TAG_DIALOG_EDIT_PASSWORD = "dialog.edit_password"
+        private const val TAG_DIALOG_GENERATE_KEY = "dialog.generate_key"
         private const val REQUEST_PICK_FILE = 1
 
         fun newInstance(): SshKeyManagementFragment = SshKeyManagementFragment()
