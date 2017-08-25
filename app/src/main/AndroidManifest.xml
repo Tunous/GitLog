@@ -29,10 +29,11 @@
             android:label="@string/clone_repository"
             android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />
         <activity android:name=".diff.DiffViewerActivity" />
-        <activity android:name="me.thanel.gitlog.repository.file.GitFileViewerActivity" />
+        <activity android:name=".repository.file.GitFileViewerActivity" />
         <activity android:name=".repository.filelist.GitFileListActivity" />
         <activity android:name=".ssh.SshKeyManagementActivity" />
         <activity android:name=".explorer.FileViewerActivity" />
+        <activity android:name=".ssh.FilePickerActivity"></activity>
     </application>
 
 </manifest>

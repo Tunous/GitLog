@@ -29,6 +29,7 @@
     <string name="new_ssh_key_name">New SSH Key name</string>
     <string name="rename_ssh_key">Rename SSH Key</string>
     <string name="remove_ssh_key">Remove SSH Key</string>
+    <string name="import_ssh_key">Import SSH key</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

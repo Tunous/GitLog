@@ -1,5 +1,7 @@
 package me.thanel.gitlog.ssh
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -9,6 +11,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.jcraft.jsch.JSch
+import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.KeyPair
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
@@ -64,6 +67,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.generate_ssh_key -> generateSshKey()
+            R.id.import_ssh_key -> importSshKey()
             else -> return super.onOptionsItemSelected(item)
         }
 
@@ -102,6 +106,20 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
                 .show()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_PICK_FILE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val filePath = data!!.getStringExtra(FilePickerActivity.EXTRA_FILE_PATH)
+                val keyFile = File(filePath)
+                val newKey = File(context.sshPrivateDir, keyFile.name)
+                keyFile.copyTo(newKey)
+                refresh()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
     private fun removeSshKey(name: String) {
         File(context.sshPublicDir, name).delete()
         File(context.sshPrivateDir, name).delete()
@@ -111,9 +129,18 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     private fun refresh() {
         val files = rootFolder.listFiles()
         val jSch = JSch()
-        val keys = files.map { it.name to KeyPair.load(jSch, it.absolutePath) }
-                .sortedBy(Pair<String, KeyPair>::first)
-        adapter.replaceAll(keys)
+        val keys = mutableListOf<Pair<String, KeyPair>>()
+        for (file in files) {
+            val keyPair = try {
+                KeyPair.load(jSch, file.absolutePath)
+            } catch (ex: JSchException) {
+                null
+            }
+            if (keyPair != null) {
+                keys.add(file.name to keyPair)
+            }
+        }
+        adapter.replaceAll(keys.sortedBy(Pair<String, KeyPair>::first))
     }
 
     private fun generateSshKey() {
@@ -136,8 +163,14 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         startActivity(intent)
     }
 
+    private fun importSshKey() {
+        val intent = FilePickerActivity.newIntent(context)
+        startActivityForResult(intent, REQUEST_PICK_FILE)
+    }
+
     companion object {
         private const val TAG_DIALOG_RENAME = "dialog.rename"
+        private const val REQUEST_PICK_FILE = 1
 
         fun newInstance(): SshKeyManagementFragment = SshKeyManagementFragment()
     }

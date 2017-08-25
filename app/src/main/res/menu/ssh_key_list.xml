@@ -7,4 +7,9 @@
         android:title="@string/generate_ssh_key"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/import_ssh_key"
+        android:title="@string/import_ssh_key"
+        app:showAsAction="never" />
+
 </menu>
