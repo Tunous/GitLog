@@ -14,9 +14,9 @@ import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.base.dialog.InputDialog
-import me.thanel.gitlog.explorer.FileListAdapter
 import me.thanel.gitlog.explorer.FileViewerActivity
 import me.thanel.gitlog.explorer.OnSshKeyMenuItemClickListener
+import me.thanel.gitlog.explorer.SshKeyListAdapter
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getViewModel
@@ -28,7 +28,7 @@ import java.io.FileOutputStream
 class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         OnSshKeyMenuItemClickListener {
     private lateinit var rootFolder: File
-    private lateinit var adapter: FileListAdapter
+    private lateinit var adapter: SshKeyListAdapter
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -48,7 +48,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         super.onActivityCreated(savedInstanceState)
 
         rootFolder = context.sshPrivateDir
-        adapter = FileListAdapter(this)
+        adapter = SshKeyListAdapter(this)
 
         recyclerView.apply {
             adapter = this@SshKeyManagementFragment.adapter
@@ -111,7 +111,11 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     private fun refresh() {
-        adapter.replaceAll(rootFolder.listFiles().asIterable())
+        val files = rootFolder.listFiles()
+        val jSch = JSch()
+        val keys = files.map { it.name to KeyPair.load(jSch, it.absolutePath) }
+                .sortedBy(Pair<String, KeyPair>::first)
+        adapter.replaceAll(keys)
     }
 
     private fun generateSshKey() {

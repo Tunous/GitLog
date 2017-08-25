@@ -5,16 +5,16 @@ import android.support.v7.widget.PopupMenu
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import kotlinx.android.synthetic.main.item_file.view.*
+import com.jcraft.jsch.KeyPair
+import kotlinx.android.synthetic.main.item_ssh_key.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
 import me.thanel.gitlog.utils.setItemTextColor
-import java.io.File
 
-class FileListAdapter(
+class SshKeyListAdapter(
         private val onSshKeyMenuItemClickListener: OnSshKeyMenuItemClickListener
-) : ItemAdapter<File, FileListAdapter.ViewHolder>() {
-    override fun getLayoutResId(viewType: Int) = R.layout.item_file
+) : ItemAdapter<Pair<String, KeyPair>, SshKeyListAdapter.ViewHolder>() {
+    override fun getLayoutResId(viewType: Int) = R.layout.item_ssh_key
 
     override fun createViewHolder(itemView: View, viewType: Int) =
         ViewHolder(itemView, onSshKeyMenuItemClickListener)
@@ -26,15 +26,16 @@ class FileListAdapter(
     class ViewHolder(
             itemView: View,
             private val onSshKeyMenuItemClickListener: OnSshKeyMenuItemClickListener
-    ) : ItemAdapter.ViewHolder<File>(itemView),
+    ) : ItemAdapter.ViewHolder<Pair<String, KeyPair>>(itemView),
             PopupMenu.OnMenuItemClickListener {
-        private val fileNameView = itemView.fileNameView
+        private val titleView = itemView.titleView
+        private val fingerPrintView = itemView.fingerPrintView
         private val popupMenu = PopupMenu(context, itemView, Gravity.END).apply {
             inflate(R.menu.ssh_key)
             menu.setItemTextColor(R.id.remove, Color.RED)
             setOnMenuItemClickListener(this@ViewHolder)
         }
-        private var boundItem: File? = null
+        private var boundItem: String? = null
 
         init {
             itemView.setOnClickListener {
@@ -42,26 +43,24 @@ class FileListAdapter(
             }
         }
 
-        override fun bind(item: File) {
+        override fun bind(item: Pair<String, KeyPair>) {
             super.bind(item)
-            boundItem = item
-            fileNameView.text = item.name
-
-            val iconResId = if (item.isDirectory) R.drawable.ic_folder else R.drawable.ic_file
-            fileNameView.setCompoundDrawablesWithIntrinsicBounds(iconResId, 0, 0, 0)
+            boundItem = item.first
+            titleView.text = item.first
+            fingerPrintView.text = item.second.fingerPrint
         }
 
         override fun onMenuItemClick(item: MenuItem): Boolean {
-            val key = boundItem ?: throw IllegalStateException(
+            val keyName = boundItem ?: throw IllegalStateException(
                     "Selected menu action for non-existing key")
 
             with(onSshKeyMenuItemClickListener) {
                 when (item.itemId) {
-                    R.id.rename -> onRenameKey(key.name)
-                    R.id.show_public_key -> onShowPublicKey(key.name)
-                    R.id.show_private_key -> onShowPrivateKey(key.name)
-                    R.id.edit_password -> onEditKeyPassword(key.name)
-                    R.id.remove -> onRemoveKey(key.name)
+                    R.id.rename -> onRenameKey(keyName)
+                    R.id.show_public_key -> onShowPublicKey(keyName)
+                    R.id.show_private_key -> onShowPrivateKey(keyName)
+                    R.id.edit_password -> onEditKeyPassword(keyName)
+                    R.id.remove -> onRemoveKey(keyName)
                     else -> return false
                 }
             }
