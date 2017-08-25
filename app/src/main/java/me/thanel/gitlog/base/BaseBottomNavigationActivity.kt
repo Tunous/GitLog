@@ -39,6 +39,7 @@ abstract class BaseBottomNavigationActivity
     }
 
     override final fun onNavigationItemSelected(item: MenuItem): Boolean {
+        if (bottomNavigationView.selectedItemId == item.itemId) return false
         displayFragment(item.itemId)
         return true
     }
