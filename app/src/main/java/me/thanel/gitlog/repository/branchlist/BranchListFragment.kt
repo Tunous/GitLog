@@ -12,6 +12,7 @@ import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.log.BranchListAdapter
+import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.api.ListBranchCommand

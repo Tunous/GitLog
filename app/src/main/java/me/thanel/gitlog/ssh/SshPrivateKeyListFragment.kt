@@ -10,6 +10,7 @@ import com.jcraft.jsch.KeyPair
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
+import me.thanel.gitlog.base.dialog.InputDialog
 import me.thanel.gitlog.explorer.FileListAdapter
 import me.thanel.gitlog.explorer.OnSshKeyMenuItemClickListener
 import me.thanel.gitlog.utils.getViewModel
@@ -18,7 +19,8 @@ import me.thanel.gitlog.utils.sshPublicDir
 import java.io.File
 import java.io.FileOutputStream
 
-class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>() {
+class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>(),
+        OnSshKeyMenuItemClickListener {
     private lateinit var rootFolder: File
     private lateinit var adapter: FileListAdapter
 
@@ -28,6 +30,10 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        if (savedInstanceState != null) {
+            val dialog = fragmentManager.findFragmentByTag(TAG_DIALOG_RENAME) as? InputDialog
+            dialog?.setOnSubmitListener(this::refresh)
+        }
     }
 
     override fun onCreateViewModel() = getViewModel<SshPrivateKeyListViewModel>(activity)
@@ -36,27 +42,7 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>() {
         super.onActivityCreated(savedInstanceState)
 
         rootFolder = context.sshDir
-        adapter = FileListAdapter(object : OnSshKeyMenuItemClickListener {
-            override fun onRename(key: File) {
-                TODO()
-            }
-
-            override fun onShowPublicKey(key: File) {
-                TODO()
-            }
-
-            override fun onShowPrivateKey(key: File) {
-                TODO()
-            }
-
-            override fun onEditPassword(key: File) {
-                TODO()
-            }
-
-            override fun onDelete(key: File) {
-                TODO()
-            }
-        })
+        adapter = FileListAdapter(this)
 
         recyclerView.apply {
             adapter = this@SshPrivateKeyListFragment.adapter
@@ -80,6 +66,28 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>() {
         return true
     }
 
+    override fun onRename(key: File) {
+        RenameSshKeyDialog.newInstance(key.name)
+                .setOnSubmitListener(this::refresh)
+                .show(fragmentManager, TAG_DIALOG_RENAME)
+    }
+
+    override fun onShowPublicKey(key: File) {
+        TODO()
+    }
+
+    override fun onShowPrivateKey(key: File) {
+        TODO()
+    }
+
+    override fun onEditPassword(key: File) {
+        TODO()
+    }
+
+    override fun onDelete(key: File) {
+        TODO()
+    }
+
     private fun refresh() {
         adapter.replaceAll(rootFolder.listFiles().asIterable())
     }
@@ -100,6 +108,8 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>() {
     }
 
     companion object {
+        private const val TAG_DIALOG_RENAME = "dialog.rename"
+
         fun newInstance(): SshPrivateKeyListFragment = SshPrivateKeyListFragment()
     }
 }

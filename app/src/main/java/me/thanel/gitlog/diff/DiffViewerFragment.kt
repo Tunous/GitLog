@@ -2,7 +2,10 @@ package me.thanel.gitlog.diff
 
 import me.thanel.gitlog.base.BaseWebViewerFragment
 import me.thanel.gitlog.commit.CommitViewModel
+import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
+import me.thanel.gitlog.utils.serializableArg
+import me.thanel.gitlog.utils.stringArg
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.lib.AbbreviatedObjectId

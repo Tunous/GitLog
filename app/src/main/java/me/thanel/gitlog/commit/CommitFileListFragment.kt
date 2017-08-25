@@ -5,7 +5,9 @@ import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
+import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
+import me.thanel.gitlog.utils.stringArg
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.diff.DiffEntry
 

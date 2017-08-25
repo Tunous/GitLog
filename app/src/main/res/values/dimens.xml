@@ -9,4 +9,5 @@
     <dimen name="regular_spacing">16dp</dimen>
     <dimen name="small_spacing">8dp</dimen>
     <dimen name="commit_header_elevation">4dp</dimen>
+    <dimen name="dialog_content_padding">24dp</dimen>
 </resources>

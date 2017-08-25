@@ -2,13 +2,15 @@ package me.thanel.gitlog.repository.file
 
 import android.text.TextUtils
 import me.thanel.gitlog.base.BaseWebViewerFragment
+import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
+import me.thanel.gitlog.utils.stringArg
 import me.thanel.gitlog.utils.withArguments
 
 class GitFileViewerFragment : BaseWebViewerFragment<GitFileViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
     private val refName by stringArg(ARG_REF_NAME)
-    private val filePath: String by stringArg(ARG_FILE_PATH)
+    private val filePath by stringArg(ARG_FILE_PATH)
 
     override fun onCreateViewModel() = GitFileViewModel.get(activity, repositoryId, refName,
             filePath)

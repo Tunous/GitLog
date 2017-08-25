@@ -15,6 +15,7 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.errors.IncorrectObjectTypeException

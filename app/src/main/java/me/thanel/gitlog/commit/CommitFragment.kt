@@ -10,7 +10,9 @@ import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.repository.filelist.GitFileListActivity
+import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
+import me.thanel.gitlog.utils.stringArg
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.revwalk.RevCommit
