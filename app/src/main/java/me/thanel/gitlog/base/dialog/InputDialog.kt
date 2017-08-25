@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
@@ -19,9 +20,11 @@ abstract class InputDialog : DialogFragment() {
     private lateinit var inputLayout: TextInputLayout
     private var onSubmitListener: (() -> Unit)? = null
 
-    protected open val titleResId: Int = 0
-    protected open val hintResId: Int = 0
+    protected open val titleResId = 0
+    protected open val hintResId = 0
     protected open val inputText: String? = null
+    protected open val isPasswordInput = false
+    protected abstract val positiveButtonResId: Int
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = View.inflate(context, R.layout.dialog_input, null)
@@ -29,6 +32,9 @@ abstract class InputDialog : DialogFragment() {
         inputField = view.dialogInputField.apply {
             setHint(hintResId)
             setText(inputText)
+            if (isPasswordInput) {
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
             addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) = Unit
 
@@ -43,7 +49,7 @@ abstract class InputDialog : DialogFragment() {
         return AlertDialog.Builder(context)
                 .setTitle(titleResId)
                 .setView(view)
-                .setPositiveButton(R.string.rename, null)
+                .setPositiveButton(positiveButtonResId, null)
                 .setNegativeButton(R.string.cancel, null)
                 .create()
     }

@@ -88,7 +88,8 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     override fun onEditKeyPassword(name: String) {
-        TODO()
+        EditSshKeyPasswordDialog.newInstance(name)
+                .show(fragmentManager, TAG_DIALOG_EDIT_PASSWORD)
     }
 
     override fun onRemoveKey(name: String) {
@@ -170,6 +171,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
 
     companion object {
         private const val TAG_DIALOG_RENAME = "dialog.rename"
+        private const val TAG_DIALOG_EDIT_PASSWORD = "dialog.edit_password"
         private const val REQUEST_PICK_FILE = 1
 
         fun newInstance(): SshKeyManagementFragment = SshKeyManagementFragment()

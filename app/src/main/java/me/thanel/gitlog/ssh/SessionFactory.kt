@@ -4,7 +4,6 @@ import android.content.Context
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.Session
 import me.thanel.gitlog.utils.sshDir
-import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.CredentialsProviderUserInfo
 import org.eclipse.jgit.transport.JschConfigSessionFactory
 import org.eclipse.jgit.transport.OpenSshConfig
@@ -15,7 +14,8 @@ class SessionFactory(private val context: Context) : JschConfigSessionFactory() 
         session.setConfig("StrictHostKeyChecking", "no")
         session.setConfig("PreferredAuthentications", "publickey,password")
 
-        session.userInfo = CredentialsProviderUserInfo(session, CredentialsProvider.getDefault())
+        session.userInfo = CredentialsProviderUserInfo(session,
+                SharedPreferencesCredentialsProvider(context))
     }
 
     override fun createDefaultJSch(fs: FS): JSch {

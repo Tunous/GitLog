@@ -13,6 +13,7 @@ class RenameSshKeyDialog : InputDialog() {
     override val titleResId get() = R.string.rename_ssh_key
     override val hintResId get() = R.string.new_ssh_key_name
     override val inputText get() = currentKeyName
+    override val positiveButtonResId get() = R.string.rename
 
     override fun onSubmit(input: String): Boolean {
         val newKeyName = input.trim()
@@ -28,6 +29,12 @@ class RenameSshKeyDialog : InputDialog() {
             showError("Failed renaming key...")
             return false
         }
+
+        val prefs = SharedPreferencesCredentialsProvider.getPrefs(context)
+        val password = prefs.getString(currentKeyName, null)
+        prefs.edit()
+                .putString(newKeyName, password)
+                .apply()
 
         return true
     }
