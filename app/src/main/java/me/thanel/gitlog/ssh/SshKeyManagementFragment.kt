@@ -130,6 +130,12 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     private fun removeSshKey(name: String) {
         File(context.sshDir, name).delete()
         File(context.sshDir, "$name.pub").delete()
+
+        SharedPreferencesCredentialsProvider.getPrefs(context)
+                .edit()
+                .remove(name)
+                .apply()
+
         refresh()
     }
 
