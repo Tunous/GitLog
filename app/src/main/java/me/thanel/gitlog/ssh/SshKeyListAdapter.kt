@@ -9,6 +9,7 @@ import com.jcraft.jsch.KeyPair
 import kotlinx.android.synthetic.main.item_ssh_key.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
+import me.thanel.gitlog.utils.isVisible
 import me.thanel.gitlog.utils.setItemTextColor
 
 class SshKeyListAdapter(
@@ -48,6 +49,7 @@ class SshKeyListAdapter(
             boundItem = item.first
             titleView.text = item.first
             fingerPrintView.text = item.second.fingerPrint
+            fingerPrintView.isVisible = !fingerPrintView.text.isNullOrBlank()
         }
 
         override fun onMenuItemClick(item: MenuItem): Boolean {
