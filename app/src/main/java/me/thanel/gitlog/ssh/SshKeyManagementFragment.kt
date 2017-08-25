@@ -10,6 +10,7 @@ import android.text.style.StyleSpan
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.KeyPair
@@ -80,7 +81,13 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     override fun onShowPublicKey(name: String) {
-        showFileContent(File(context.sshDir, "$name.pub"))
+        val publicKey = File(context.sshDir, "$name.pub")
+        if (!publicKey.exists()) {
+            // TODO: Do not show menu entry for this action if key doesn't exist
+            Toast.makeText(context, "Public key doesn't exist", Toast.LENGTH_SHORT).show()
+            return
+        }
+        showFileContent(publicKey)
     }
 
     override fun onShowPrivateKey(name: String) {
@@ -152,7 +159,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         val jsch = JSch()
         with(KeyPair.genKeyPair(jsch, KeyPair.RSA)) {
             writePrivateKey(FileOutputStream(privateKey))
-            writePublicKey(FileOutputStream(publicKey), "GitLog")
+            writePublicKey(FileOutputStream(publicKey), getString(R.string.app_name))
             dispose()
         }
 
