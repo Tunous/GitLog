@@ -24,7 +24,7 @@ import me.thanel.gitlog.utils.sshPublicDir
 import java.io.File
 import java.io.FileOutputStream
 
-class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>(),
+class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         OnSshKeyMenuItemClickListener {
     private lateinit var rootFolder: File
     private lateinit var adapter: FileListAdapter
@@ -41,7 +41,7 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>(),
         }
     }
 
-    override fun onCreateViewModel() = getViewModel<SshPrivateKeyListViewModel>(activity)
+    override fun onCreateViewModel() = getViewModel<SshKeyManagementViewModel>(activity)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -50,7 +50,7 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>(),
         adapter = FileListAdapter(this)
 
         recyclerView.apply {
-            adapter = this@SshPrivateKeyListFragment.adapter
+            adapter = this@SshKeyManagementFragment.adapter
             layoutManager = LinearLayoutManager(context)
         }
 
@@ -131,6 +131,6 @@ class SshPrivateKeyListFragment : BaseFragment<SshPrivateKeyListViewModel>(),
     companion object {
         private const val TAG_DIALOG_RENAME = "dialog.rename"
 
-        fun newInstance(): SshPrivateKeyListFragment = SshPrivateKeyListFragment()
+        fun newInstance(): SshKeyManagementFragment = SshKeyManagementFragment()
     }
 }
