@@ -21,7 +21,7 @@ class SessionFactory(private val context: Context) : JschConfigSessionFactory() 
     override fun createDefaultJSch(fs: FS): JSch {
         val jsch = JSch()
         context.sshDir.listFiles()
-                .filterNot { it.endsWith(".pub") }
+                .filterNot { it.name.endsWith(".pub") }
                 .forEach { jsch.addIdentity(it.absolutePath) }
         return jsch
     }

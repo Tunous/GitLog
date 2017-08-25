@@ -24,6 +24,7 @@ import me.thanel.gitlog.repository.branchlist.BranchListFragment
 import me.thanel.gitlog.repository.filelist.GitFileListFragment
 import me.thanel.gitlog.repository.log.CommitLogFragment
 import me.thanel.gitlog.repositorylist.RepositoryListActivity
+import me.thanel.gitlog.ssh.TransportCallback
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.formatTags
@@ -87,7 +88,9 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     private fun fetch() = launch(UI) {
         val dialog = ProgressDialog.show(this@RepositoryActivity, "Fetch", "Fetching...", true)
         async(CommonPool) {
-            repository!!.git.fetch().call()
+            repository!!.git.fetch()
+                    .setTransportConfigCallback(TransportCallback(this@RepositoryActivity))
+                    .call()
         }.await()
         dialog.dismiss()
         recreate()
