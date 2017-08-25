@@ -32,6 +32,7 @@
         <activity android:name="me.thanel.gitlog.repository.file.GitFileViewerActivity" />
         <activity android:name=".repository.filelist.GitFileListActivity" />
         <activity android:name=".ssh.SshKeyManagementActivity" />
+        <activity android:name=".explorer.FileViewerActivity" />
     </application>
 
 </manifest>

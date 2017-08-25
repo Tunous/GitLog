@@ -15,11 +15,12 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.base.dialog.InputDialog
 import me.thanel.gitlog.explorer.FileListAdapter
+import me.thanel.gitlog.explorer.FileViewerActivity
 import me.thanel.gitlog.explorer.OnSshKeyMenuItemClickListener
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getViewModel
-import me.thanel.gitlog.utils.sshDir
+import me.thanel.gitlog.utils.sshPrivateDir
 import me.thanel.gitlog.utils.sshPublicDir
 import java.io.File
 import java.io.FileOutputStream
@@ -46,7 +47,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        rootFolder = context.sshDir
+        rootFolder = context.sshPrivateDir
         adapter = FileListAdapter(this)
 
         recyclerView.apply {
@@ -71,33 +72,33 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         return true
     }
 
-    override fun onRename(key: File) {
-        RenameSshKeyDialog.newInstance(key.name)
+    override fun onRenameKey(name: String) {
+        RenameSshKeyDialog.newInstance(name)
                 .setOnSubmitListener(this::refresh)
                 .show(fragmentManager, TAG_DIALOG_RENAME)
     }
 
-    override fun onShowPublicKey(key: File) {
+    override fun onShowPublicKey(name: String) {
+        showFileContent(File(context.sshPublicDir, name))
+    }
+
+    override fun onShowPrivateKey(name: String) {
+        showFileContent(File(context.sshPrivateDir, name))
+    }
+
+    override fun onEditKeyPassword(name: String) {
         TODO()
     }
 
-    override fun onShowPrivateKey(key: File) {
-        TODO()
-    }
-
-    override fun onEditPassword(key: File) {
-        TODO()
-    }
-
-    override fun onRemove(key: File) {
+    override fun onRemoveKey(name: String) {
         val message = getString(R.string.remove_confirm_message)
-                .formatTags(StyleableTag("target", key.name, StyleSpan(Typeface.BOLD)))
+                .formatTags(StyleableTag("target", name, StyleSpan(Typeface.BOLD)))
 
         AlertDialog.Builder(context)
                 .setTitle(R.string.remove_ssh_key)
                 .setMessage(message)
                 .setPositiveButton(R.string.remove) { _, _ ->
-                    removeSshKey(key.name)
+                    removeSshKey(name)
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -105,7 +106,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
 
     private fun removeSshKey(name: String) {
         File(context.sshPublicDir, name).delete()
-        File(context.sshDir, name).delete()
+        File(context.sshPrivateDir, name).delete()
         refresh()
     }
 
@@ -115,7 +116,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
 
     private fun generateSshKey() {
         val fileName = "test"
-        val privateKey = File(context.sshDir, fileName)
+        val privateKey = File(context.sshPrivateDir, fileName)
         val publicKey = File(context.sshPublicDir, fileName)
 
         val jsch = JSch()
@@ -126,6 +127,11 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         }
 
         refresh()
+    }
+
+    private fun showFileContent(file: File) {
+        val intent = FileViewerActivity.newIntent(context, file.absolutePath)
+        startActivity(intent)
     }
 
     companion object {

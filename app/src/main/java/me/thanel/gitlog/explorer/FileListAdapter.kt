@@ -57,11 +57,11 @@ class FileListAdapter(
 
             with(onSshKeyMenuItemClickListener) {
                 when (item.itemId) {
-                    R.id.rename -> onRename(key)
-                    R.id.show_public_key -> onShowPublicKey(key)
-                    R.id.show_private_key -> onShowPrivateKey(key)
-                    R.id.edit_password -> onEditPassword(key)
-                    R.id.remove -> onRemove(key)
+                    R.id.rename -> onRenameKey(key.name)
+                    R.id.show_public_key -> onShowPublicKey(key.name)
+                    R.id.show_private_key -> onShowPrivateKey(key.name)
+                    R.id.edit_password -> onEditKeyPassword(key.name)
+                    R.id.remove -> onRemoveKey(key.name)
                     else -> return false
                 }
             }
@@ -72,9 +72,9 @@ class FileListAdapter(
 }
 
 interface OnSshKeyMenuItemClickListener {
-    fun onRename(key: File)
-    fun onShowPublicKey(key: File)
-    fun onShowPrivateKey(key: File)
-    fun onEditPassword(key: File)
-    fun onRemove(key: File)
+    fun onRenameKey(name: String)
+    fun onShowPublicKey(name: String)
+    fun onShowPrivateKey(name: String)
+    fun onEditKeyPassword(name: String)
+    fun onRemoveKey(name: String)
 }

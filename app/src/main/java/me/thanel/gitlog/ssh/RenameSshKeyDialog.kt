@@ -2,7 +2,7 @@ package me.thanel.gitlog.ssh
 
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.dialog.InputDialog
-import me.thanel.gitlog.utils.sshDir
+import me.thanel.gitlog.utils.sshPrivateDir
 import me.thanel.gitlog.utils.sshPublicDir
 import me.thanel.gitlog.utils.stringArg
 import me.thanel.gitlog.utils.withArguments
@@ -17,9 +17,9 @@ class RenameSshKeyDialog : InputDialog() {
 
     override fun onSubmit(input: String): Boolean {
         val newKeyName = input.trim()
-        val publicKeyFile = File(context.sshDir, currentKeyName)
+        val publicKeyFile = File(context.sshPrivateDir, currentKeyName)
         val privateKeyFile = File(context.sshPublicDir, currentKeyName)
-        val newPublicKeyFile = File(context.sshDir, newKeyName)
+        val newPublicKeyFile = File(context.sshPrivateDir, newKeyName)
         val newPrivateKeyFile = File(context.sshPublicDir, newKeyName)
 
         val publicKeyRenameSuccess = publicKeyFile.renameTo(newPublicKeyFile)
@@ -45,7 +45,7 @@ class RenameSshKeyDialog : InputDialog() {
         }
 
         val newKeyName = input.trim().toString()
-        val newPublicKeyFile = File(context.sshDir, newKeyName)
+        val newPublicKeyFile = File(context.sshPrivateDir, newKeyName)
         val newPrivateKeyFile = File(context.sshPublicDir, newKeyName)
         if (newPublicKeyFile.exists() || newPrivateKeyFile.exists()) {
             showError("SSH Key with this name already exists")
