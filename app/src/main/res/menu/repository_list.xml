@@ -3,11 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/remove_all_repositories"
-        android:title="@string/remove_all_repositories"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/manage_ssh_keys"
         android:title="@string/manage_ssh_keys"
         app:showAsAction="never" />

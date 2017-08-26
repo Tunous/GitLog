@@ -15,7 +15,6 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import me.thanel.gitlog.ActivityResults
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseBottomNavigationActivity
 import me.thanel.gitlog.db.RepositoryViewModel
@@ -117,9 +116,6 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     private fun removeRepository() {
         launch(CommonPool) {
             viewModel.removeRepository(repository!!)
-            setResult(ActivityResults.RESULT_REPOSITORY_REMOVED, Intent().apply {
-                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-            })
             finish()
         }
     }

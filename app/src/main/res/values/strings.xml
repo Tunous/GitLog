@@ -23,7 +23,6 @@
     <string name="show_graph">Show graph</string>
     <string name="fetch">Fetch</string>
     <string name="generate_ssh_key">Generate SSH key</string>
-    <string name="remove_all_repositories">Remove all repositories</string>
     <string name="manage_ssh_keys">Manage SSH keys</string>
     <string name="rename">Rename</string>
     <string name="new_ssh_key_name">New SSH Key name</string>
@@ -36,6 +35,7 @@
     <string name="password">Password</string>
     <string name="edit">Edit</string>
     <string name="generate">Generate</string>
+    <string name="no_repositories">No repositories</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

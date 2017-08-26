@@ -120,9 +120,10 @@ inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: 
  * @return A LiveData which emits resulting values.
  * @see Transformations.map
  */
-fun <X, Y> LiveData<X>.mapBg(func: (X) -> Y): LiveData<Y> = Transformations.switchMap(this) {
-    BackgroundLoadLiveData(it, func)
-}
+fun <X, Y> LiveData<X>.mapBg(func: suspend (X) -> Y): LiveData<Y> =
+    Transformations.switchMap(this) {
+        BackgroundLoadLiveData(it, func)
+    }
 
 /**
  * Live data which immediately applies the given function on the provided data in
@@ -131,7 +132,7 @@ fun <X, Y> LiveData<X>.mapBg(func: (X) -> Y): LiveData<Y> = Transformations.swit
  * @param input The input data to map.
  * @param func The function to apply.
  */
-class BackgroundLoadLiveData<X, Y>(input: X, func: (X) -> Y) : MutableLiveData<Y>() {
+class BackgroundLoadLiveData<X, Y>(input: X, func: suspend (X) -> Y) : MutableLiveData<Y>() {
     init {
         launch(CommonPool) {
             postValue(func(input))

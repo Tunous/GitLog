@@ -23,8 +23,8 @@ class CommitViewModel(
     private val diffFormatter = DiffFormatter(outputStream)
 
     val repository = db.repositoryDao().getRepository(repositoryId)
-    val diffEntries = repository.mapBg(this::loadDiffEntries)
-    val commit = repository.mapBg(this::loadCommit)
+    val diffEntries = repository.mapBg { loadDiffEntries(it) }
+    val commit = repository.mapBg { loadCommit(it) }
 
     fun formatDiffEntry(diffEntry: DiffEntry): String {
         outputStream.reset()
@@ -37,7 +37,7 @@ class CommitViewModel(
         diffEntries.find { it.newId == newId }
     }
 
-    private fun loadDiffEntries(repository: Repository): List<DiffEntry> {
+    private suspend fun loadDiffEntries(repository: Repository): List<DiffEntry> {
         val git = repository.git
         val gitRepository = git.repository
         diffFormatter.setRepository(gitRepository)
@@ -47,7 +47,7 @@ class CommitViewModel(
         return diffFormatter.scan(previousCommit, currentCommit)
     }
 
-    private fun loadCommit(repository: Repository): RevCommit {
+    private suspend fun loadCommit(repository: Repository): RevCommit {
         val git = repository.git
         val gitRepository = git.repository
         return git.log()
