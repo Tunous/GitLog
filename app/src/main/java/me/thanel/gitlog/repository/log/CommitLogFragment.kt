@@ -1,11 +1,11 @@
 package me.thanel.gitlog.repository.log
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.view_recycler.*
+import android.view.View
+import kotlinx.android.synthetic.main.view_horizontal_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -16,6 +16,7 @@ import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.utils.intArg
+import me.thanel.gitlog.utils.isVisible
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.errors.IncorrectObjectTypeException
@@ -43,12 +44,10 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     override fun observeViewModel(viewModel: CommitLogViewModel) =
         viewModel.repository.observe(this, this::onRepositoryLoaded)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-        }
+        emptyView.setText(R.string.no_commits)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -73,13 +72,11 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
         return true
     }
 
-    private fun onRepositoryLoaded(it: Repository?) {
-        if (it == null) {
-            // TODO: Loading
-            return
+    private fun onRepositoryLoaded(repo: Repository?) {
+        if (repo != null) {
+            repository = repo
+            logCommits()
         }
-        repository = it
-        logCommits()
     }
 
     private fun openCommit(commit: RevCommit) {
@@ -117,6 +114,9 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
         commitLogAdapter = CommitLogAdapter(plotCommitList, this@CommitLogFragment::openCommit)
         commitLogAdapter.notifyDataSetChanged()
         recyclerView.adapter = commitLogAdapter
+
+        emptyView.isVisible = plotCommitList.isEmpty()
+        loadingProgressBar.hide()
     }
 
     companion object {

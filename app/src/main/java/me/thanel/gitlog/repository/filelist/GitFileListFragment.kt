@@ -1,7 +1,6 @@
 package me.thanel.gitlog.repository.filelist
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
@@ -28,7 +27,6 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
 
         pathBar = PathBar(context)
         pathBar.onPathEntryClicked {

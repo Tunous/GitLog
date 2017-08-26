@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.thanel.gitlog.repository.log.ZoomHorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:overScrollMode="never"
-    android:scrollbars="horizontal">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingBottom="16dp"
-        android:scrollbars="vertical"
-        android:verticalScrollbarPosition="left" />
+        android:gravity="center"
+        android:visibility="gone"
+        tools:text="No items found." />
 
-</me.thanel.gitlog.repository.log.ZoomHorizontalScrollView>
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/loadingProgressBar"
+        style="?android:progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <me.thanel.gitlog.repository.log.ZoomHorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="horizontal">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="left"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+    </me.thanel.gitlog.repository.log.ZoomHorizontalScrollView>
+
+</FrameLayout>

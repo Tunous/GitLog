@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
@@ -32,10 +31,7 @@ class FilePickerFragment : BaseFragment<FilePickerViewModel>() {
             }
         }
 
-        recyclerView.apply {
-            adapter = fileListAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
+        recyclerView.adapter = fileListAdapter
 
         displayFiles(Environment.getExternalStorageDirectory())
     }

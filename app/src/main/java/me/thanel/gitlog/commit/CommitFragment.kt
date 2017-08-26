@@ -1,7 +1,6 @@
 package me.thanel.gitlog.commit
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -42,7 +41,6 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
 
         adapter = DiffHunkAdapter(viewModel)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -1,7 +1,6 @@
 package me.thanel.gitlog.repositorylist
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 import me.thanel.gitlog.AddRepositoryActivity
@@ -25,7 +24,6 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
         emptyView.setText(R.string.no_repositories)
 
         repositoryRecyclerView.adapter = adapter
-        repositoryRecyclerView.layoutManager = LinearLayoutManager(context)
 
         addRepositoryButton.setOnClickListener {
             showAddRepositoryScreen()

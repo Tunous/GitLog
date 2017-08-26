@@ -36,6 +36,7 @@
     <string name="edit">Edit</string>
     <string name="generate">Generate</string>
     <string name="no_repositories">No repositories</string>
+    <string name="no_commits">No commits.</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

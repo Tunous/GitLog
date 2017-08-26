@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.text.style.StyleSpan
 import android.view.Menu
 import android.view.MenuInflater
@@ -53,10 +52,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         rootFolder = context.sshDir
         adapter = SshKeyListAdapter(this)
 
-        recyclerView.apply {
-            adapter = this@SshKeyManagementFragment.adapter
-            layoutManager = LinearLayoutManager(context)
-        }
+        recyclerView.adapter = adapter
 
         refresh()
     }

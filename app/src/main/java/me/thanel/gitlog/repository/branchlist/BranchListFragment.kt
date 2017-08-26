@@ -1,7 +1,6 @@
 package me.thanel.gitlog.repository.branchlist
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.view_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -42,10 +41,7 @@ class BranchListFragment : BaseFragment<RepositoryViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        recyclerView.apply {
-            adapter = this@BranchListFragment.adapter
-            layoutManager = LinearLayoutManager(context)
-        }
+        recyclerView.adapter = this@BranchListFragment.adapter
     }
 
     private fun listBranches(repository: Repository) = launch(UI) {
