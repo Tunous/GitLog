@@ -1,13 +1,13 @@
 package me.thanel.gitlog.repositorylist
 
-import android.content.Context
+import activitystarter.MakeActivityStarter
 import android.view.Menu
 import android.view.MenuItem
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragmentActivity
-import me.thanel.gitlog.ssh.SshKeyManagementActivity
-import me.thanel.gitlog.utils.createIntent
+import me.thanel.gitlog.ssh.SshKeyManagementActivityStarter
 
+@MakeActivityStarter
 class RepositoryListActivity : BaseFragmentActivity() {
     override val canNavigateUp = false
 
@@ -27,12 +27,10 @@ class RepositoryListActivity : BaseFragmentActivity() {
     }
 
     private fun browseSshKeys() {
-        val intent = SshKeyManagementActivity.newIntent(this)
-        startActivityForResult(intent, REQUEST_BROWSE_SSH)
+        SshKeyManagementActivityStarter.startForResult(this, REQUEST_BROWSE_SSH)
     }
 
     companion object {
         private const val REQUEST_BROWSE_SSH = 1
-        fun newIntent(context: Context) = context.createIntent<RepositoryListActivity>()
     }
 }

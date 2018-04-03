@@ -2,17 +2,13 @@ package me.thanel.gitlog.utils
 
 import android.arch.lifecycle.*
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Bundle
 import android.support.annotation.AttrRes
 import android.support.annotation.ColorInt
 import android.support.annotation.IdRes
 import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -44,29 +40,6 @@ import java.security.NoSuchAlgorithmException
  */
 fun ViewGroup.inflate(@LayoutRes layoutResId: Int, attachToRoot: Boolean = false): View =
     LayoutInflater.from(context).inflate(layoutResId, this, attachToRoot)
-
-/**
- * Create a new instance of fragment with type [T] and initialize its arguments using the provided
- * [initializer].
- */
-fun <T : Fragment> T.withArguments(initializer: Bundle.() -> Unit): T {
-    arguments = Bundle().apply(initializer)
-    return this
-}
-
-/**
- * Create a new intent for an activity of the specified type [T].
- */
-inline fun <reified T : AppCompatActivity> Context.createIntent(): Intent =
-    Intent(this, T::class.java)
-
-/**
- * Create a new intent for an activity of the specified type [T] and initialize it with the
- * specified [initializer].
- */
-inline fun <reified T : AppCompatActivity> Context.createIntent(
-    initializer: Intent.() -> Unit
-): Intent = createIntent<T>().apply(initializer)
 
 class StyleableTag(name: String, val replacement: String, vararg val spans: Any) {
     val name = "[$name]"

@@ -1,20 +1,23 @@
 package me.thanel.gitlog.repository.filelist
 
+import activitystarter.Arg
 import android.os.Bundle
+import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.repository.file.GitFileViewerActivity
-import me.thanel.gitlog.utils.intArg
+import me.thanel.gitlog.repository.file.GitFileViewerActivityStarter
 import me.thanel.gitlog.utils.observe
-import me.thanel.gitlog.utils.stringArg
-import me.thanel.gitlog.utils.withArguments
 import me.thanel.gitlog.view.PathBar
 
 class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
-    private val repositoryId by intArg(ARG_REPOSITORY_ID)
-    private val refName by stringArg(ARG_REF_NAME)
+    @get:Arg
+    val repositoryId: Int by argExtra()
+
+    @get:Arg
+    val refName: String by argExtra()
+
     private val adapter = GitFileListAdapter(this::moveDown)
     private lateinit var pathBar: PathBar
     private lateinit var repository: Repository
@@ -79,9 +82,12 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
 
     private fun moveDown(file: GitFile) {
         if (!file.isDirectory) {
-            val intent =
-                GitFileViewerActivity.newIntent(requireContext(), repositoryId, refName, file.path)
-            startActivity(intent)
+            GitFileViewerActivityStarter.start(
+                requireContext(),
+                repositoryId,
+                refName,
+                file.path
+            )
             return
         }
 
@@ -109,12 +115,5 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
 
     companion object {
         private const val STATE_CURRENT_PATH = "state.current_path"
-        private const val ARG_REPOSITORY_ID = "arg.repository_id"
-        private const val ARG_REF_NAME = "arg.ref_name"
-
-        fun newInstance(repositoryId: Int, refName: String) = GitFileListFragment().withArguments {
-            putInt(ARG_REPOSITORY_ID, repositoryId)
-            putString(ARG_REF_NAME, refName)
-        }
     }
 }

@@ -74,7 +74,10 @@ class AvatarHeaderView @JvmOverloads constructor(
 
     fun bind(ident: PersonIdent, @StringRes messageResId: Int) {
         avatarView.setFromIdent(ident)
-        titleView.text = "${ident.name} <${ident.emailAddress}>"
+        titleView.text = context.getString(R.string.user_name_and_email).formatTags(
+            StyleableTag("name", ident.name),
+            StyleableTag("email", ident.emailAddress)
+        )
         val time = DateUtils.formatDateTime(
             context, ident.`when`.time,
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_YEAR

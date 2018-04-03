@@ -1,8 +1,8 @@
 package me.thanel.gitlog.repository
 
+import activitystarter.Arg
 import android.app.ProgressDialog
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog
 import android.text.style.StyleSpan
 import android.view.Menu
 import android.view.MenuItem
+import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -19,19 +20,19 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseBottomNavigationActivity
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.repository.branchlist.BranchListFragment
-import me.thanel.gitlog.repository.filelist.GitFileListFragment
-import me.thanel.gitlog.repository.log.CommitLogFragment
-import me.thanel.gitlog.repositorylist.RepositoryListActivity
+import me.thanel.gitlog.repository.branchlist.BranchListFragmentStarter
+import me.thanel.gitlog.repository.filelist.GitFileListFragmentStarter
+import me.thanel.gitlog.repository.log.CommitLogFragmentStarter
+import me.thanel.gitlog.repositorylist.RepositoryListActivityStarter
 import me.thanel.gitlog.ssh.TransportCallback
 import me.thanel.gitlog.utils.StyleableTag
-import me.thanel.gitlog.utils.createIntent
 import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getAbbreviatedName
 import org.eclipse.jgit.lib.Constants
 
 class RepositoryActivity : BaseBottomNavigationActivity() {
-    private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
+    @get:Arg
+    val repositoryId: Int by argExtra()
 
     private lateinit var viewModel: RepositoryViewModel
 
@@ -57,9 +58,9 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     }
 
     override fun createFragment(itemId: Int): Fragment = when (itemId) {
-        R.id.log -> CommitLogFragment.newInstance(repositoryId)
-        R.id.files -> GitFileListFragment.newInstance(repositoryId, Constants.HEAD)
-        R.id.branches -> BranchListFragment.newInstance(repositoryId)
+        R.id.log -> CommitLogFragmentStarter.newInstance(repositoryId)
+        R.id.files -> GitFileListFragmentStarter.newInstance(repositoryId, Constants.HEAD)
+        R.id.branches -> BranchListFragmentStarter.newInstance(repositoryId)
         else -> throw IllegalAccessException("Unknown fragment id: $itemId")
     }
 
@@ -96,8 +97,8 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     }
 
     override fun getSupportParentActivityIntent(): Intent =
-        RepositoryListActivity.newIntent(this)
-            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        RepositoryListActivityStarter.getIntent(this)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     private fun promptRemoveRepository() {
         val message = getString(R.string.remove_confirm_message)
@@ -121,12 +122,6 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     }
 
     companion object {
-        private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
         const val EXTRA_REPOSITORY = "extra.repository"
-
-        fun newIntent(context: Context, repositoryId: Int) =
-            context.createIntent<RepositoryActivity> {
-                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-            }
     }
 }

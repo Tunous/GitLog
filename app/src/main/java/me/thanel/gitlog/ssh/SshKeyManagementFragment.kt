@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.base.dialog.InputDialog
-import me.thanel.gitlog.explorer.FileViewerActivity
+import me.thanel.gitlog.explorer.FileViewerActivityStarter
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.formatTags
 import me.thanel.gitlog.utils.getViewModel
@@ -73,7 +73,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     override fun onRenameKey(name: String) {
-        RenameSshKeyDialog.newInstance(name)
+        RenameSshKeyDialogStarter.newInstance(name)
             .setOnSubmitListener(this::refresh)
             .show(fragmentManager, TAG_DIALOG_RENAME)
     }
@@ -93,7 +93,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     override fun onEditKeyPassword(name: String) {
-        EditSshKeyPasswordDialog.newInstance(name)
+        EditSshKeyPasswordDialogStarter.newInstance(name)
             .show(fragmentManager, TAG_DIALOG_EDIT_PASSWORD)
     }
 
@@ -162,13 +162,11 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     private fun showFileContent(file: File) {
-        val intent = FileViewerActivity.newIntent(requireContext(), file.absolutePath)
-        startActivity(intent)
+        FileViewerActivityStarter.start(requireContext(), file.absolutePath)
     }
 
     private fun importSshKey() {
-        val intent = FilePickerActivity.newIntent(requireContext())
-        startActivityForResult(intent, REQUEST_PICK_FILE)
+        FilePickerActivityStarter.startForResult(requireActivity(), REQUEST_PICK_FILE)
     }
 
     companion object {

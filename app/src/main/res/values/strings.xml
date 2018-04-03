@@ -5,8 +5,6 @@
     <string name="remove">Remove</string>
     <string name="remove_repository">Remove repository</string>
     <string name="cancel">Cancel</string>
-    <string name="view_diff">View diff</string>
-    <string name="deselect_all">Deselect all</string>
     <string name="diff_summary">Showing [changed_files] with [additions] and [deletions].</string>
     <string name="view_whole_file">View whole file</string>
     <string name="view_in_full_screen">View in full-screen</string>
@@ -37,6 +35,10 @@
     <string name="generate">Generate</string>
     <string name="no_repositories">No repositories</string>
     <string name="no_commits">No commits.</string>
+    <string name="repository_url">Repository URL</string>
+    <string name="repository_name">Repository name</string>
+    <string name="clone">Clone</string>
+    <string name="user_name_and_email">[name] &lt;[email]&gt;</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

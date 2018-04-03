@@ -1,9 +1,9 @@
 package me.thanel.gitlog
 
+import activitystarter.MakeActivityStarter
 import android.app.Activity
 import android.app.ProgressDialog
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -20,16 +20,16 @@ import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.RepositoryActivity
-import me.thanel.gitlog.repositorylist.RepositoryListActivity
+import me.thanel.gitlog.repositorylist.RepositoryListActivityStarter
 import me.thanel.gitlog.repositorylist.RepositoryListManager
 import me.thanel.gitlog.ssh.TransportCallback
-import me.thanel.gitlog.utils.createIntent
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.InvalidRemoteException
 import org.eclipse.jgit.api.errors.TransportException
 import org.eclipse.jgit.lib.EmptyProgressMonitor
 import java.io.File
 
+@MakeActivityStarter
 class AddRepositoryActivity : AppCompatActivity() {
     private lateinit var viewModel: RepositoryViewModel
 
@@ -171,10 +171,6 @@ class AddRepositoryActivity : AppCompatActivity() {
     }
 
     override fun getSupportParentActivityIntent(): Intent =
-        RepositoryListActivity.newIntent(this)
-            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-    companion object {
-        fun newIntent(context: Context) = context.createIntent<AddRepositoryActivity>()
-    }
+        RepositoryListActivityStarter.getIntent(this)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 }

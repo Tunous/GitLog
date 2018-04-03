@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.view.isVisible
 import kotlinx.android.synthetic.main.fragment_repository_list.*
-import me.thanel.gitlog.AddRepositoryActivity
+import me.thanel.gitlog.AddRepositoryActivityStarter
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.repository.RepositoryActivity
+import me.thanel.gitlog.repository.RepositoryActivityStarter
 import me.thanel.gitlog.utils.observe
 
 class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
@@ -44,10 +44,10 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
     }
 
     private fun showAddRepositoryScreen() {
-        startActivity(AddRepositoryActivity.newIntent(requireContext()))
+        AddRepositoryActivityStarter.start(requireContext())
     }
 
     private fun openRepository(repository: Repository) {
-        startActivity(RepositoryActivity.newIntent(requireContext(), repository.id))
+        RepositoryActivityStarter.start(requireContext(), repository.id)
     }
 }

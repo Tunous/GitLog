@@ -33,7 +33,7 @@
         <activity android:name=".repository.filelist.GitFileListActivity" />
         <activity android:name=".ssh.SshKeyManagementActivity" />
         <activity android:name=".explorer.FileViewerActivity" />
-        <activity android:name=".ssh.FilePickerActivity"></activity>
+        <activity android:name=".ssh.FilePickerActivity" />
     </application>
 
 </manifest>

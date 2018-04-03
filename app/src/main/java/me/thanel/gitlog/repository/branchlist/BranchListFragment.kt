@@ -1,6 +1,8 @@
 package me.thanel.gitlog.repository.branchlist
 
+import activitystarter.Arg
 import android.os.Bundle
+import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -11,14 +13,13 @@ import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.log.BranchListAdapter
-import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
-import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.api.ListBranchCommand
 import org.eclipse.jgit.lib.Repository.shortenRefName
 
 class BranchListFragment : BaseFragment<RepositoryViewModel>() {
-    private val repositoryId by intArg(ARG_REPOSITORY_ID)
+    @get: Arg
+    val repositoryId: Int by argExtra()
 
     private val adapter = BranchListAdapter {
         // TODO:
@@ -51,13 +52,5 @@ class BranchListFragment : BaseFragment<RepositoryViewModel>() {
                 .call()
         }
         adapter.addAll(branches)
-    }
-
-    companion object {
-        private const val ARG_REPOSITORY_ID = "arg.repository_id"
-
-        fun newInstance(repositoryId: Int) = BranchListFragment().withArguments {
-            putInt(ARG_REPOSITORY_ID, repositoryId)
-        }
     }
 }

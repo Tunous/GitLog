@@ -1,15 +1,17 @@
 package me.thanel.gitlog.ssh
 
+import activitystarter.Arg
 import android.content.SharedPreferences
 import android.os.Bundle
+import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.dialog.InputDialog
-import me.thanel.gitlog.utils.stringArg
-import me.thanel.gitlog.utils.withArguments
 
 class EditSshKeyPasswordDialog : InputDialog() {
     private lateinit var prefs: SharedPreferences
-    private val keyName by stringArg(ARG_KEY_NAME)
+
+    @get:Arg
+    val keyName: String by argExtra()
 
     override val titleResId get() = R.string.edit_password
     override val hintResId get() = R.string.password
@@ -28,13 +30,5 @@ class EditSshKeyPasswordDialog : InputDialog() {
             .putString(keyName, input)
             .apply()
         return true
-    }
-
-    companion object {
-        private const val ARG_KEY_NAME = "arg.key_name"
-
-        fun newInstance(currentKeyName: String) = EditSshKeyPasswordDialog().withArguments {
-            putString(ARG_KEY_NAME, currentKeyName)
-        }
     }
 }

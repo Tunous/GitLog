@@ -1,13 +1,13 @@
 package me.thanel.gitlog.ssh
 
-import android.content.Context
+import activitystarter.MakeActivityStarter
 import android.content.Intent
 import android.os.Bundle
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragmentActivity
-import me.thanel.gitlog.repositorylist.RepositoryListActivity
-import me.thanel.gitlog.utils.createIntent
+import me.thanel.gitlog.repositorylist.RepositoryListActivityStarter
 
+@MakeActivityStarter(includeStartForResult = true)
 class SshKeyManagementActivity : BaseFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,10 +17,6 @@ class SshKeyManagementActivity : BaseFragmentActivity() {
     override fun createFragment() = SshKeyManagementFragment.newInstance()
 
     override fun getSupportParentActivityIntent(): Intent =
-        RepositoryListActivity.newIntent(this)
-            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-    companion object {
-        fun newIntent(context: Context) = context.createIntent<SshKeyManagementActivity>()
-    }
+        RepositoryListActivityStarter.getIntent(this)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 }

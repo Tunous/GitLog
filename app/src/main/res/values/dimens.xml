@@ -2,12 +2,10 @@
 <resources>
     <dimen name="toolbar_inset">72dp</dimen>
     <dimen name="diff_line_padding">8dp</dimen>
-    <dimen name="bottom_sheet_peek_height">56dp</dimen>
     <dimen name="avatar_size">32dp</dimen>
     <dimen name="small_avatar_size">16dp</dimen>
     <dimen name="small_avatar_margin">20dp</dimen>
     <dimen name="regular_spacing">16dp</dimen>
     <dimen name="small_spacing">8dp</dimen>
-    <dimen name="commit_header_elevation">4dp</dimen>
     <dimen name="dialog_content_padding">24dp</dimen>
 </resources>

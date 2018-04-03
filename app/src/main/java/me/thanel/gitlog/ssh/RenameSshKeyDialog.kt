@@ -1,14 +1,15 @@
 package me.thanel.gitlog.ssh
 
+import activitystarter.Arg
+import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.dialog.InputDialog
 import me.thanel.gitlog.utils.sshDir
-import me.thanel.gitlog.utils.stringArg
-import me.thanel.gitlog.utils.withArguments
 import java.io.File
 
 class RenameSshKeyDialog : InputDialog() {
-    private val currentKeyName by stringArg(ARG_CURRENT_KEY_NAME)
+    @get:Arg
+    val currentKeyName: String by argExtra()
 
     override val titleResId get() = R.string.rename_ssh_key
     override val hintResId get() = R.string.new_ssh_key_name
@@ -59,13 +60,5 @@ class RenameSshKeyDialog : InputDialog() {
         }
 
         return super.validateInput(input)
-    }
-
-    companion object {
-        private const val ARG_CURRENT_KEY_NAME = "arg.current_key_name"
-
-        fun newInstance(currentKeyName: String) = RenameSshKeyDialog().withArguments {
-            putString(ARG_CURRENT_KEY_NAME, currentKeyName)
-        }
     }
 }

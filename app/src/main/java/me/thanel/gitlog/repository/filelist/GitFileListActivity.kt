@@ -1,18 +1,20 @@
 package me.thanel.gitlog.repository.filelist
 
-import android.content.Context
+import activitystarter.Arg
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.base.BaseFragmentActivity
-import me.thanel.gitlog.commit.CommitActivity
-import me.thanel.gitlog.utils.createIntent
+import me.thanel.gitlog.commit.CommitActivityStarter
 import me.thanel.gitlog.utils.getAbbreviatedName
 import me.thanel.gitlog.utils.observe
 
 class GitFileListActivity : BaseFragmentActivity() {
-    private val repositoryId by intExtra(EXTRA_REPOSITORY_ID)
-    private val refName by stringExtra(EXTRA_REF_NAME)
+    @get:Arg
+    val repositoryId: Int by argExtra()
+
+    @get:Arg
+    val refName: String by argExtra()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,20 +27,10 @@ class GitFileListActivity : BaseFragmentActivity() {
         }
     }
 
-    override fun createFragment(): Fragment = GitFileListFragment.newInstance(repositoryId, refName)
+    override fun createFragment(): GitFileListFragment =
+        GitFileListFragmentStarter.newInstance(repositoryId, refName)
 
     override fun getSupportParentActivityIntent(): Intent =
-        CommitActivity.newIntent(this, repositoryId, refName)
-            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-    companion object {
-        private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
-        private const val EXTRA_REF_NAME = "extra.ref_name"
-
-        fun newIntent(context: Context, repositoryId: Int, refName: String): Intent =
-            context.createIntent<GitFileListActivity> {
-                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-                putExtra(EXTRA_REF_NAME, refName)
-            }
-    }
+        CommitActivityStarter.getIntent(this, refName, repositoryId)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 }

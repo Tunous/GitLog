@@ -1,19 +1,25 @@
 package me.thanel.gitlog.repository.file
 
+import activitystarter.Arg
 import android.text.TextUtils
+import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.base.BaseWebViewerFragment
-import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
-import me.thanel.gitlog.utils.stringArg
-import me.thanel.gitlog.utils.withArguments
 
 class GitFileViewerFragment : BaseWebViewerFragment<GitFileViewModel>() {
-    private val repositoryId by intArg(ARG_REPOSITORY_ID)
-    private val refName by stringArg(ARG_REF_NAME)
-    private val filePath by stringArg(ARG_FILE_PATH)
+    @get:Arg
+    val repositoryId: Int by argExtra()
+
+    @get:Arg
+    val refName: String by argExtra()
+
+    @get:Arg
+    val filePath: String by argExtra()
 
     override fun onCreateViewModel() = GitFileViewModel.get(
-        requireActivity(), repositoryId, refName,
+        requireActivity(),
+        repositoryId,
+        refName,
         filePath
     )
 
@@ -25,17 +31,4 @@ class GitFileViewerFragment : BaseWebViewerFragment<GitFileViewModel>() {
                 loadData("<body><code><pre>$escapedContent</pre></code></body>")
             }
         }
-
-    companion object {
-        private const val ARG_REPOSITORY_ID = "arg.repository_id"
-        private const val ARG_REF_NAME = "arg.ref_name"
-        private const val ARG_FILE_PATH = "arg.file_path"
-
-        fun newInstance(repositoryId: Int, refName: String, filePath: String) =
-            GitFileViewerFragment().withArguments {
-                putInt(ARG_REPOSITORY_ID, repositoryId)
-                putString(ARG_REF_NAME, refName)
-                putString(ARG_FILE_PATH, filePath)
-            }
-    }
 }

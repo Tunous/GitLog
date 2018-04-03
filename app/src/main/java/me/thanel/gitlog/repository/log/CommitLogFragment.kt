@@ -1,11 +1,13 @@
 package me.thanel.gitlog.repository.log
 
+import activitystarter.Arg
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.view.isVisible
+import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_horizontal_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -14,11 +16,9 @@ import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
-import me.thanel.gitlog.commit.CommitActivity
+import me.thanel.gitlog.commit.CommitActivityStarter
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.utils.intArg
 import me.thanel.gitlog.utils.observe
-import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.errors.IncorrectObjectTypeException
 import org.eclipse.jgit.errors.MissingObjectException
 import org.eclipse.jgit.revplot.PlotCommitList
@@ -27,7 +27,9 @@ import org.eclipse.jgit.revplot.PlotWalk
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
-    private val repositoryId by intArg(ARG_REPOSITORY_ID)
+    @get:Arg
+    val repositoryId: Int by argExtra()
+
     private lateinit var commitLogAdapter: CommitLogAdapter
     private lateinit var repository: Repository
 
@@ -80,8 +82,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     }
 
     private fun openCommit(commit: RevCommit) {
-        val intent = CommitActivity.newIntent(requireContext(), repository.id, commit.name)
-        startActivity(intent)
+        CommitActivityStarter.start(requireContext(), commit.name, repositoryId)
     }
 
     private fun logCommits() = launch(UI) {
@@ -117,13 +118,5 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
 
         emptyView.isVisible = plotCommitList.isEmpty()
         loadingProgressBar.hide()
-    }
-
-    companion object {
-        private const val ARG_REPOSITORY_ID = "arg.repository_id"
-
-        fun newInstance(repositoryId: Int) = CommitLogFragment().withArguments {
-            putInt(ARG_REPOSITORY_ID, repositoryId)
-        }
     }
 }

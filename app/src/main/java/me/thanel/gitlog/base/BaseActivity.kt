@@ -3,14 +3,12 @@ package me.thanel.gitlog.base
 import android.arch.lifecycle.LifecycleRegistry
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import android.support.annotation.LayoutRes
 import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import me.thanel.gitlog.R
-import java.io.Serializable
 
 abstract class BaseActivity : AppCompatActivity() {
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
@@ -59,25 +57,4 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun removeHeaderView(view: View) = appBarLayout.removeView(view)
-
-    protected fun <T : Parcelable> parcelableExtra(name: String) = lazy {
-        intent.getParcelableExtra<T>(name)
-    }
-
-    protected fun intExtra(name: String) = lazy {
-        intent.getIntExtra(name, 0)
-    }
-
-    protected fun stringExtra(name: String) = lazy {
-        intent.getStringExtra(name)
-    }
-
-    protected fun stringArrayExtra(name: String) = lazy {
-        intent.getStringArrayExtra(name)
-    }
-
-    protected fun <T : Serializable> serializableExtra(name: String) = lazy {
-        @Suppress("UNCHECKED_CAST")
-        intent.getSerializableExtra(name) as T
-    }
 }

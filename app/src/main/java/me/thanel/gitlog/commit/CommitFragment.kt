@@ -1,25 +1,28 @@
 package me.thanel.gitlog.commit
 
+import activitystarter.Arg
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
-import me.thanel.gitlog.repository.filelist.GitFileListActivity
-import me.thanel.gitlog.utils.intArg
+import me.thanel.gitlog.repository.filelist.GitFileListActivityStarter
 import me.thanel.gitlog.utils.observe
-import me.thanel.gitlog.utils.stringArg
-import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitFragment : BaseFragment<CommitViewModel>() {
-    private val commitSha by stringArg(ARG_COMMIT_SHA)
-    private val repositoryId by intArg(ARG_REPOSITORY_ID)
-    private lateinit var adapter: DiffHunkAdapter
+    @get:Arg
+    val commitSha: String by argExtra()
+
+    @get:Arg
+    val repositoryId: Int by argExtra()
+
+    lateinit var adapter: DiffHunkAdapter
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -57,9 +60,11 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.browse_files -> {
-                val intent =
-                    GitFileListActivity.newIntent(requireContext(), repositoryId, commitSha)
-                startActivity(intent)
+                GitFileListActivityStarter.start(
+                    requireContext(),
+                    repositoryId,
+                    commitSha
+                )
             }
             R.id.line_numbers -> {
                 item.isChecked = !item.isChecked
@@ -86,15 +91,5 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
         }
 
         adapter.replaceAll(diffEntries)
-    }
-
-    companion object {
-        private const val ARG_COMMIT_SHA = "arg.commit_sha"
-        private const val ARG_REPOSITORY_ID = "arg.repository_id"
-
-        fun newInstance(commitSha: String, repositoryId: Int) = CommitFragment().withArguments {
-            putString(ARG_COMMIT_SHA, commitSha)
-            putInt(ARG_REPOSITORY_ID, repositoryId)
-        }
     }
 }

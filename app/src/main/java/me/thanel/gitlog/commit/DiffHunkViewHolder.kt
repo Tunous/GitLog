@@ -12,8 +12,8 @@ import kotlinx.android.synthetic.main.item_diff_hunk.view.*
 import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
-import me.thanel.gitlog.diff.DiffViewerActivity
-import me.thanel.gitlog.repository.file.GitFileViewerActivity
+import me.thanel.gitlog.diff.DiffViewerActivityStarter
+import me.thanel.gitlog.repository.file.GitFileViewerActivityStarter
 import org.eclipse.jgit.diff.DiffEntry
 
 class DiffHunkViewHolder(
@@ -71,18 +71,20 @@ class DiffHunkViewHolder(
         val diffEntry = itemView.tag as DiffEntry
         when (item.itemId) {
             R.id.view_full_screen -> {
-                val intent = DiffViewerActivity.newIntent(
-                    context, viewModel.repositoryId,
-                    viewModel.commitSha, diffEntry.newId
+                DiffViewerActivityStarter.start(
+                    context,
+                    viewModel.commitSha,
+                    viewModel.repositoryId,
+                    diffEntry.newId
                 )
-                context.startActivity(intent)
             }
             R.id.view_whole_file -> {
-                val intent = GitFileViewerActivity.newIntent(
-                    context, viewModel.repositoryId,
-                    viewModel.commitSha, diffEntry.newPath
+                GitFileViewerActivityStarter.start(
+                    context,
+                    viewModel.repositoryId,
+                    viewModel.commitSha,
+                    diffEntry.newPath
                 )
-                context.startActivity(intent)
             }
             else -> return false
         }
