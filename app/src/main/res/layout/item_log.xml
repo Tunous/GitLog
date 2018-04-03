@@ -1,77 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
-    android:gravity="center_vertical"
-    android:minHeight="52dp"
-    android:minWidth="570dp"
     android:orientation="horizontal">
 
     <me.thanel.gitlog.ui.repository.log.view.PlotLaneView
         android:id="@+id/laneView"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        app:drawableBorderSize="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="54dp"
+        android:layout_height="match_parent"
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp"
         tools:src="@mipmap/ic_launcher_round" />
 
-    <TextView
-        android:id="@+id/branchView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
-        android:maxEms="30"
-        android:maxLines="1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="?colorPrimary"
-        android:textStyle="bold"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/logMessageView"
-        app:layout_constraintLeft_toRightOf="@+id/laneView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Branch"
-        tools:visibility="visible" />
-
-    <TextView
-        android:id="@+id/logMessageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginStart="12dp"
-        android:ellipsize="end"
-        android:maxEms="30"
-        android:maxLines="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toRightOf="@+id/laneView"
-        app:layout_constraintRight_toLeftOf="@+id/commitDetailsIndicator"
-        app:layout_constraintTop_toBottomOf="@+id/branchView"
-        tools:text="Commit message" />
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/branchView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="?colorPrimary"
+            android:textStyle="bold"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/logMessageView"
+            app:layout_constraintLeft_toRightOf="@+id/laneView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Branch"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/logMessageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Commit message" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/commitDetailsIndicator"
-        android:layout_width="24dp"
-        android:layout_height="16dp"
-        android:background="@color/grey"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:scaleType="center"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/logMessageView"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintLeft_toRightOf="@+id/logMessageView"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/logMessageView"
         app:srcCompat="@drawable/ic_more_horiz"
         tools:visibility="visible" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

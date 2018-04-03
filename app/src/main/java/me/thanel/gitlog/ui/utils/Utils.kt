@@ -181,7 +181,8 @@ fun String.md5(): String {
 
 fun Context.dpToPx(valueInDp: Float): Float {
     return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, valueInDp,
+        TypedValue.COMPLEX_UNIT_DIP,
+        valueInDp,
         resources.displayMetrics
     )
 }
