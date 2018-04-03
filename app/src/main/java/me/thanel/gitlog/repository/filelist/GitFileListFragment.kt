@@ -28,7 +28,7 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
         super.onActivityCreated(savedInstanceState)
         recyclerView.adapter = adapter
 
-        pathBar = PathBar(context)
+        pathBar = PathBar(requireContext())
         pathBar.onPathEntryClicked {
             displayFiles(it)
             currentPath.clear()
@@ -52,7 +52,8 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
         super.onDestroy()
     }
 
-    override fun onCreateViewModel() = GitFileListViewModel.get(activity, repositoryId, refName)
+    override fun onCreateViewModel() =
+        GitFileListViewModel.get(requireActivity(), repositoryId, refName)
 
     override fun observeViewModel(viewModel: GitFileListViewModel) =
         viewModel.repository.observe(this) {
@@ -78,7 +79,8 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
 
     private fun moveDown(file: GitFile) {
         if (!file.isDirectory) {
-            val intent = GitFileViewerActivity.newIntent(context, repositoryId, refName, file.path)
+            val intent =
+                GitFileViewerActivity.newIntent(requireContext(), repositoryId, refName, file.path)
             startActivity(intent)
             return
         }

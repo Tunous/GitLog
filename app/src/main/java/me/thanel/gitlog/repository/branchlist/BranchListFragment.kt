@@ -5,7 +5,7 @@ import kotlinx.android.synthetic.main.view_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.run
+import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.RepositoryViewModel
@@ -32,7 +32,7 @@ class BranchListFragment : BaseFragment<RepositoryViewModel>() {
     override val layoutResId: Int
         get() = R.layout.view_recycler
 
-    override fun onCreateViewModel() = RepositoryViewModel.get(activity)
+    override fun onCreateViewModel() = RepositoryViewModel.get(requireActivity())
 
     override fun observeViewModel(viewModel: RepositoryViewModel) =
         viewModel.getRepository(repositoryId).observe(this) {
@@ -45,10 +45,10 @@ class BranchListFragment : BaseFragment<RepositoryViewModel>() {
     }
 
     private fun listBranches(repository: Repository) = launch(UI) {
-        val branches = run(CommonPool) {
+        val branches = withContext(CommonPool) {
             repository.git.branchList()
-                    .setListMode(ListBranchCommand.ListMode.ALL)
-                    .call()
+                .setListMode(ListBranchCommand.ListMode.ALL)
+                .call()
         }
         adapter.addAll(branches)
     }

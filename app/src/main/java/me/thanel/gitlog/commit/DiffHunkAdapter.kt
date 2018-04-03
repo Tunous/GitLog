@@ -8,7 +8,7 @@ import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.revwalk.RevCommit
 
 class DiffHunkAdapter(
-        private val viewModel: CommitViewModel
+    private val viewModel: CommitViewModel
 ) : ItemAdapter<DiffEntry, RecyclerView.ViewHolder>() {
     var commit: RevCommit? = null
         set(value) {

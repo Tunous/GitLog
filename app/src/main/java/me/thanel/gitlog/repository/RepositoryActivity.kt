@@ -88,8 +88,8 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
         val dialog = ProgressDialog.show(this@RepositoryActivity, "Fetch", "Fetching...", true)
         async(CommonPool) {
             repository!!.git.fetch()
-                    .setTransportConfigCallback(TransportCallback(this@RepositoryActivity))
-                    .call()
+                .setTransportConfigCallback(TransportCallback(this@RepositoryActivity))
+                .call()
         }.await()
         dialog.dismiss()
         recreate()
@@ -97,20 +97,20 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
 
     override fun getSupportParentActivityIntent(): Intent =
         RepositoryListActivity.newIntent(this)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     private fun promptRemoveRepository() {
         val message = getString(R.string.remove_confirm_message)
-                .formatTags(StyleableTag("target", repository!!.name, StyleSpan(Typeface.BOLD)))
+            .formatTags(StyleableTag("target", repository!!.name, StyleSpan(Typeface.BOLD)))
 
         AlertDialog.Builder(this)
-                .setTitle(R.string.remove_repository_dialog_title)
-                .setMessage(message)
-                .setPositiveButton(R.string.remove) { _, _ ->
-                    removeRepository()
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
+            .setTitle(R.string.remove_repository_dialog_title)
+            .setMessage(message)
+            .setPositiveButton(R.string.remove) { _, _ ->
+                removeRepository()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     private fun removeRepository() {

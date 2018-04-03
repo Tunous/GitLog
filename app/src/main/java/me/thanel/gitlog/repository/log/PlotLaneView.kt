@@ -1,12 +1,7 @@
 package me.thanel.gitlog.repository.log
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapShader
-import android.graphics.Canvas
-import android.graphics.Matrix
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.graphics.Shader.TileMode
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
@@ -25,9 +20,9 @@ import org.eclipse.jgit.revplot.PlotLane
  * // TODO: Include license in about screen
  */
 class PlotLaneView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
     private val childLanes = mutableListOf<Int>()
     private val parentLanes = mutableListOf<Int>()
@@ -59,8 +54,10 @@ class PlotLaneView @JvmOverloads constructor(
     init {
         val a = context.obtainStyledAttributes(attrs, R.styleable.PlotLaneView)
         drawableSize = a.getDimension(R.styleable.PlotLaneView_drawableSize, context.dpToPx(24f))
-        drawableBorderSize = a.getDimension(R.styleable.PlotLaneView_drawableBorderSize,
-                context.dpToPx(2f))
+        drawableBorderSize = a.getDimension(
+            R.styleable.PlotLaneView_drawableBorderSize,
+            context.dpToPx(2f)
+        )
         paint.strokeWidth = a.getDimension(R.styleable.PlotLaneView_lineWidth, context.dpToPx(3f))
         laneSpacing = a.getDimension(R.styleable.PlotLaneView_laneSpacing, context.dpToPx(8f))
         maxLanes = a.getInteger(R.styleable.PlotLaneView_maxLanes, 0)
@@ -204,11 +201,15 @@ class PlotLaneView @JvmOverloads constructor(
 
         return try {
             val bitmap = if (drawable is ColorDrawable) {
-                Bitmap.createBitmap(Companion.COLORDRAWABLE_DIMENSION,
-                        Companion.COLORDRAWABLE_DIMENSION, Companion.BITMAP_CONFIG)
+                Bitmap.createBitmap(
+                    Companion.COLORDRAWABLE_DIMENSION,
+                    Companion.COLORDRAWABLE_DIMENSION, Companion.BITMAP_CONFIG
+                )
             } else {
-                Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight,
-                        Companion.BITMAP_CONFIG)
+                Bitmap.createBitmap(
+                    drawable.intrinsicWidth, drawable.intrinsicHeight,
+                    Companion.BITMAP_CONFIG
+                )
             }
 
             val canvas = Canvas(bitmap)
@@ -255,8 +256,10 @@ class PlotLaneView @JvmOverloads constructor(
         }
 
         shaderMatrix.setScale(scale, scale)
-        shaderMatrix.postTranslate(((dx + 0.5f).toInt() + drawableRect.left),
-                ((dy + 0.5f).toInt() + drawableRect.top))
+        shaderMatrix.postTranslate(
+            ((dx + 0.5f).toInt() + drawableRect.left),
+            ((dy + 0.5f).toInt() + drawableRect.top)
+        )
 
         bitmapShader!!.setLocalMatrix(shaderMatrix)
     }
@@ -279,11 +282,12 @@ class PlotLaneView @JvmOverloads constructor(
         private const val COLORDRAWABLE_DIMENSION = 2
         private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
         private val COLORS = intArrayOf(
-                0xff0099cc.toInt(),
-                0xff9933cc.toInt(),
-                0xff669900.toInt(),
-                0xffff8800.toInt(),
-                0xffcc0000.toInt())
+            0xff0099cc.toInt(),
+            0xff9933cc.toInt(),
+            0xff669900.toInt(),
+            0xffff8800.toInt(),
+            0xffcc0000.toInt()
+        )
 
         private fun getColor(position: Int) = COLORS[position % COLORS.size]
     }

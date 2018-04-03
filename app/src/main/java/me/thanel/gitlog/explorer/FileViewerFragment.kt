@@ -10,7 +10,7 @@ import java.io.File
 class FileViewerFragment : BaseWebViewerFragment<FileViewModel>() {
     private val filePath by stringArg(ARG_FILE_PATH)
 
-    override fun onCreateViewModel() = FileViewModel.get(activity)
+    override fun onCreateViewModel() = FileViewModel.get(requireActivity())
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

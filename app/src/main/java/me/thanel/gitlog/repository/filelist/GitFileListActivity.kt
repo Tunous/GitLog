@@ -29,16 +29,16 @@ class GitFileListActivity : BaseFragmentActivity() {
 
     override fun getSupportParentActivityIntent(): Intent =
         CommitActivity.newIntent(this, repositoryId, refName)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
         private const val EXTRA_REF_NAME = "extra.ref_name"
 
-        fun newIntent(context: Context, repositoryId: Int, refName: String): Intent
-                = context.createIntent<GitFileListActivity> {
-            putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-            putExtra(EXTRA_REF_NAME, refName)
-        }
+        fun newIntent(context: Context, repositoryId: Int, refName: String): Intent =
+            context.createIntent<GitFileListActivity> {
+                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
+                putExtra(EXTRA_REF_NAME, refName)
+            }
     }
 }

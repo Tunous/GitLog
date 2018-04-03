@@ -17,10 +17,10 @@ class RenameSshKeyDialog : InputDialog() {
 
     override fun onSubmit(input: String): Boolean {
         val newKeyName = input.trim()
-        val privateKeyFile = File(context.sshDir, currentKeyName)
-        val publicKeyFile = File(context.sshDir, "$currentKeyName.pub")
-        val newPrivateKeyFile = File(context.sshDir, newKeyName)
-        val newPublicKeyFile = File(context.sshDir, "$newKeyName.pub")
+        val privateKeyFile = File(requireContext().sshDir, currentKeyName)
+        val publicKeyFile = File(requireContext().sshDir, "$currentKeyName.pub")
+        val newPrivateKeyFile = File(requireContext().sshDir, newKeyName)
+        val newPublicKeyFile = File(requireContext().sshDir, "$newKeyName.pub")
 
         val publicKeyRenameSuccess = publicKeyFile.renameTo(newPublicKeyFile)
         val privateKeyRenameSuccess = privateKeyFile.renameTo(newPrivateKeyFile)
@@ -30,11 +30,11 @@ class RenameSshKeyDialog : InputDialog() {
             return false
         }
 
-        val prefs = SharedPreferencesCredentialsProvider.getPrefs(context)
+        val prefs = SharedPreferencesCredentialsProvider.getPrefs(requireContext())
         val password = prefs.getString(currentKeyName, null)
         prefs.edit()
-                .putString(newKeyName, password)
-                .apply()
+            .putString(newKeyName, password)
+            .apply()
 
         return true
     }
@@ -51,8 +51,8 @@ class RenameSshKeyDialog : InputDialog() {
         }
 
         val newKeyName = input.trim().toString()
-        val newPrivateKeyFile = File(context.sshDir, newKeyName)
-        val newPublicKeyFile = File(context.sshDir, "$newKeyName.pub")
+        val newPrivateKeyFile = File(requireContext().sshDir, newKeyName)
+        val newPublicKeyFile = File(requireContext().sshDir, "$newKeyName.pub")
         if (newPublicKeyFile.exists() || newPrivateKeyFile.exists()) {
             showError("SSH Key with this name already exists")
             return false

@@ -4,7 +4,12 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import me.thanel.gitlog.db.model.Repository
 
-@Database(entities = arrayOf(Repository::class), version = 2)
+@Database(
+    entities = [
+        Repository::class
+    ],
+    version = 2
+)
 abstract class Database : RoomDatabase() {
     abstract fun repositoryDao(): RepositoryDao
 }

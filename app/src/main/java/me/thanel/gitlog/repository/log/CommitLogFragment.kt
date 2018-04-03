@@ -5,18 +5,18 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.view.isVisible
 import kotlinx.android.synthetic.main.view_horizontal_recycler.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.run
+import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.Preferences
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.commit.CommitActivity
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.utils.intArg
-import me.thanel.gitlog.utils.isVisible
 import me.thanel.gitlog.utils.observe
 import me.thanel.gitlog.utils.withArguments
 import org.eclipse.jgit.errors.IncorrectObjectTypeException
@@ -39,12 +39,12 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateViewModel() = CommitLogViewModel.get(activity, repositoryId)
+    override fun onCreateViewModel() = CommitLogViewModel.get(requireActivity(), repositoryId)
 
     override fun observeViewModel(viewModel: CommitLogViewModel) =
         viewModel.repository.observe(this, this::onRepositoryLoaded)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         emptyView.setText(R.string.no_commits)
@@ -80,12 +80,12 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
     }
 
     private fun openCommit(commit: RevCommit) {
-        val intent = CommitActivity.newIntent(context, repository.id, commit.name)
+        val intent = CommitActivity.newIntent(requireContext(), repository.id, commit.name)
         startActivity(intent)
     }
 
     private fun logCommits() = launch(UI) {
-        val plotCommitList = run(CommonPool + context) {
+        val plotCommitList = withContext(CommonPool + coroutineContext) {
             val repo = repository.git.repository
             val plotWalk = PlotWalk(repo)
 
@@ -108,7 +108,7 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
             val plotCommitList = PlotCommitList<PlotLane>()
             plotCommitList.source(plotWalk)
             plotCommitList.fillTo(Int.MAX_VALUE)
-            return@run plotCommitList
+            return@withContext plotCommitList
         }
 
         commitLogAdapter = CommitLogAdapter(plotCommitList, this@CommitLogFragment::openCommit)

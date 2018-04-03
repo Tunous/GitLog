@@ -5,15 +5,15 @@ import android.support.v7.widget.PopupMenu
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
+import androidx.view.isVisible
 import com.jcraft.jsch.KeyPair
 import kotlinx.android.synthetic.main.item_ssh_key.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
-import me.thanel.gitlog.utils.isVisible
 import me.thanel.gitlog.utils.setItemTextColor
 
 class SshKeyListAdapter(
-        private val onSshKeyMenuItemClickListener: OnSshKeyMenuItemClickListener
+    private val onSshKeyMenuItemClickListener: OnSshKeyMenuItemClickListener
 ) : ItemAdapter<Pair<String, KeyPair>, SshKeyListAdapter.ViewHolder>() {
     override fun getLayoutResId(viewType: Int) = R.layout.item_ssh_key
 
@@ -25,10 +25,10 @@ class SshKeyListAdapter(
     }
 
     class ViewHolder(
-            itemView: View,
-            private val onSshKeyMenuItemClickListener: OnSshKeyMenuItemClickListener
+        itemView: View,
+        private val onSshKeyMenuItemClickListener: OnSshKeyMenuItemClickListener
     ) : ItemAdapter.ViewHolder<Pair<String, KeyPair>>(itemView),
-            PopupMenu.OnMenuItemClickListener {
+        PopupMenu.OnMenuItemClickListener {
         private val titleView = itemView.titleView
         private val fingerPrintView = itemView.fingerPrintView
         private val popupMenu = PopupMenu(context, itemView, Gravity.END).apply {
@@ -54,7 +54,8 @@ class SshKeyListAdapter(
 
         override fun onMenuItemClick(item: MenuItem): Boolean {
             val keyName = boundItem ?: throw IllegalStateException(
-                    "Selected menu action for non-existing key")
+                "Selected menu action for non-existing key"
+            )
 
             with(onSshKeyMenuItemClickListener) {
                 when (item.itemId) {

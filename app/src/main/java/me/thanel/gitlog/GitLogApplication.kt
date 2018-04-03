@@ -18,8 +18,8 @@ class GitLogApplication : Application() {
         Kotpref.init(this)
 
         val picasso = Picasso.Builder(this)
-                .downloader(OkHttp3Downloader(this, Integer.MAX_VALUE.toLong()))
-                .build()
+            .downloader(OkHttp3Downloader(this, Integer.MAX_VALUE.toLong()))
+            .build()
         Picasso.setSingletonInstance(picasso)
     }
 }

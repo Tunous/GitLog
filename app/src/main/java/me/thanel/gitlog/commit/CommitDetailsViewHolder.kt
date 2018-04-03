@@ -10,8 +10,8 @@ import me.thanel.gitlog.utils.SHORT_SHA_LENGTH
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitDetailsViewHolder(
-        itemView: View,
-        private val repositoryId: Int
+    itemView: View,
+    private val repositoryId: Int
 ) : ItemAdapter.ViewHolder<RevCommit>(itemView) {
     private val commitMessageView = itemView.commitMessageView
     private val headerView = itemView.commitHeaderView
@@ -39,8 +39,10 @@ class CommitDetailsViewHolder(
             val sha = match.value
             val span = ClickableShaSpan(repositoryId, sha)
             builder.replace(start, end, match.value.substring(0, SHORT_SHA_LENGTH))
-            builder.setSpan(span, start, start + SHORT_SHA_LENGTH,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.setSpan(
+                span, start, start + SHORT_SHA_LENGTH,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
             start += SHORT_SHA_LENGTH
         }
         return builder

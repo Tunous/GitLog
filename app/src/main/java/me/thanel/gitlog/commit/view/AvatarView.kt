@@ -13,9 +13,9 @@ import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.revwalk.RevCommit
 
 class AvatarView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
     init {
         View.inflate(context, R.layout.view_stacked_avatar, this)

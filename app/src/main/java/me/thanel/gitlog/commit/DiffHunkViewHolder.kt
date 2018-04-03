@@ -17,11 +17,11 @@ import me.thanel.gitlog.repository.file.GitFileViewerActivity
 import org.eclipse.jgit.diff.DiffEntry
 
 class DiffHunkViewHolder(
-        itemView: View,
-        private val viewModel: CommitViewModel
+    itemView: View,
+    private val viewModel: CommitViewModel
 ) : ItemAdapter.ViewHolder<DiffEntry>(itemView),
-        PopupMenu.OnMenuItemClickListener,
-        View.OnClickListener {
+    PopupMenu.OnMenuItemClickListener,
+    View.OnClickListener {
     private val diffHeader = itemView.diffHeader.apply {
         setOnClickListener(this@DiffHunkViewHolder)
     }
@@ -71,13 +71,17 @@ class DiffHunkViewHolder(
         val diffEntry = itemView.tag as DiffEntry
         when (item.itemId) {
             R.id.view_full_screen -> {
-                val intent = DiffViewerActivity.newIntent(context, viewModel.repositoryId,
-                        viewModel.commitSha, diffEntry.newId)
+                val intent = DiffViewerActivity.newIntent(
+                    context, viewModel.repositoryId,
+                    viewModel.commitSha, diffEntry.newId
+                )
                 context.startActivity(intent)
             }
             R.id.view_whole_file -> {
-                val intent = GitFileViewerActivity.newIntent(context, viewModel.repositoryId,
-                        viewModel.commitSha, diffEntry.newPath)
+                val intent = GitFileViewerActivity.newIntent(
+                    context, viewModel.repositoryId,
+                    viewModel.commitSha, diffEntry.newPath
+                )
                 context.startActivity(intent)
             }
             else -> return false
@@ -93,7 +97,8 @@ class DiffHunkViewHolder(
     }
 
     private fun toggleCodeView() {
-        TransitionManager.beginDelayedTransition(itemView.parent as ViewGroup, TransitionSet()
+        TransitionManager.beginDelayedTransition(
+            itemView.parent as ViewGroup, TransitionSet()
                 // Animate only the drop-down, expand animation breaks when scrolling...
                 .addTransition(ChangeTransform().addTarget(expandDropDown))
         )

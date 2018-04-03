@@ -14,9 +14,9 @@ import org.eclipse.jgit.revwalk.RevCommit
 import java.io.ByteArrayOutputStream
 
 class CommitViewModel(
-        application: Application,
-        val repositoryId: Int,
-        val commitSha: String
+    application: Application,
+    val repositoryId: Int,
+    val commitSha: String
 ) : ViewModel() {
     private val db = (application as GitLogApplication).database
     private val outputStream = ByteArrayOutputStream()
@@ -37,7 +37,7 @@ class CommitViewModel(
         diffEntries.find { it.newId == newId }
     }
 
-    private suspend fun loadDiffEntries(repository: Repository): List<DiffEntry> {
+    private fun loadDiffEntries(repository: Repository): List<DiffEntry> {
         val git = repository.git
         val gitRepository = git.repository
         diffFormatter.setRepository(gitRepository)
@@ -47,14 +47,14 @@ class CommitViewModel(
         return diffFormatter.scan(previousCommit, currentCommit)
     }
 
-    private suspend fun loadCommit(repository: Repository): RevCommit {
+    private fun loadCommit(repository: Repository): RevCommit {
         val git = repository.git
         val gitRepository = git.repository
         return git.log()
-                .add(gitRepository.resolve(commitSha))
-                .setMaxCount(1)
-                .call()
-                .first()
+            .add(gitRepository.resolve(commitSha))
+            .setMaxCount(1)
+            .call()
+            .first()
     }
 
     override fun onCleared() {

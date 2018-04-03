@@ -1,15 +1,15 @@
 package me.thanel.gitlog.base
 
-import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.os.Bundle
 import android.support.annotation.LayoutRes
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
+abstract class BaseFragment<T : ViewModel> : Fragment() {
     protected lateinit var baseActivity: BaseActivity
     protected lateinit var viewModel: T
 
@@ -25,8 +25,10 @@ abstract class BaseFragment<T : ViewModel> : LifecycleFragment() {
         baseActivity = context
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?): View = inflater.inflate(layoutResId, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(layoutResId, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

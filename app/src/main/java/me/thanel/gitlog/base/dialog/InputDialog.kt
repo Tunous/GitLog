@@ -46,12 +46,12 @@ abstract class InputDialog : DialogFragment() {
             })
         }
 
-        return AlertDialog.Builder(context)
-                .setTitle(titleResId)
-                .setView(view)
-                .setPositiveButton(positiveButtonResId, null)
-                .setNegativeButton(R.string.cancel, null)
-                .create()
+        return AlertDialog.Builder(requireContext())
+            .setTitle(titleResId)
+            .setView(view)
+            .setPositiveButton(positiveButtonResId, null)
+            .setNegativeButton(R.string.cancel, null)
+            .create()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

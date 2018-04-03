@@ -8,7 +8,7 @@ import org.eclipse.jgit.lib.Ref
 import org.eclipse.jgit.lib.Repository
 
 class BranchListAdapter(
-        onItemClickListener: (Ref) -> Unit
+    onItemClickListener: (Ref) -> Unit
 ) : ItemAdapter<Ref, BranchListAdapter.ViewHolder>(onItemClickListener) {
     override fun createViewHolder(itemView: View, viewType: Int) = ViewHolder(itemView)
 

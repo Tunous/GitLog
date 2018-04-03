@@ -9,18 +9,19 @@ import java.io.File
 
 @Entity(tableName = "repositories")
 data class Repository(
-        @PrimaryKey(autoGenerate = true) val id: Int,
-        val name: String,
-        val url: String,
-        val path: String
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val name: String,
+    val url: String,
+    val path: String
 ) : Parcelable {
     val git: Git get() = Git.open(File(path))
 
     constructor(parcel: Parcel) : this(
-            id = parcel.readInt(),
-            name = parcel.readString(),
-            url = parcel.readString(),
-            path = parcel.readString())
+        id = parcel.readInt(),
+        name = parcel.readString(),
+        url = parcel.readString(),
+        path = parcel.readString()
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)

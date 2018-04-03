@@ -7,7 +7,7 @@ import me.thanel.gitlog.base.ItemAdapter
 import java.io.File
 
 class FileListAdapter(
-        onItemClickListener: (File) -> Unit
+    onItemClickListener: (File) -> Unit
 ) : ItemAdapter<File, FileListAdapter.ViewModel>(onItemClickListener) {
     override fun createViewHolder(itemView: View, viewType: Int) = ViewModel(itemView)
 

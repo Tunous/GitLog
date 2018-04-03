@@ -25,7 +25,7 @@ import me.thanel.gitlog.utils.sshDir
 import java.io.File
 
 class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
-        OnSshKeyMenuItemClickListener {
+    OnSshKeyMenuItemClickListener {
     private lateinit var rootFolder: File
     private lateinit var adapter: SshKeyListAdapter
 
@@ -36,20 +36,20 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         if (savedInstanceState != null) {
-            (fragmentManager.findFragmentByTag(TAG_DIALOG_RENAME) as? InputDialog)
-                    ?.setOnSubmitListener(this::refresh)
+            (requireFragmentManager().findFragmentByTag(TAG_DIALOG_RENAME) as? InputDialog)
+                ?.setOnSubmitListener(this::refresh)
 
-            (fragmentManager.findFragmentByTag(TAG_DIALOG_GENERATE_KEY) as? InputDialog)
-                    ?.setOnSubmitListener(this::refresh)
+            (requireFragmentManager().findFragmentByTag(TAG_DIALOG_GENERATE_KEY) as? InputDialog)
+                ?.setOnSubmitListener(this::refresh)
         }
     }
 
-    override fun onCreateViewModel() = getViewModel<SshKeyManagementViewModel>(activity)
+    override fun onCreateViewModel() = getViewModel<SshKeyManagementViewModel>(requireActivity())
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        rootFolder = context.sshDir
+        rootFolder = requireContext().sshDir
         adapter = SshKeyListAdapter(this)
 
         recyclerView.adapter = adapter
@@ -74,12 +74,12 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
 
     override fun onRenameKey(name: String) {
         RenameSshKeyDialog.newInstance(name)
-                .setOnSubmitListener(this::refresh)
-                .show(fragmentManager, TAG_DIALOG_RENAME)
+            .setOnSubmitListener(this::refresh)
+            .show(fragmentManager, TAG_DIALOG_RENAME)
     }
 
     override fun onShowPublicKey(name: String) {
-        val publicKey = File(context.sshDir, "$name.pub")
+        val publicKey = File(requireContext().sshDir, "$name.pub")
         if (!publicKey.exists()) {
             // TODO: Do not show menu entry for this action if key doesn't exist
             Toast.makeText(context, "Public key doesn't exist", Toast.LENGTH_SHORT).show()
@@ -89,26 +89,26 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     override fun onShowPrivateKey(name: String) {
-        showFileContent(File(context.sshDir, name))
+        showFileContent(File(requireContext().sshDir, name))
     }
 
     override fun onEditKeyPassword(name: String) {
         EditSshKeyPasswordDialog.newInstance(name)
-                .show(fragmentManager, TAG_DIALOG_EDIT_PASSWORD)
+            .show(fragmentManager, TAG_DIALOG_EDIT_PASSWORD)
     }
 
     override fun onRemoveKey(name: String) {
         val message = getString(R.string.remove_confirm_message)
-                .formatTags(StyleableTag("target", name, StyleSpan(Typeface.BOLD)))
+            .formatTags(StyleableTag("target", name, StyleSpan(Typeface.BOLD)))
 
-        AlertDialog.Builder(context)
-                .setTitle(R.string.remove_ssh_key)
-                .setMessage(message)
-                .setPositiveButton(R.string.remove) { _, _ ->
-                    removeSshKey(name)
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.remove_ssh_key)
+            .setMessage(message)
+            .setPositiveButton(R.string.remove) { _, _ ->
+                removeSshKey(name)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -116,7 +116,7 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
             if (resultCode == Activity.RESULT_OK) {
                 val filePath = data!!.getStringExtra(FilePickerActivity.EXTRA_FILE_PATH)
                 val keyFile = File(filePath)
-                val newKey = File(context.sshDir, keyFile.name)
+                val newKey = File(requireContext().sshDir, keyFile.name)
                 keyFile.copyTo(newKey)
                 refresh()
             }
@@ -126,20 +126,20 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
     }
 
     private fun removeSshKey(name: String) {
-        File(context.sshDir, name).delete()
-        File(context.sshDir, "$name.pub").delete()
+        File(requireContext().sshDir, name).delete()
+        File(requireContext().sshDir, "$name.pub").delete()
 
-        SharedPreferencesCredentialsProvider.getPrefs(context)
-                .edit()
-                .remove(name)
-                .apply()
+        SharedPreferencesCredentialsProvider.getPrefs(requireContext())
+            .edit()
+            .remove(name)
+            .apply()
 
         refresh()
     }
 
     private fun refresh() {
         val files = rootFolder.listFiles()
-                .filterNot { it.startsWith(".pub") }
+            .filterNot { it.startsWith(".pub") }
         val jSch = JSch()
         val keys = mutableListOf<Pair<String, KeyPair>>()
         for (file in files) {
@@ -157,17 +157,17 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
 
     private fun generateSshKey() {
         GenerateSshKeyDialog.newInstance()
-                .setOnSubmitListener(this::refresh)
-                .show(fragmentManager, TAG_DIALOG_GENERATE_KEY)
+            .setOnSubmitListener(this::refresh)
+            .show(fragmentManager, TAG_DIALOG_GENERATE_KEY)
     }
 
     private fun showFileContent(file: File) {
-        val intent = FileViewerActivity.newIntent(context, file.absolutePath)
+        val intent = FileViewerActivity.newIntent(requireContext(), file.absolutePath)
         startActivity(intent)
     }
 
     private fun importSshKey() {
-        val intent = FilePickerActivity.newIntent(context)
+        val intent = FilePickerActivity.newIntent(requireContext())
         startActivityForResult(intent, REQUEST_PICK_FILE)
     }
 

@@ -6,7 +6,7 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.base.ItemAdapter
 
 class GitFileListAdapter(
-        onItemClickListener: (GitFile) -> Unit
+    onItemClickListener: (GitFile) -> Unit
 ) : ItemAdapter<GitFile, GitFileListAdapter.ViewHolder>(onItemClickListener) {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position])
 

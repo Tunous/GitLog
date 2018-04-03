@@ -12,8 +12,10 @@ class GitFileViewerFragment : BaseWebViewerFragment<GitFileViewModel>() {
     private val refName by stringArg(ARG_REF_NAME)
     private val filePath by stringArg(ARG_FILE_PATH)
 
-    override fun onCreateViewModel() = GitFileViewModel.get(activity, repositoryId, refName,
-            filePath)
+    override fun onCreateViewModel() = GitFileViewModel.get(
+        requireActivity(), repositoryId, refName,
+        filePath
+    )
 
     override fun observeViewModel(viewModel: GitFileViewModel) =
         viewModel.repository.observe(this) {
@@ -29,11 +31,11 @@ class GitFileViewerFragment : BaseWebViewerFragment<GitFileViewModel>() {
         private const val ARG_REF_NAME = "arg.ref_name"
         private const val ARG_FILE_PATH = "arg.file_path"
 
-        fun newInstance(repositoryId: Int, refName: String, filePath: String)
-                = GitFileViewerFragment().withArguments {
-            putInt(ARG_REPOSITORY_ID, repositoryId)
-            putString(ARG_REF_NAME, refName)
-            putString(ARG_FILE_PATH, filePath)
-        }
+        fun newInstance(repositoryId: Int, refName: String, filePath: String) =
+            GitFileViewerFragment().withArguments {
+                putInt(ARG_REPOSITORY_ID, repositoryId)
+                putString(ARG_REF_NAME, refName)
+                putString(ARG_FILE_PATH, filePath)
+            }
     }
 }

@@ -18,9 +18,9 @@ import java.io.IOException
 import java.util.*
 
 class GitFileListViewModel(
-        application: Application,
-        private val repositoryId: Int,
-        private val refName: String
+    application: Application,
+    private val repositoryId: Int,
+    private val refName: String
 ) : ViewModel() {
     private val db = (application as GitLogApplication).database
     private val scrollStateStack = LinkedList<Parcelable>()
@@ -38,18 +38,22 @@ class GitFileListViewModel(
         return readFiles(gitRepo, head.name, path)
     }
 
-    private fun readFiles(repository: org.eclipse.jgit.lib.Repository, commit: String,
-            path: String): List<GitFile> {
+    private fun readFiles(
+        repository: org.eclipse.jgit.lib.Repository, commit: String,
+        path: String
+    ): List<GitFile> {
         val revCommit = buildRevCommit(repository, commit)
 
         val items = mutableListOf<GitFile>()
         val tree = if (path.isNotEmpty()) {
-            val walk = TreeWalk.forPath(repository, path, revCommit.tree) ?:
-                    throw FileNotFoundException("Did not find expected file '$path'.")
+            val walk = TreeWalk.forPath(repository, path, revCommit.tree)
+                    ?: throw FileNotFoundException("Did not find expected file '$path'.")
             if (walk.getFileMode(0).bits and FileMode.TYPE_TREE == 0) {
-                throw IllegalStateException("Tried to read the elements of a non-tree for " +
-                        "commit '$commit' and path '$path', had filemode " +
-                        "${walk.getFileMode(0).bits}")
+                throw IllegalStateException(
+                    "Tried to read the elements of a non-tree for " +
+                            "commit '$commit' and path '$path', had filemode " +
+                            "${walk.getFileMode(0).bits}"
+                )
             }
             val result = walk.getObjectId(0)
             walk.release()
@@ -81,8 +85,10 @@ class GitFileListViewModel(
     }
 
     @Throws(IOException::class)
-    private fun buildRevCommit(repository: org.eclipse.jgit.lib.Repository,
-            commit: String): RevCommit {
+    private fun buildRevCommit(
+        repository: org.eclipse.jgit.lib.Repository,
+        commit: String
+    ): RevCommit {
         val revWalk = RevWalk(repository)
         val revCommit = revWalk.parseCommit(ObjectId.fromString(commit))
         revWalk.release()
@@ -90,9 +96,9 @@ class GitFileListViewModel(
     }
 
     companion object {
-        fun get(activity: FragmentActivity, repositoryId: Int, refName: String)
-                = getViewModel(activity) {
-            GitFileListViewModel(activity.application, repositoryId, refName)
-        }
+        fun get(activity: FragmentActivity, repositoryId: Int, refName: String) =
+            getViewModel(activity) {
+                GitFileListViewModel(activity.application, repositoryId, refName)
+            }
     }
 }

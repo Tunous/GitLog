@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import me.thanel.gitlog.utils.inflate
 
 abstract class ItemAdapter<E, VH : RecyclerView.ViewHolder>(
-        private val onItemClickListener: ((E) -> Unit)? = null
+    private val onItemClickListener: ((E) -> Unit)? = null
 ) : RecyclerView.Adapter<VH>() {
     protected val items = mutableListOf<E>()
 

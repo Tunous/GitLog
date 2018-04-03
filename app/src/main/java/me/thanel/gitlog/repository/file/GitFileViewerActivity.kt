@@ -27,23 +27,25 @@ class GitFileViewerActivity : BaseFragmentActivity() {
         }
     }
 
-    override fun createFragment() = GitFileViewerFragment.newInstance(repositoryId, refName,
-            filePath)
+    override fun createFragment() = GitFileViewerFragment.newInstance(
+        repositoryId, refName,
+        filePath
+    )
 
     override fun getSupportParentActivityIntent(): Intent =
         GitFileListActivity.newIntent(this, repositoryId, refName)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         private const val EXTRA_FILE_PATH = "extra.file_path"
         private const val EXTRA_REF_NAME = "extra.ref_name"
         private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
 
-        fun newIntent(context: Context, repositoryId: Int, refName: String, filePath: String)
-                = context.createIntent<GitFileViewerActivity> {
-            putExtra(EXTRA_REPOSITORY_ID, repositoryId)
-            putExtra(EXTRA_REF_NAME, refName)
-            putExtra(EXTRA_FILE_PATH, filePath)
-        }
+        fun newIntent(context: Context, repositoryId: Int, refName: String, filePath: String) =
+            context.createIntent<GitFileViewerActivity> {
+                putExtra(EXTRA_REPOSITORY_ID, repositoryId)
+                putExtra(EXTRA_REF_NAME, refName)
+                putExtra(EXTRA_FILE_PATH, filePath)
+            }
     }
 }

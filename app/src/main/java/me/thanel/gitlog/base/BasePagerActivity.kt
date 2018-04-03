@@ -12,7 +12,7 @@ import java.util.*
 abstract class BasePagerActivity : BaseActivity() {
     private lateinit var adapter: Adapter
 
-    override final val layoutResId: Int
+    final override val layoutResId: Int
         get() = R.layout.activity_base_pager
 
     protected abstract val pageTitles: Array<CharSequence>
@@ -41,12 +41,12 @@ abstract class BasePagerActivity : BaseActivity() {
 
         override fun getItem(position: Int): Fragment {
             val fragment = createFragment(position)
-            fragments.put(position, fragment)
+            fragments[position] = fragment
             return fragment
         }
 
-        override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
-            super.destroyItem(container, position, `object`)
+        override fun destroyItem(container: ViewGroup, position: Int, obj: Any) {
+            super.destroyItem(container, position, obj)
             fragments.remove(position)
         }
 

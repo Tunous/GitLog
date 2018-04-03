@@ -13,8 +13,8 @@ import me.thanel.gitlog.utils.formatTags
 import org.eclipse.jgit.diff.DiffEntry
 
 class DiffSummaryViewHolder(
-        itemView: View,
-        private val viewModel: CommitViewModel
+    itemView: View,
+    private val viewModel: CommitViewModel
 ) : ItemAdapter.ViewHolder<List<DiffEntry>>(itemView) {
     private val summaryTextView = itemView.findViewById<TextView>(R.id.summaryTextView)
 
@@ -23,10 +23,12 @@ class DiffSummaryViewHolder(
 
         val changedFilesCount = item.size
         val resources = context.resources
-        val changedFilesText = resources.getQuantityString(R.plurals.changed_files,
-                changedFilesCount, changedFilesCount)
+        val changedFilesText = resources.getQuantityString(
+            R.plurals.changed_files,
+            changedFilesCount, changedFilesCount
+        )
         val diffs = item.flatMap { viewModel.formatDiffEntry(it).split("\n") }
-                .dropWhile { !it.startsWith("@@") }
+            .dropWhile { !it.startsWith("@@") }
         val additions = diffs.count { it.startsWith("+") }
         val deletions = diffs.count { it.startsWith("-") }
         val additionsText = resources.getQuantityString(R.plurals.additions, additions, additions)
@@ -36,11 +38,16 @@ class DiffSummaryViewHolder(
         val removeColor = ContextCompat.getColor(context, R.color.diffRemoveForeground)
 
         summaryTextView.text = context.getString(R.string.diff_summary).formatTags(
-                StyleableTag("changed_files", changedFilesText, StyleSpan(Typeface.BOLD)),
-                StyleableTag("additions", additionsText, StyleSpan(Typeface.BOLD),
-                        ForegroundColorSpan(addColor)),
-                StyleableTag("deletions", deletionsText, StyleSpan(Typeface.BOLD),
-                        ForegroundColorSpan(removeColor)))
+            StyleableTag("changed_files", changedFilesText, StyleSpan(Typeface.BOLD)),
+            StyleableTag(
+                "additions", additionsText, StyleSpan(Typeface.BOLD),
+                ForegroundColorSpan(addColor)
+            ),
+            StyleableTag(
+                "deletions", deletionsText, StyleSpan(Typeface.BOLD),
+                ForegroundColorSpan(removeColor)
+            )
+        )
     }
 }
 

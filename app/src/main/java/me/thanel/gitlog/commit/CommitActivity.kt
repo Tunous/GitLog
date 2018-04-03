@@ -25,7 +25,7 @@ class CommitActivity : BaseFragmentActivity() {
 
     override fun getSupportParentActivityIntent(): Intent =
         RepositoryActivity.newIntent(this, repositoryId)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         private const val EXTRA_COMMIT_SHA = "extra.commit_sha"

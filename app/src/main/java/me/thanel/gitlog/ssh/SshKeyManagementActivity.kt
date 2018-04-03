@@ -18,7 +18,7 @@ class SshKeyManagementActivity : BaseFragmentActivity() {
 
     override fun getSupportParentActivityIntent(): Intent =
         RepositoryListActivity.newIntent(this)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         fun newIntent(context: Context) = context.createIntent<SshKeyManagementActivity>()

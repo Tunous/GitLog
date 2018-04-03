@@ -1,24 +1,20 @@
 package me.thanel.gitlog.commit.view
 
 import android.content.Context
-import android.support.transition.ChangeBounds
-import android.support.transition.ChangeTransform
-import android.support.transition.Fade
-import android.support.transition.TransitionManager
-import android.support.transition.TransitionSet
+import android.support.transition.*
 import android.support.v7.widget.LinearLayoutCompat
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import androidx.view.isVisible
 import kotlinx.android.synthetic.main.view_commit_header.view.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.utils.isVisible
 import org.eclipse.jgit.revwalk.RevCommit
 
 class CommitHeaderView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : LinearLayoutCompat(context, attrs, defStyleAttr) {
     private var shouldDisplayCommitter = false
 
@@ -52,10 +48,12 @@ class CommitHeaderView @JvmOverloads constructor(
     }
 
     private fun setDetailsVisible(visible: Boolean) {
-        TransitionManager.beginDelayedTransition(parent as ViewGroup, TransitionSet()
+        TransitionManager.beginDelayedTransition(
+            parent as ViewGroup, TransitionSet()
                 .addTransition(ChangeTransform())
                 .addTransition(ChangeBounds())
-                .addTransition(Fade()))
+                .addTransition(Fade())
+        )
 
         authorView.isVisible = visible
         committerView.isVisible = visible && shouldDisplayCommitter

@@ -11,10 +11,10 @@ import org.eclipse.jgit.treewalk.TreeWalk
 import java.io.ByteArrayOutputStream
 
 class GitFileViewModel(
-        application: Application,
-        repositoryId: Int,
-        private val refName: String,
-        private val filePath: String
+    application: Application,
+    repositoryId: Int,
+    private val refName: String,
+    private val filePath: String
 ) : ViewModel() {
     private val db = (application as GitLogApplication).database
 
@@ -43,9 +43,9 @@ class GitFileViewModel(
     }
 
     companion object {
-        fun get(activity: FragmentActivity, repositoryId: Int, refName: String, filePath: String)
-                = getViewModel(activity) {
-            GitFileViewModel(activity.application, repositoryId, refName, filePath)
-        }
+        fun get(activity: FragmentActivity, repositoryId: Int, refName: String, filePath: String) =
+            getViewModel(activity) {
+                GitFileViewModel(activity.application, repositoryId, refName, filePath)
+            }
     }
 }

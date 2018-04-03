@@ -8,20 +8,20 @@ import android.text.format.DateUtils
 import android.text.style.StyleSpan
 import android.util.AttributeSet
 import android.view.View
+import androidx.view.isVisible
 import kotlinx.android.synthetic.main.view_avatar_header.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.utils.StyleableTag
 import me.thanel.gitlog.utils.formatTags
-import me.thanel.gitlog.utils.isVisible
 import org.eclipse.jgit.lib.PersonIdent
 import org.eclipse.jgit.revwalk.RevCommit
 import org.eclipse.jgit.util.RelativeDateFormatter
 import java.util.*
 
 class AvatarHeaderView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
     init {
         View.inflate(context, R.layout.view_avatar_header, this)
@@ -59,13 +59,15 @@ class AvatarHeaderView @JvmOverloads constructor(
         val dateString = RelativeDateFormatter.format(date)
         val message = if (commit.authorIdent?.emailAddress == commit.committerIdent?.emailAddress) {
             context.getString(R.string.committed_alone).formatTags(
-                    StyleableTag("committer", commit.committerIdent.name, StyleSpan(Typeface.BOLD)),
-                    StyleableTag("time", dateString))
+                StyleableTag("committer", commit.committerIdent.name, StyleSpan(Typeface.BOLD)),
+                StyleableTag("time", dateString)
+            )
         } else {
             context.getString(R.string.committed_together).formatTags(
-                    StyleableTag("author", commit.authorIdent.name, StyleSpan(Typeface.BOLD)),
-                    StyleableTag("committer", commit.committerIdent.name, StyleSpan(Typeface.BOLD)),
-                    StyleableTag("time", dateString))
+                StyleableTag("author", commit.authorIdent.name, StyleSpan(Typeface.BOLD)),
+                StyleableTag("committer", commit.committerIdent.name, StyleSpan(Typeface.BOLD)),
+                StyleableTag("time", dateString)
+            )
         }
         detailsView.text = message
     }
@@ -73,8 +75,10 @@ class AvatarHeaderView @JvmOverloads constructor(
     fun bind(ident: PersonIdent, @StringRes messageResId: Int) {
         avatarView.setFromIdent(ident)
         titleView.text = "${ident.name} <${ident.emailAddress}>"
-        val time = DateUtils.formatDateTime(context, ident.`when`.time,
-                DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_YEAR)
+        val time = DateUtils.formatDateTime(
+            context, ident.`when`.time,
+            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_YEAR
+        )
         detailsView.text = context.getString(messageResId).formatTags(StyleableTag("time", time))
     }
 }

@@ -17,9 +17,9 @@ import kotlinx.android.synthetic.main.view_diff_hunk.view.*
 import me.thanel.gitlog.R
 
 class DiffHunkView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : HorizontalScrollView(context, attrs, defStyleAttr) {
     init {
         View.inflate(context, R.layout.view_diff_hunk, this)
@@ -100,20 +100,26 @@ class DiffHunkView @JvmOverloads constructor(
             builder.setSpan(span, spanStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
             val lineNumberSpan = DiffLineSpan(lineBg, 32, index == 0, index == lines.size - 1)
-            lineNumberBuilder.setSpan(lineNumberSpan, lineNumberSpanStart, lineNumberBuilder.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            lineNumberBuilder.setSpan(
+                lineNumberSpan, lineNumberSpanStart, lineNumberBuilder.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
         val padding = context.resources.getDimensionPixelSize(R.dimen.diff_line_padding)
         val lineHeightSpan = DiffLineHeightSpan(padding)
         builder.setSpan(lineHeightSpan, 0, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        lineNumberBuilder.setSpan(lineHeightSpan, 0, lineNumberBuilder.length,
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        lineNumberBuilder.setSpan(
+            lineHeightSpan, 0, lineNumberBuilder.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         diffTextView.text = builder
         lineNumbersView.text = lineNumberBuilder
     }
 
-    private fun SpannableStringBuilder.appendLineNumbers(line: String, fromLineNumber: Int,
-            toLineNumber: Int, numberLength: Int) {
+    private fun SpannableStringBuilder.appendLineNumbers(
+        line: String, fromLineNumber: Int,
+        toLineNumber: Int, numberLength: Int
+    ) {
         val isMarker = line.startsWith("@@")
         val isAdded = line.startsWith("+")
         val isRemoved = line.startsWith("-")
@@ -145,8 +151,10 @@ class DiffHunkView @JvmOverloads constructor(
     }
 
     private class DiffLineHeightSpan(private val padding: Int) : LineHeightSpan {
-        override fun chooseHeight(text: CharSequence, start: Int, end: Int, spanStartV: Int, v: Int,
-                fm: Paint.FontMetricsInt) {
+        override fun chooseHeight(
+            text: CharSequence, start: Int, end: Int, spanStartV: Int, v: Int,
+            fm: Paint.FontMetricsInt
+        ) {
             val topOffset = padding / 2
             fm.top -= topOffset
             fm.ascent -= topOffset
@@ -156,14 +164,16 @@ class DiffHunkView @JvmOverloads constructor(
     }
 
     private class DiffLineSpan(
-            private @ColorInt val backgroundColor: Int,
-            private val padding: Int,
-            private val isFirstLine: Boolean,
-            private val isLastLine: Boolean
+        @ColorInt private val backgroundColor: Int,
+        private val padding: Int,
+        private val isFirstLine: Boolean,
+        private val isLastLine: Boolean
     ) : LineBackgroundSpan {
-        override fun drawBackground(c: Canvas, p: Paint, left: Int, right: Int, top: Int,
-                baseline: Int, bottom: Int, text: CharSequence, start: Int, end: Int,
-                lineNumber: Int) {
+        override fun drawBackground(
+            c: Canvas, p: Paint, left: Int, right: Int, top: Int,
+            baseline: Int, bottom: Int, text: CharSequence, start: Int, end: Int,
+            lineNumber: Int
+        ) {
             val paintColor = p.color
             val paddingTop = (top - if (isFirstLine) padding else 0).toFloat()
             val paddingBottom = (bottom + if (isLastLine) padding else 0).toFloat()

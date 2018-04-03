@@ -19,14 +19,14 @@ class FileViewerActivity : BaseFragmentActivity() {
 
     override fun getSupportParentActivityIntent(): Intent =
         SshKeyManagementActivity.newIntent(this)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         private const val EXTRA_FILE_PATH = "extra.file_path"
 
-        fun newIntent(context: Context, filePath: String)
-                = context.createIntent<FileViewerActivity> {
-            putExtra(EXTRA_FILE_PATH, filePath)
-        }
+        fun newIntent(context: Context, filePath: String) =
+            context.createIntent<FileViewerActivity> {
+                putExtra(EXTRA_FILE_PATH, filePath)
+            }
     }
 }

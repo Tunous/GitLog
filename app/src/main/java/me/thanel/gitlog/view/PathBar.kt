@@ -10,9 +10,9 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.utils.resolveColor
 
 class PathBar @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : HorizontalScrollView(context, attrs, defStyleAttr), View.OnClickListener {
     private var onPathEntryClicked: ((String) -> Unit)? = null
 

@@ -29,7 +29,8 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
+    override fun onCreateViewModel() =
+        CommitViewModel.get(requireActivity(), repositoryId, commitSha)
 
     override fun observeViewModel(viewModel: CommitViewModel) {
         viewModel.commit.observe(this, this::displayCommitInformation)
@@ -56,7 +57,8 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.browse_files -> {
-                val intent = GitFileListActivity.newIntent(context, repositoryId, commitSha)
+                val intent =
+                    GitFileListActivity.newIntent(requireContext(), repositoryId, commitSha)
                 startActivity(intent)
             }
             R.id.line_numbers -> {

@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import me.thanel.gitlog.R
 
 abstract class BaseFragmentActivity : BaseActivity() {
-    override final val layoutResId: Int
+    final override val layoutResId: Int
         get() = R.layout.activity_base
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,8 +13,8 @@ abstract class BaseFragmentActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainer, createFragment())
-                    .commit()
+                .replace(R.id.fragmentContainer, createFragment())
+                .commit()
         }
     }
 

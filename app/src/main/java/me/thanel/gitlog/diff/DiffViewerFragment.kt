@@ -2,11 +2,7 @@ package me.thanel.gitlog.diff
 
 import me.thanel.gitlog.base.BaseWebViewerFragment
 import me.thanel.gitlog.commit.CommitViewModel
-import me.thanel.gitlog.utils.intArg
-import me.thanel.gitlog.utils.observe
-import me.thanel.gitlog.utils.serializableArg
-import me.thanel.gitlog.utils.stringArg
-import me.thanel.gitlog.utils.withArguments
+import me.thanel.gitlog.utils.*
 import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.lib.AbbreviatedObjectId
 
@@ -15,7 +11,8 @@ class DiffViewerFragment : BaseWebViewerFragment<CommitViewModel>() {
     private val repositoryId by intArg(ARG_REPOSITORY_ID)
     private val diffId by serializableArg<AbbreviatedObjectId>(ARG_DIFF_ID)
 
-    override fun onCreateViewModel() = CommitViewModel.get(activity, repositoryId, commitSha)
+    override fun onCreateViewModel() =
+        CommitViewModel.get(requireActivity(), repositoryId, commitSha)
 
     override fun observeViewModel(viewModel: CommitViewModel) =
         viewModel.getDiffEntry(diffId).observe(this, this::displayDiff)
@@ -27,9 +24,9 @@ class DiffViewerFragment : BaseWebViewerFragment<CommitViewModel>() {
         }
 
         val diffText = viewModel.formatDiffEntry(diffEntry)
-                .split("\n")
-                .dropWhile { !it.startsWith("@@") }
-                .joinToString("<br/>")
+            .split("\n")
+            .dropWhile { !it.startsWith("@@") }
+            .joinToString("<br/>")
         loadData(StringBuilder().apply {
             append("<body>")
             append("<div>")
@@ -44,11 +41,11 @@ class DiffViewerFragment : BaseWebViewerFragment<CommitViewModel>() {
         private const val ARG_REPOSITORY_ID = "arg.repository_id"
         private const val ARG_DIFF_ID = "arg.diff_id"
 
-        fun newInstance(commitSha: String, repositoryId: Int, diffId: AbbreviatedObjectId)
-                = DiffViewerFragment().withArguments {
-            putString(ARG_COMMIT_SHA, commitSha)
-            putInt(ARG_REPOSITORY_ID, repositoryId)
-            putSerializable(ARG_DIFF_ID, diffId)
-        }
+        fun newInstance(commitSha: String, repositoryId: Int, diffId: AbbreviatedObjectId) =
+            DiffViewerFragment().withArguments {
+                putString(ARG_COMMIT_SHA, commitSha)
+                putInt(ARG_REPOSITORY_ID, repositoryId)
+                putSerializable(ARG_DIFF_ID, diffId)
+            }
     }
 }

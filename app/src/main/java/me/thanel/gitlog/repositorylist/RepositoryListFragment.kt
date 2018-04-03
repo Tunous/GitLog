@@ -2,6 +2,7 @@ package me.thanel.gitlog.repositorylist
 
 import android.os.Bundle
 import android.view.View
+import androidx.view.isVisible
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 import me.thanel.gitlog.AddRepositoryActivity
 import me.thanel.gitlog.R
@@ -9,7 +10,6 @@ import me.thanel.gitlog.base.BaseFragment
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.RepositoryActivity
-import me.thanel.gitlog.utils.isVisible
 import me.thanel.gitlog.utils.observe
 
 class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
@@ -18,7 +18,7 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
     override val layoutResId: Int
         get() = R.layout.fragment_repository_list
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         emptyView.setText(R.string.no_repositories)
@@ -30,7 +30,7 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
         }
     }
 
-    override fun onCreateViewModel() = RepositoryViewModel.get(activity)
+    override fun onCreateViewModel() = RepositoryViewModel.get(requireActivity())
 
     override fun observeViewModel(viewModel: RepositoryViewModel) =
         viewModel.listRepositories().observe(this, this::displayRepositories)
@@ -44,10 +44,10 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
     }
 
     private fun showAddRepositoryScreen() {
-        startActivity(AddRepositoryActivity.newIntent(context))
+        startActivity(AddRepositoryActivity.newIntent(requireContext()))
     }
 
     private fun openRepository(repository: Repository) {
-        startActivity(RepositoryActivity.newIntent(context, repository.id))
+        startActivity(RepositoryActivity.newIntent(requireContext(), repository.id))
     }
 }

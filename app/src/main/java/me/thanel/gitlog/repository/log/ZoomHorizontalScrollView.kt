@@ -14,9 +14,9 @@ import android.widget.HorizontalScrollView
  * width fits the whole view.
  */
 class ZoomHorizontalScrollView @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : HorizontalScrollView(context, attrs, defStyleAttr) {
     private val scaleDetector = ScaleGestureDetector(context, ScaleListener())
     private var scaleFactor = 1f
@@ -50,13 +50,17 @@ class ZoomHorizontalScrollView @JvmOverloads constructor(
         invalidate()
     }
 
-    override fun overScrollBy(deltaX: Int, deltaY: Int, scrollX: Int, scrollY: Int,
-            scrollRangeX: Int, scrollRangeY: Int, maxOverScrollX: Int, maxOverScrollY: Int,
-            isTouchEvent: Boolean): Boolean {
+    override fun overScrollBy(
+        deltaX: Int, deltaY: Int, scrollX: Int, scrollY: Int,
+        scrollRangeX: Int, scrollRangeY: Int, maxOverScrollX: Int, maxOverScrollY: Int,
+        isTouchEvent: Boolean
+    ): Boolean {
         val maxScrollRange = getScrollRange()
         val scrollRange = Math.min(scrollRangeX, maxScrollRange)
-        return super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRange, scrollRangeY,
-                maxOverScrollX, maxOverScrollY, isTouchEvent)
+        return super.overScrollBy(
+            deltaX, deltaY, scrollX, scrollY, scrollRange, scrollRangeY,
+            maxOverScrollX, maxOverScrollY, isTouchEvent
+        )
     }
 
     private fun getScrollRange(): Int {

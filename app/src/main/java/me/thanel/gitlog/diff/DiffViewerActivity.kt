@@ -32,15 +32,17 @@ class DiffViewerActivity : BaseFragmentActivity() {
 
     override fun getSupportParentActivityIntent(): Intent =
         CommitActivity.newIntent(this, repositoryId, commitSha)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         private const val EXTRA_COMMIT_SHA = "extra.commit_sha"
         private const val EXTRA_REPOSITORY_ID = "extra.repository_id"
         private const val EXTRA_DIFF_ID = "extra.diff_id"
 
-        fun newIntent(context: Context, repositoryId: Int, commitSha: String,
-                diffId: AbbreviatedObjectId) = context.createIntent<DiffViewerActivity> {
+        fun newIntent(
+            context: Context, repositoryId: Int, commitSha: String,
+            diffId: AbbreviatedObjectId
+        ) = context.createIntent<DiffViewerActivity> {
             putExtra(EXTRA_COMMIT_SHA, commitSha)
             putExtra(EXTRA_REPOSITORY_ID, repositoryId)
             putExtra(EXTRA_DIFF_ID, diffId)

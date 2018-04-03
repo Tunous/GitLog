@@ -1,13 +1,6 @@
 package me.thanel.gitlog.utils
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.Transformations
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
+import android.arch.lifecycle.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -72,7 +65,8 @@ inline fun <reified T : AppCompatActivity> Context.createIntent(): Intent =
  * specified [initializer].
  */
 inline fun <reified T : AppCompatActivity> Context.createIntent(
-        initializer: Intent.() -> Unit): Intent = createIntent<T>().apply(initializer)
+    initializer: Intent.() -> Unit
+): Intent = createIntent<T>().apply(initializer)
 
 class StyleableTag(name: String, val replacement: String, vararg val spans: Any) {
     val name = "[$name]"
@@ -143,8 +137,10 @@ class BackgroundLoadLiveData<X, Y>(input: X, func: suspend (X) -> Y) : MutableLi
 inline fun <reified T : ViewModel> getViewModel(activity: FragmentActivity): T =
     ViewModelProviders.of(activity).get(T::class.java)
 
-inline fun <reified T : ViewModel> getViewModel(activity: FragmentActivity,
-        crossinline onCreateFactory: () -> T): T {
+inline fun <reified T : ViewModel> getViewModel(
+    activity: FragmentActivity,
+    crossinline onCreateFactory: () -> T
+): T {
     val factory = object : ViewModelProvider.Factory {
         override fun <X : ViewModel> create(modelClass: Class<X>): X {
             @Suppress("UNCHECKED_CAST")
@@ -198,7 +194,7 @@ fun String.md5(): String {
         for (aMessageDigest in messageDigest) {
             var hex = Integer.toHexString(0xFF and aMessageDigest.toInt())
             while (hex.length < 2) {
-                hex = "0" + hex
+                hex = "0$hex"
             }
             hexString.append(hex)
         }
@@ -210,15 +206,11 @@ fun String.md5(): String {
     return ""
 }
 
-var View.isVisible: Boolean
-    get() = visibility == View.VISIBLE
-    set(visible) {
-        visibility = if (visible) View.VISIBLE else View.GONE
-    }
-
 fun Context.dpToPx(valueInDp: Float): Float {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp,
-            resources.displayMetrics)
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, valueInDp,
+        resources.displayMetrics
+    )
 }
 
 const val GRAVATAR_URL = "https://www.gravatar.com/avatar"
@@ -226,12 +218,12 @@ const val GRAVATAR_URL = "https://www.gravatar.com/avatar"
 fun Context.loadAvatar(emailAddress: String, targetView: ImageView) {
     val hash = emailAddress.trim().toLowerCase().md5()
     val url = Uri.parse(GRAVATAR_URL).buildUpon()
-            .appendPath(hash)
-            .appendQueryParameter("d", "identicon")
-            .toString()
+        .appendPath(hash)
+        .appendQueryParameter("d", "identicon")
+        .toString()
     Picasso.with(this)
-            .load(url)
-            .into(targetView)
+        .load(url)
+        .into(targetView)
 }
 
 private fun File.requireExists() {

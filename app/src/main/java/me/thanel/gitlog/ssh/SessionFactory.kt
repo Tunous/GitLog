@@ -14,15 +14,17 @@ class SessionFactory(private val context: Context) : JschConfigSessionFactory() 
         session.setConfig("StrictHostKeyChecking", "no")
         session.setConfig("PreferredAuthentications", "publickey,password")
 
-        session.userInfo = CredentialsProviderUserInfo(session,
-                SharedPreferencesCredentialsProvider(context))
+        session.userInfo = CredentialsProviderUserInfo(
+            session,
+            SharedPreferencesCredentialsProvider(context)
+        )
     }
 
     override fun createDefaultJSch(fs: FS): JSch {
         val jsch = JSch()
         context.sshDir.listFiles()
-                .filterNot { it.name.endsWith(".pub") }
-                .forEach { jsch.addIdentity(it.absolutePath) }
+            .filterNot { it.name.endsWith(".pub") }
+            .forEach { jsch.addIdentity(it.absolutePath) }
         return jsch
     }
 }

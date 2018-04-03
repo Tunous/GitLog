@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_add_repository.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.run
+import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.repository.RepositoryActivity
@@ -49,8 +49,10 @@ class AddRepositoryActivity : AppCompatActivity() {
                 repositoryUrlInputView.error = null
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int,
-                    after: Int) = Unit
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int,
+                after: Int
+            ) = Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
@@ -60,8 +62,10 @@ class AddRepositoryActivity : AppCompatActivity() {
                 repositoryNameInputView.error = null
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int,
-                    after: Int) = Unit
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int,
+                after: Int
+            ) = Unit
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
         })
@@ -114,26 +118,28 @@ class AddRepositoryActivity : AppCompatActivity() {
         val rootFile = File(filesDir, "repos/$repoName")
 
         launch(UI) {
-            val dialog = ProgressDialog.show(this@AddRepositoryActivity, "Cloning repository",
-                    "Cloning \"$repoUrl\" as $repoName...", true)
+            val dialog = ProgressDialog.show(
+                this@AddRepositoryActivity, "Cloning repository",
+                "Cloning \"$repoUrl\" as $repoName...", true
+            )
 
             try {
-                val repository = run(CommonPool) {
+                val repository = withContext(CommonPool) {
                     Git.cloneRepository()
-                            .setURI(repoUrl)
-                            .setDirectory(rootFile)
-                            .setBare(true)
-                            .setCloneAllBranches(true)
-                            .setProgressMonitor(object : EmptyProgressMonitor() {
-                                override fun beginTask(title: String, totalWork: Int) {
-                                    launch(UI) {
-                                        dialog.setMessage(title)
-                                    }
+                        .setURI(repoUrl)
+                        .setDirectory(rootFile)
+                        .setBare(true)
+                        .setCloneAllBranches(true)
+                        .setProgressMonitor(object : EmptyProgressMonitor() {
+                            override fun beginTask(title: String, totalWork: Int) {
+                                launch(UI) {
+                                    dialog.setMessage(title)
                                 }
-                            })
-                            .setTransportConfigCallback(TransportCallback(this@AddRepositoryActivity))
-                            .call()
-                            .close()
+                            }
+                        })
+                        .setTransportConfigCallback(TransportCallback(this@AddRepositoryActivity))
+                        .call()
+                        .close()
 
                     val repository = Repository(0, repoName, repoUrl, rootFile.absolutePath)
                     viewModel.addRepository(repository)
@@ -155,9 +161,9 @@ class AddRepositoryActivity : AppCompatActivity() {
                 rootFile.deleteRecursively()
 
                 AlertDialog.Builder(this@AddRepositoryActivity)
-                        .setTitle("Failed cloning")
-                        .setMessage(error.message)
-                        .show()
+                    .setTitle("Failed cloning")
+                    .setMessage(error.message)
+                    .show()
             } finally {
                 dialog.dismiss()
             }
@@ -166,7 +172,7 @@ class AddRepositoryActivity : AppCompatActivity() {
 
     override fun getSupportParentActivityIntent(): Intent =
         RepositoryListActivity.newIntent(this)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
     companion object {
         fun newIntent(context: Context) = context.createIntent<AddRepositoryActivity>()

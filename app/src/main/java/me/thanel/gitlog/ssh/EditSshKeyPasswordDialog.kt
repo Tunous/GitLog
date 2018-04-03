@@ -19,14 +19,14 @@ class EditSshKeyPasswordDialog : InputDialog() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = SharedPreferencesCredentialsProvider.getPrefs(context)
+        prefs = SharedPreferencesCredentialsProvider.getPrefs(requireContext())
     }
 
     override fun onSubmit(input: String): Boolean {
-        SharedPreferencesCredentialsProvider.getPrefs(context)
-                .edit()
-                .putString(keyName, input)
-                .apply()
+        SharedPreferencesCredentialsProvider.getPrefs(requireContext())
+            .edit()
+            .putString(keyName, input)
+            .apply()
         return true
     }
 

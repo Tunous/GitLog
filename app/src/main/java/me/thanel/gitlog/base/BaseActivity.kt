@@ -1,7 +1,6 @@
 package me.thanel.gitlog.base
 
 import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.content.Context
 import android.os.Bundle
 import android.os.Parcelable
@@ -13,7 +12,7 @@ import android.view.View
 import me.thanel.gitlog.R
 import java.io.Serializable
 
-abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
+abstract class BaseActivity : AppCompatActivity() {
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
     private val appBarLayout by lazy { findViewById<AppBarLayout>(R.id.appBarLayout) }
     val headerContext: Context get() = appBarLayout.context
@@ -51,8 +50,9 @@ abstract class BaseActivity : AppCompatActivity(), LifecycleRegistryOwner {
     fun addHeaderView(view: View, addToTop: Boolean = false) {
         val position = if (addToTop) 0 else appBarLayout.childCount
         val layoutParams = AppBarLayout.LayoutParams(
-                AppBarLayout.LayoutParams.MATCH_PARENT,
-                AppBarLayout.LayoutParams.WRAP_CONTENT).apply {
+            AppBarLayout.LayoutParams.MATCH_PARENT,
+            AppBarLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
             scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
         }
         appBarLayout.addView(view, position, layoutParams)

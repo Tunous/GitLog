@@ -24,10 +24,10 @@ class FilePickerFragment : BaseFragment<FilePickerViewModel>() {
             if (it.isDirectory) {
                 displayFiles(it)
             } else {
-                activity.setResult(Activity.RESULT_OK, Intent().apply {
+                requireActivity().setResult(Activity.RESULT_OK, Intent().apply {
                     putExtra(FilePickerActivity.EXTRA_FILE_PATH, it.absolutePath)
                 })
-                activity.finish()
+                requireActivity().finish()
             }
         }
 
@@ -36,13 +36,13 @@ class FilePickerFragment : BaseFragment<FilePickerViewModel>() {
         displayFiles(Environment.getExternalStorageDirectory())
     }
 
-    override fun onCreateViewModel() = getViewModel<FilePickerViewModel>(activity)
+    override fun onCreateViewModel() = getViewModel<FilePickerViewModel>(requireActivity())
 
     private fun displayFiles(file: File) {
         if (!file.isDirectory) return
 
         val childFiles = file.listFiles()
-                .sortedBy { it.name }
+            .sortedBy { it.name }
         fileListAdapter.replaceAll(childFiles)
     }
 

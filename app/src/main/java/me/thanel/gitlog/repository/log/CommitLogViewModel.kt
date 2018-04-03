@@ -9,8 +9,8 @@ import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.utils.getViewModel
 
 class CommitLogViewModel(
-        application: Application,
-        private val repositoryId: Int
+    application: Application,
+    private val repositoryId: Int
 ) : AndroidViewModel(application) {
     private val db = (application as GitLogApplication).database
 

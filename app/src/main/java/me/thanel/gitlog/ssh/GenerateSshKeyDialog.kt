@@ -19,13 +19,13 @@ class GenerateSshKeyDialog : InputDialog() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = SharedPreferencesCredentialsProvider.getPrefs(context)
+        prefs = SharedPreferencesCredentialsProvider.getPrefs(requireContext())
     }
 
     override fun onSubmit(input: String): Boolean {
         val keyName = input.trim()
-        val privateKey = File(context.sshDir, keyName)
-        val publicKey = File(context.sshDir, "$keyName.pub")
+        val privateKey = File(requireContext().sshDir, keyName)
+        val publicKey = File(requireContext().sshDir, "$keyName.pub")
 
         val jsch = JSch()
         with(KeyPair.genKeyPair(jsch, KeyPair.RSA)) {

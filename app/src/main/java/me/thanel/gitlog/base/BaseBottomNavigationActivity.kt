@@ -11,8 +11,8 @@ import me.thanel.gitlog.R
 
 abstract class BaseBottomNavigationActivity
     : BaseActivity(),
-        BottomNavigationView.OnNavigationItemSelectedListener {
-    override final val layoutResId: Int
+    BottomNavigationView.OnNavigationItemSelectedListener {
+    final override val layoutResId: Int
         get() = R.layout.activity_base_bottom_navigation
 
     protected abstract val menuResId: Int
@@ -38,7 +38,7 @@ abstract class BaseBottomNavigationActivity
         }
     }
 
-    override final fun onNavigationItemSelected(item: MenuItem): Boolean {
+    final override fun onNavigationItemSelected(item: MenuItem): Boolean {
         if (bottomNavigationView.selectedItemId == item.itemId) return false
         displayFragment(item.itemId)
         return true
@@ -48,7 +48,7 @@ abstract class BaseBottomNavigationActivity
 
     private fun displayFragment(@IdRes itemId: Int) {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, createFragment(itemId))
-                .commit()
+            .replace(R.id.fragmentContainer, createFragment(itemId))
+            .commit()
     }
 }
