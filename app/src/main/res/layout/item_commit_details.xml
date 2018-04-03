@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <me.thanel.gitlog.commit.view.CommitHeaderView
+    <me.thanel.gitlog.ui.commit.view.CommitHeaderView
         android:id="@+id/commitHeaderView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <me.thanel.gitlog.repository.log.ZoomHorizontalScrollView
+    <me.thanel.gitlog.ui.repository.log.ZoomHorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -37,6 +37,6 @@
             android:verticalScrollbarPosition="left"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
-    </me.thanel.gitlog.repository.log.ZoomHorizontalScrollView>
+    </me.thanel.gitlog.ui.repository.log.ZoomHorizontalScrollView>
 
 </FrameLayout>

@@ -10,7 +10,7 @@
     android:minWidth="570dp"
     android:orientation="horizontal">
 
-    <me.thanel.gitlog.repository.log.PlotLaneView
+    <me.thanel.gitlog.ui.repository.log.view.PlotLaneView
         android:id="@+id/laneView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"

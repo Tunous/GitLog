@@ -14,26 +14,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".repositorylist.RepositoryListActivity">
+        <activity android:name=".ui.repositorylist.RepositoryListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".repository.RepositoryActivity" />
-        <activity android:name=".commit.CommitActivity" />
+        <activity android:name=".ui.repository.RepositoryActivity" />
+        <activity android:name=".ui.commit.CommitActivity" />
         <activity
-            android:name=".AddRepositoryActivity"
+            android:name=".ui.AddRepositoryActivity"
             android:excludeFromRecents="true"
             android:label="@string/clone_repository"
             android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />
-        <activity android:name=".diff.DiffViewerActivity" />
-        <activity android:name=".repository.file.GitFileViewerActivity" />
-        <activity android:name=".repository.filelist.GitFileListActivity" />
-        <activity android:name=".ssh.SshKeyManagementActivity" />
-        <activity android:name=".explorer.FileViewerActivity" />
-        <activity android:name=".ssh.FilePickerActivity" />
+        <activity android:name=".ui.diff.DiffViewerActivity" />
+        <activity android:name=".ui.repository.file.GitFileViewerActivity" />
+        <activity android:name=".ui.repository.filelist.GitFileListActivity" />
+        <activity android:name=".ui.ssh.SshKeyManagementActivity" />
+        <activity android:name=".ui.explorer.FileViewerActivity" />
+        <activity android:name=".ui.ssh.FilePickerActivity" />
     </application>
 
 </manifest>

@@ -9,19 +9,19 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     tools:parentTag="android.widget.LinearLayout">
 
-    <me.thanel.gitlog.commit.view.AvatarHeaderView
+    <me.thanel.gitlog.ui.commit.view.AvatarHeaderView
         android:id="@+id/headerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:showExpandArrow="true" />
 
-    <me.thanel.gitlog.commit.view.AvatarHeaderView
+    <me.thanel.gitlog.ui.commit.view.AvatarHeaderView
         android:id="@+id/authorView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
-    <me.thanel.gitlog.commit.view.AvatarHeaderView
+    <me.thanel.gitlog.ui.commit.view.AvatarHeaderView
         android:id="@+id/committerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

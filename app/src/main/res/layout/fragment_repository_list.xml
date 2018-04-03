@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".repositorylist.RepositoryListActivity">
+    tools:context=".ui.repositorylist.RepositoryListActivity">
 
     <TextView
         android:id="@+id/emptyView"
