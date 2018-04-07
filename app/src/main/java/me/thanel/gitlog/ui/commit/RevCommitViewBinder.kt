@@ -2,30 +2,28 @@ package me.thanel.gitlog.ui.commit
 
 import android.text.Spannable
 import android.text.SpannableStringBuilder
-import android.view.View
-import kotlinx.android.synthetic.main.item_commit_details.view.*
-import me.thanel.gitlog.ui.base.ItemAdapter
+import kotlinx.android.synthetic.main.item_commit_details.*
+import me.thanel.gitlog.R
+import me.thanel.gitlog.ui.base.adapter.ContainerViewBinder
+import me.thanel.gitlog.ui.base.adapter.ContainerViewHolder
 import me.thanel.gitlog.ui.utils.ClickableShaSpan
 import me.thanel.gitlog.ui.utils.SHORT_SHA_LENGTH
 import org.eclipse.jgit.revwalk.RevCommit
 
-class CommitDetailsViewHolder(
-    itemView: View,
-    private val repositoryId: Int
-) : ItemAdapter.ViewHolder<RevCommit>(itemView) {
-    private val commitMessageView = itemView.commitMessageView
-    private val headerView = itemView.commitHeaderView
-    private var commitShaRegex = Regex("""[0-9a-f]{40}""")
+class RevCommitViewBinder(private val repositoryId: Int) : ContainerViewBinder<RevCommit>() {
+    private val commitShaRegex = Regex("""[0-9a-f]{40}""")
 
-    override fun bind(item: RevCommit) {
-        super.bind(item)
-        commitMessageView.text = formatMessage(item)
+    override val layoutResource: Int
+        get() = R.layout.item_commit_details
+
+    override fun onBindViewHolder(holder: ContainerViewHolder, item: RevCommit) {
+        holder.commitMessageView.text = formatMessage(item)
 
         // Setting this on each bind fixes issue where text selection stops working
-        commitMessageView.setTextIsSelectable(true)
-        commitMessageView.isFocusable = true
+        holder.commitMessageView.setTextIsSelectable(true)
+        holder.commitMessageView.isFocusable = true
 
-        headerView.displayCommitInformation(item)
+        holder.commitHeaderView.displayCommitInformation(item)
     }
 
     private fun formatMessage(item: RevCommit): CharSequence {

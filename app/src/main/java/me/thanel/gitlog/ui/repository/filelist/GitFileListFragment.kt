@@ -4,6 +4,7 @@ import activitystarter.Arg
 import android.os.Bundle
 import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
+import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
@@ -28,7 +29,9 @@ class GitFileListFragment : BaseFragment() {
         RepositoryViewModel.createParams(repositoryId)
     }
 
-    private val adapter = GitFileListAdapter(this::moveDown)
+    private val adapter = MultiTypeAdapter().apply {
+        register(GitFile::class.java, GitFileViewBinder(::moveDown))
+    }
     private lateinit var pathBar: PathBar
     private lateinit var repository: Repository
 
@@ -82,8 +85,7 @@ class GitFileListFragment : BaseFragment() {
     }
 
     private fun displayFiles(path: String = "") {
-        val files = gitFileListViewModel.listFiles(repository, path)
-        adapter.replaceAll(files)
+        adapter.items = gitFileListViewModel.listFiles(repository, path)
     }
 
     private fun moveDown(file: GitFile) {

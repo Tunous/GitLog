@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
+import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.gitlog.R
 import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
@@ -26,7 +27,18 @@ class CommitFragment : BaseFragment() {
         CommitViewModel.createParams(repositoryId, commitSha)
     }
 
-    lateinit var adapter: DiffHunkAdapter
+    private val adapterItems = mutableListOf<Any>()
+    private val adapter by lazy {
+        MultiTypeAdapter().apply {
+            register(
+                FormattedDiffEntry::class.java,
+                FormattedDiffEntryViewBinder(repositoryId, commitSha)
+            )
+            register(RevCommit::class.java, RevCommitViewBinder(repositoryId))
+            register(DiffSummary::class.java, DiffSummaryViewBinder())
+            items = adapterItems
+        }
+    }
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -39,7 +51,6 @@ class CommitFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = DiffHunkAdapter(repositoryId, commitSha)
         recyclerView.adapter = adapter
 
         viewModel.commit.observe(this, this::displayCommitInformation)
@@ -80,7 +91,7 @@ class CommitFragment : BaseFragment() {
             // TODO: Loading indicator
             return
         }
-        adapter.commit = commit
+        adapterItems.add(0, commit)
     }
 
     private fun displayDiffs(diffEntries: List<FormattedDiffEntry>?) {
@@ -88,7 +99,8 @@ class CommitFragment : BaseFragment() {
             // TODO: Loading indicator
             return
         }
-
-        adapter.replaceAll(diffEntries)
+        adapterItems.add(DiffSummary(diffEntries))
+        adapterItems.addAll(diffEntries)
+        adapter.notifyDataSetChanged()
     }
 }

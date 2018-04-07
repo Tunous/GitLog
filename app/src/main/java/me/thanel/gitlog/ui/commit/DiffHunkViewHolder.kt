@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_diff_hunk.view.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.preferences.Preferences
-import me.thanel.gitlog.ui.base.ItemAdapter
+import me.thanel.gitlog.ui.base.adapter.ItemViewHolder
 import me.thanel.gitlog.ui.diff.DiffViewerActivityStarter
 import me.thanel.gitlog.ui.repository.file.GitFileViewerActivityStarter
 import org.eclipse.jgit.diff.DiffEntry
@@ -20,7 +20,7 @@ class DiffHunkViewHolder(
     itemView: View,
     private val repositoryId: Int,
     private val commitSha: String
-) : ItemAdapter.ViewHolder<FormattedDiffEntry>(itemView),
+) : ItemViewHolder<FormattedDiffEntry>(itemView),
     PopupMenu.OnMenuItemClickListener,
     View.OnClickListener {
     private val diffHeader = itemView.diffHeader.apply {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.view.isVisible
 import kotlinx.android.synthetic.main.fragment_repository_list.*
+import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
@@ -13,7 +14,9 @@ import me.thanel.gitlog.ui.utils.observe
 import org.koin.android.architecture.ext.sharedViewModel
 
 class RepositoryListFragment : BaseFragment() {
-    private val adapter = RepositoryListAdapter(this::openRepository)
+    private val adapter = MultiTypeAdapter().apply {
+        register(Repository::class.java, RepositoryViewBinder(::openRepository))
+    }
 
     private val repositoryViewModel by sharedViewModel<RepositoryListViewModel>()
 
@@ -40,7 +43,8 @@ class RepositoryListFragment : BaseFragment() {
     private fun displayRepositories(repositories: List<Repository>?) {
         if (repositories != null) {
             loadingProgressBar.hide()
-            adapter.replaceAll(repositories)
+            adapter.items = repositories
+            adapter.notifyDataSetChanged()
             emptyView.isVisible = repositories.isEmpty()
         }
     }

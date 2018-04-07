@@ -15,6 +15,7 @@ import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.KeyPair
 import kotlinx.android.synthetic.main.view_recycler.*
+import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.gitlog.R
 import me.thanel.gitlog.ui.base.dialog.InputDialog
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
@@ -30,7 +31,9 @@ import java.io.File
 class SshKeyManagementFragment : BaseFragment(),
     OnSshKeyMenuItemClickListener {
     private lateinit var rootFolder: File
-    private lateinit var adapter: SshKeyListAdapter
+    private val adapter = MultiTypeAdapter().apply {
+        register(SshKey::class.java, SshKeyViewBinder(this@SshKeyManagementFragment))
+    }
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -51,7 +54,6 @@ class SshKeyManagementFragment : BaseFragment(),
         super.onActivityCreated(savedInstanceState)
 
         rootFolder = requireContext().sshDir
-        adapter = SshKeyListAdapter(this)
 
         recyclerView.adapter = adapter
 
@@ -153,7 +155,8 @@ class SshKeyManagementFragment : BaseFragment(),
                 keys.add(file.name to keyPair)
             }
         }
-        adapter.replaceAll(keys.sortedBy(Pair<String, KeyPair>::first))
+        adapter.items = keys.sortedBy(Pair<String, KeyPair>::first)
+        adapter.notifyDataSetChanged()
     }
 
     private fun generateSshKey() {

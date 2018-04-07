@@ -8,6 +8,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
+import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.db.model.git
@@ -15,6 +16,7 @@ import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.repository.RepositoryViewModel
 import me.thanel.gitlog.ui.utils.observe
 import org.eclipse.jgit.api.ListBranchCommand
+import org.eclipse.jgit.lib.Ref
 import org.eclipse.jgit.lib.Repository.shortenRefName
 import org.koin.android.architecture.ext.sharedViewModel
 
@@ -26,13 +28,8 @@ class BranchListFragment : BaseFragment() {
         RepositoryViewModel.createParams(repositoryId)
     }
 
-    private val adapter = BranchListAdapter {
-        // TODO:
-        //   - Set active branch
-        //   - Switch to log view
-        //   - Make baseActivity private
-        //   - Make toolbarSubtitle protected
-        baseActivity.toolbarSubtitle = shortenRefName(it.name)
+    private val adapter = MultiTypeAdapter().apply {
+        register(Ref::class.java, RefViewBinder(::onRefClicked))
     }
 
     override val layoutResId: Int
@@ -54,6 +51,16 @@ class BranchListFragment : BaseFragment() {
                 .setListMode(ListBranchCommand.ListMode.ALL)
                 .call()
         }
-        adapter.addAll(branches)
+        adapter.items = branches
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun onRefClicked(ref: Ref) {
+        // TODO:
+        //   - Set active branch
+        //   - Switch to log view
+        //   - Make baseActivity private
+        //   - Make toolbarSubtitle protected
+        baseActivity.toolbarSubtitle = shortenRefName(ref.name)
     }
 }

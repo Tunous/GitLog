@@ -36,6 +36,7 @@ ext {
     jschVersion = '0.1.54'
     roomVersion = '1.0.0'
     activityStarterVersion = '1.11-beta'
+    multiTypeVersion = '3.4.4'
 }
 
 dependencies {
@@ -59,6 +60,8 @@ dependencies {
     implementation "com.jcraft:jsch:$jschVersion"
     implementation "androidx.core:core-ktx:0.2"
     implementation "org.koin:koin-android-architecture:0.9.1"
+    implementation "me.drakeet.multitype:multitype:$multiTypeVersion"
+    implementation "me.drakeet.multitype:multitype-kotlin:$multiTypeVersion"
 
     implementation "com.squareup.picasso:picasso:$picassoVersion"
     implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$okhttpDownloaderVersion"
@@ -82,4 +85,8 @@ kotlin {
     experimental {
         coroutines "enable"
     }
+}
+
+androidExtensions {
+    experimental = true
 }
