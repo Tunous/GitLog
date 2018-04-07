@@ -14,7 +14,8 @@ class SshKeyManagementActivity : BaseFragmentActivity() {
         toolbarTitle = getString(R.string.manage_ssh_keys)
     }
 
-    override fun createFragment() = SshKeyManagementFragment.newInstance()
+    override fun createFragment(): SshKeyManagementFragment =
+        SshKeyManagementFragmentStarter.newInstance()
 
     override fun getSupportParentActivityIntent(): Intent =
         RepositoryListActivityStarter.getIntent(this)

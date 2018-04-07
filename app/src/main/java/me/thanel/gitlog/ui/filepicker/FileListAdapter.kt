@@ -1,4 +1,4 @@
-package me.thanel.gitlog.ui.ssh
+package me.thanel.gitlog.ui.filepicker
 
 import android.view.View
 import kotlinx.android.synthetic.main.item_file.view.*
@@ -9,7 +9,8 @@ import java.io.File
 class FileListAdapter(
     onItemClickListener: (File) -> Unit
 ) : ItemAdapter<File, FileListAdapter.ViewModel>(onItemClickListener) {
-    override fun createViewHolder(itemView: View, viewType: Int) = ViewModel(itemView)
+    override fun createViewHolder(itemView: View, viewType: Int) =
+        ViewModel(itemView)
 
     override fun onBindViewHolder(holder: ViewModel, position: Int) {
         holder.bind(items[position])

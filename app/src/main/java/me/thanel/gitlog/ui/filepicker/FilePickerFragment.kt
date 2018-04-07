@@ -1,4 +1,4 @@
-package me.thanel.gitlog.ui.ssh
+package me.thanel.gitlog.ui.filepicker
 
 import android.app.Activity
 import android.content.Intent

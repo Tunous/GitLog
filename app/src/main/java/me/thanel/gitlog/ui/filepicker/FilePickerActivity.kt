@@ -1,4 +1,4 @@
-package me.thanel.gitlog.ui.ssh
+package me.thanel.gitlog.ui.filepicker
 
 import activitystarter.MakeActivityStarter
 import me.thanel.gitlog.ui.base.activity.BaseFragmentActivity

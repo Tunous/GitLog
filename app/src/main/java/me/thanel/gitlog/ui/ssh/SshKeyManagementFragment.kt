@@ -1,5 +1,6 @@
 package me.thanel.gitlog.ui.ssh
 
+import activitystarter.MakeActivityStarter
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Typeface
@@ -18,11 +19,14 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.ui.base.dialog.InputDialog
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.explorer.FileViewerActivityStarter
+import me.thanel.gitlog.ui.filepicker.FilePickerActivity
+import me.thanel.gitlog.ui.filepicker.FilePickerActivityStarter
 import me.thanel.gitlog.ui.utils.StyleableTag
 import me.thanel.gitlog.ui.utils.formatTags
 import me.thanel.gitlog.ui.utils.sshDir
 import java.io.File
 
+@MakeActivityStarter
 class SshKeyManagementFragment : BaseFragment(),
     OnSshKeyMenuItemClickListener {
     private lateinit var rootFolder: File
@@ -171,7 +175,5 @@ class SshKeyManagementFragment : BaseFragment(),
         private const val TAG_DIALOG_EDIT_PASSWORD = "dialog.edit_password"
         private const val TAG_DIALOG_GENERATE_KEY = "dialog.generate_key"
         private const val REQUEST_PICK_FILE = 1
-
-        fun newInstance(): SshKeyManagementFragment = SshKeyManagementFragment()
     }
 }

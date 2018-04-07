@@ -27,10 +27,6 @@ class RepositoryListActivity : BaseFragmentActivity() {
     }
 
     private fun browseSshKeys() {
-        SshKeyManagementActivityStarter.startForResult(this, REQUEST_BROWSE_SSH)
-    }
-
-    companion object {
-        private const val REQUEST_BROWSE_SSH = 1
+        SshKeyManagementActivityStarter.start(this)
     }
 }
