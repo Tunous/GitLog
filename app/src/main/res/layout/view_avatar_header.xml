@@ -7,7 +7,7 @@
     android:paddingBottom="@dimen/small_spacing"
     android:paddingTop="@dimen/small_spacing"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    tools:background="@color/colorPrimary"
+    tools:background="?colorPrimaryDark"
     tools:parentTag="android.support.constraint.ConstraintLayout">
 
     <me.thanel.gitlog.ui.commit.view.AvatarView

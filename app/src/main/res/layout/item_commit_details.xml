@@ -22,6 +22,7 @@
         android:autoLink="web"
         android:focusable="true"
         android:padding="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textIsSelectable="true"
         tools:text="Commit message text\n\nThat can be multiline" />
 

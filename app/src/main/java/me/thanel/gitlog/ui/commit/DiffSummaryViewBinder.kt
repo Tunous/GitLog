@@ -22,21 +22,12 @@ class DiffSummaryViewBinder : ContainerViewBinder<DiffSummary>() {
             R.plurals.changed_files,
             changedFilesCount, changedFilesCount
         )
-        val diffs = item.formattedDiffEntries.flatMap { it.formattedPatch.split("\n") }
-            .dropWhile { !it.startsWith("@@") }
-        val additions = diffs.count { it.startsWith("+") }
-        val deletions = diffs.count { it.startsWith("-") }
-        val additionsText = resources.getQuantityString(R.plurals.additions, additions, additions)
-        val deletionsText = resources.getQuantityString(R.plurals.deletions, deletions, deletions)
-
-        val addColor = ContextCompat.getColor(
-            holder.context,
-            R.color.diffAddForeground
-        )
-        val removeColor = ContextCompat.getColor(
-            holder.context,
-            R.color.diffRemoveForeground
-        )
+        val additionsText =
+            resources.getQuantityString(R.plurals.additions, item.numAdditions, item.numAdditions)
+        val deletionsText =
+            resources.getQuantityString(R.plurals.deletions, item.numDeletions, item.numDeletions)
+        val addColor = ContextCompat.getColor(holder.context, R.color.diffAddForeground)
+        val removeColor = ContextCompat.getColor(holder.context, R.color.diffRemoveForeground)
 
         holder.summaryTextView.text = holder.context.getString(R.string.diff_summary).formatTags(
             StyleableTag(

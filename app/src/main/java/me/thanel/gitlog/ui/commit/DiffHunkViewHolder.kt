@@ -69,14 +69,14 @@ class DiffHunkViewHolder(
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        val diffEntry = itemView.tag as DiffEntry
+        val diffEntry = itemView.tag as FormattedDiffEntry
         when (item.itemId) {
             R.id.view_full_screen -> {
                 DiffViewerActivityStarter.start(
                     context,
                     commitSha,
                     repositoryId,
-                    diffEntry.newId
+                    diffEntry.diffEntry.newId
                 )
             }
             R.id.view_whole_file -> {
@@ -84,7 +84,7 @@ class DiffHunkViewHolder(
                     context,
                     repositoryId,
                     commitSha,
-                    diffEntry.newPath
+                    diffEntry.diffEntry.newPath
                 )
             }
             else -> return false
