@@ -1,18 +1,16 @@
 package me.thanel.gitlog.ui.base.activity
 
-import android.arch.lifecycle.LifecycleRegistry
 import android.content.Context
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.View
 import me.thanel.gitlog.R
 
 abstract class BaseActivity : AppCompatActivity() {
-    private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
-    private val appBarLayout by lazy { findViewById<AppBarLayout>(R.id.appBarLayout) }
+    private lateinit var appBarLayout: AppBarLayout
+
     val headerContext: Context get() = appBarLayout.context
 
     protected var toolbarTitle: CharSequence? = null
@@ -35,15 +33,12 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutResId)
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        appBarLayout = findViewById(R.id.appBarLayout)
+        setSupportActionBar(findViewById(R.id.toolbar))
         if (canNavigateUp) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
     }
-
-    override fun getLifecycle() = lifecycleRegistry
 
     fun addHeaderView(view: View, addToTop: Boolean = false) {
         val position = if (addToTop) 0 else appBarLayout.childCount

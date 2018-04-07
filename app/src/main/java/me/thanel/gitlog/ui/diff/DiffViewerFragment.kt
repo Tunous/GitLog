@@ -4,9 +4,8 @@ import activitystarter.Arg
 import android.os.Bundle
 import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.ui.base.fragment.BaseWebViewerFragment
-import me.thanel.gitlog.ui.commit.CommitViewModel
+import me.thanel.gitlog.ui.commit.FormattedDiffEntry
 import me.thanel.gitlog.ui.utils.observe
-import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.lib.AbbreviatedObjectId
 import org.koin.android.architecture.ext.viewModel
 
@@ -20,22 +19,22 @@ class DiffViewerFragment : BaseWebViewerFragment() {
     @get:Arg
     val diffId: AbbreviatedObjectId by argExtra()
 
-    private val viewModel by viewModel<CommitViewModel> {
-        CommitViewModel.createParams(repositoryId, commitSha)
+    private val viewModel by viewModel<DiffViewModel> {
+        DiffViewModel.createParams(repositoryId, commitSha, diffId)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.getDiffEntry(diffId).observe(this, this::displayDiff)
+        viewModel.formattedDiffEntry.observe(this, ::displayDiff)
     }
 
-    private fun displayDiff(diffEntry: DiffEntry?) {
-        if (diffEntry == null) {
+    private fun displayDiff(formattedDiffEntry: FormattedDiffEntry?) {
+        if (formattedDiffEntry == null) {
             // TODO: Loading or error...
             return
         }
 
-        val diffText = viewModel.formatDiffEntry(diffEntry)
+        val diffText = formattedDiffEntry.formattedPatch
             .split("\n")
             .dropWhile { !it.startsWith("@@") }
             .joinToString("<br/>")

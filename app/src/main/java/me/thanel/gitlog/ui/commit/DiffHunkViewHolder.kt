@@ -9,8 +9,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_diff_hunk.view.*
-import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.R
+import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.ui.base.ItemAdapter
 import me.thanel.gitlog.ui.diff.DiffViewerActivityStarter
 import me.thanel.gitlog.ui.repository.file.GitFileViewerActivityStarter
@@ -18,8 +18,9 @@ import org.eclipse.jgit.diff.DiffEntry
 
 class DiffHunkViewHolder(
     itemView: View,
-    private val viewModel: CommitViewModel
-) : ItemAdapter.ViewHolder<DiffEntry>(itemView),
+    private val repositoryId: Int,
+    private val commitSha: String
+) : ItemAdapter.ViewHolder<FormattedDiffEntry>(itemView),
     PopupMenu.OnMenuItemClickListener,
     View.OnClickListener {
     private val diffHeader = itemView.diffHeader.apply {
@@ -38,16 +39,16 @@ class DiffHunkViewHolder(
 
     private val viewWholeFileItem = actionsMenu.menu.findItem(R.id.view_whole_file)
 
-    override fun bind(item: DiffEntry) {
+    override fun bind(item: FormattedDiffEntry) {
         super.bind(item)
         itemView.tag = item
-        fileNameView.text = getPath(item)
-        fileNameView.setTextColor(getColor(item))
+        fileNameView.text = getPath(item.diffEntry)
+        fileNameView.setTextColor(getColor(item.diffEntry))
         expandDropDown.rotation = 0f
 
-        viewWholeFileItem.isVisible = item.changeType != DiffEntry.ChangeType.DELETE
+        viewWholeFileItem.isVisible = item.diffEntry.changeType != DiffEntry.ChangeType.DELETE
 
-        diffHunkView.setDiff(viewModel.formatDiffEntry(item))
+        diffHunkView.setDiff(item.formattedPatch)
         diffHunkView.setLineNumbersVisible(Preferences.showLineNumbers)
         diffHunkView.visibility = View.GONE
     }
@@ -73,16 +74,16 @@ class DiffHunkViewHolder(
             R.id.view_full_screen -> {
                 DiffViewerActivityStarter.start(
                     context,
-                    viewModel.commitSha,
-                    viewModel.repositoryId,
+                    commitSha,
+                    repositoryId,
                     diffEntry.newId
                 )
             }
             R.id.view_whole_file -> {
                 GitFileViewerActivityStarter.start(
                     context,
-                    viewModel.repositoryId,
-                    viewModel.commitSha,
+                    repositoryId,
+                    commitSha,
                     diffEntry.newPath
                 )
             }

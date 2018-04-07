@@ -4,6 +4,7 @@ import activitystarter.Arg
 import android.content.Intent
 import android.os.Bundle
 import com.marcinmoskala.activitystarter.argExtra
+import me.thanel.gitlog.R
 import me.thanel.gitlog.ui.base.activity.BaseFragmentActivity
 import me.thanel.gitlog.ui.repository.RepositoryActivityStarter
 import me.thanel.gitlog.ui.utils.SHORT_SHA_LENGTH
@@ -19,9 +20,8 @@ class CommitActivity : BaseFragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val shortSha = commitSha.substring(0, SHORT_SHA_LENGTH)
-        toolbarTitle = "Commit [sha]".formatTags(StyleableTag("sha", shortSha))
+        toolbarTitle = getString(R.string.commit_sha).formatTags(StyleableTag("sha", shortSha))
     }
 
     override fun createFragment(): CommitFragment =

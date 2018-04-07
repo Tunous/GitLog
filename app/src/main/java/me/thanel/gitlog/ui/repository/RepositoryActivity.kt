@@ -17,6 +17,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.git
 import me.thanel.gitlog.ui.base.activity.BaseBottomNavigationActivity
 import me.thanel.gitlog.ui.repository.branchlist.BranchListFragmentStarter
 import me.thanel.gitlog.ui.repository.filelist.GitFileListFragmentStarter

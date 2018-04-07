@@ -6,7 +6,6 @@ import android.os.Bundle
 import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.ui.base.activity.BaseFragmentActivity
 import me.thanel.gitlog.ui.commit.CommitActivityStarter
-import me.thanel.gitlog.ui.commit.CommitViewModel
 import me.thanel.gitlog.ui.utils.observe
 import org.eclipse.jgit.lib.AbbreviatedObjectId
 import org.koin.android.architecture.ext.getViewModel
@@ -24,14 +23,14 @@ class DiffViewerActivity : BaseFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel = getViewModel<CommitViewModel> {
-            CommitViewModel.createParams(repositoryId, commitSha)
+        val viewModel = getViewModel<DiffViewModel> {
+            DiffViewModel.createParams(repositoryId, commitSha, diffId)
         }
 
         viewModel.repository.observe(this) {
             toolbarSubtitle = it?.name
         }
-        viewModel.getDiffEntry(diffId).observe(this) {
+        viewModel.diffEntry.observe(this) {
             toolbarTitle = it?.newPath?.split("/")?.lastOrNull()
         }
     }

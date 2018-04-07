@@ -15,10 +15,8 @@ import kotlinx.android.synthetic.main.activity_add_repository.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.ui.repository.RepositoryActivity
 import me.thanel.gitlog.ui.repositorylist.RepositoryListActivityStarter
 import me.thanel.gitlog.ui.repositorylist.RepositoryListManager
 import me.thanel.gitlog.ui.repositorylist.RepositoryListViewModel
@@ -124,7 +122,7 @@ class AddRepositoryActivity : AppCompatActivity() {
             )
 
             try {
-                val repository = withContext(CommonPool) {
+                launch(CommonPool) {
                     Git.cloneRepository()
                         .setURI(repoUrl)
                         .setDirectory(rootFile)
@@ -143,14 +141,11 @@ class AddRepositoryActivity : AppCompatActivity() {
 
                     val repository = Repository(0, repoName, repoUrl, rootFile.absolutePath)
                     repositoryListViewModel.addRepository(repository)
-                    repository
-                }
+                }.join()
 
                 dialog.dismiss()
 
-                setResult(Activity.RESULT_OK, Intent().apply {
-                    putExtra(RepositoryActivity.EXTRA_REPOSITORY, repository)
-                })
+                setResult(Activity.RESULT_OK)
                 finish()
             } catch (error: InvalidRemoteException) {
                 rootFile.deleteRecursively()

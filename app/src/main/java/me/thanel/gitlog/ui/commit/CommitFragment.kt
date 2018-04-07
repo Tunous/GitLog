@@ -12,7 +12,6 @@ import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.repository.filelist.GitFileListActivityStarter
 import me.thanel.gitlog.ui.utils.observe
-import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.revwalk.RevCommit
 import org.koin.android.architecture.ext.sharedViewModel
 
@@ -40,16 +39,16 @@ class CommitFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = DiffHunkAdapter(viewModel)
+        adapter = DiffHunkAdapter(repositoryId, commitSha)
         recyclerView.adapter = adapter
 
         viewModel.commit.observe(this, this::displayCommitInformation)
-        viewModel.diffEntries.observe(this, this::displayDiffs)
+        viewModel.formattedDiffEntries.observe(this, this::displayDiffs)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.commit, menu)
         super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.commit, menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -84,7 +83,7 @@ class CommitFragment : BaseFragment() {
         adapter.commit = commit
     }
 
-    private fun displayDiffs(diffEntries: List<DiffEntry>?) {
+    private fun displayDiffs(diffEntries: List<FormattedDiffEntry>?) {
         if (diffEntries == null) {
             // TODO: Loading indicator
             return

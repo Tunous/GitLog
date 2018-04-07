@@ -4,14 +4,14 @@ import android.app.Application
 import com.chibatching.kotpref.Kotpref
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
-import me.thanel.gitlog.di.repositoryModule
+import me.thanel.gitlog.di.appModule
 import org.koin.android.ext.android.startKoin
 
 class GitLogApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        startKoin(this, listOf(repositoryModule))
+        startKoin(this, listOf(appModule))
         Kotpref.init(this)
 
         val picasso = Picasso.Builder(this)

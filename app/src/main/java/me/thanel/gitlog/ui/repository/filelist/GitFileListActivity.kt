@@ -4,6 +4,7 @@ import activitystarter.Arg
 import android.content.Intent
 import android.os.Bundle
 import com.marcinmoskala.activitystarter.argExtra
+import me.thanel.gitlog.db.model.git
 import me.thanel.gitlog.ui.base.activity.BaseFragmentActivity
 import me.thanel.gitlog.ui.commit.CommitActivityStarter
 import me.thanel.gitlog.ui.repository.RepositoryViewModel

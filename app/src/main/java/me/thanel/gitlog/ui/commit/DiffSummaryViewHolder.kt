@@ -10,15 +10,13 @@ import me.thanel.gitlog.R
 import me.thanel.gitlog.ui.base.ItemAdapter
 import me.thanel.gitlog.ui.utils.StyleableTag
 import me.thanel.gitlog.ui.utils.formatTags
-import org.eclipse.jgit.diff.DiffEntry
 
 class DiffSummaryViewHolder(
-    itemView: View,
-    private val viewModel: CommitViewModel
-) : ItemAdapter.ViewHolder<List<DiffEntry>>(itemView) {
-    private val summaryTextView = itemView.findViewById<TextView>(R.id.summaryTextView)
+    itemView: View
+) : ItemAdapter.ViewHolder<List<FormattedDiffEntry>>(itemView) {
+    private val summaryTextView: TextView = itemView.findViewById(R.id.summaryTextView)
 
-    override fun bind(item: List<DiffEntry>) {
+    override fun bind(item: List<FormattedDiffEntry>) {
         super.bind(item)
 
         val changedFilesCount = item.size
@@ -27,7 +25,7 @@ class DiffSummaryViewHolder(
             R.plurals.changed_files,
             changedFilesCount, changedFilesCount
         )
-        val diffs = item.flatMap { viewModel.formatDiffEntry(it).split("\n") }
+        val diffs = item.flatMap { it.formattedPatch.split("\n") }
             .dropWhile { !it.startsWith("@@") }
         val additions = diffs.count { it.startsWith("+") }
         val deletions = diffs.count { it.startsWith("-") }

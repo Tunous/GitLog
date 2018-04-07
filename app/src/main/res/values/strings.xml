@@ -39,6 +39,7 @@
     <string name="repository_name">Repository name</string>
     <string name="clone">Clone</string>
     <string name="user_name_and_email">[name] &lt;[email]&gt;</string>
+    <string name="commit_sha">Commit [sha]</string>
 
     <plurals name="changed_files">
         <item quantity="one">1 changed file</item>

@@ -4,12 +4,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import me.thanel.gitlog.R
 import me.thanel.gitlog.ui.base.ItemAdapter
-import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.revwalk.RevCommit
 
 class DiffHunkAdapter(
-    private val viewModel: CommitViewModel
-) : ItemAdapter<DiffEntry, RecyclerView.ViewHolder>() {
+    private val repositoryId: Int,
+    private val commitSha: String
+) : ItemAdapter<FormattedDiffEntry, RecyclerView.ViewHolder>() {
     var commit: RevCommit? = null
         set(value) {
             field = value
@@ -40,9 +40,9 @@ class DiffHunkAdapter(
 
     override fun createViewHolder(itemView: View, viewType: Int): RecyclerView.ViewHolder =
         when (viewType) {
-            VIEW_TYPE_COMMIT_DETAILS -> CommitDetailsViewHolder(itemView, viewModel.repositoryId)
-            VIEW_TYPE_SUMMARY -> DiffSummaryViewHolder(itemView, viewModel)
-            else -> DiffHunkViewHolder(itemView, viewModel)
+            VIEW_TYPE_COMMIT_DETAILS -> CommitDetailsViewHolder(itemView, repositoryId)
+            VIEW_TYPE_SUMMARY -> DiffSummaryViewHolder(itemView)
+            else -> DiffHunkViewHolder(itemView, repositoryId, commitSha)
         }
 
     companion object {

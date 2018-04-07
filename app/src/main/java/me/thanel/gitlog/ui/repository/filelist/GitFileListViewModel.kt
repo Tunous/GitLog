@@ -3,6 +3,7 @@ package me.thanel.gitlog.ui.repository.filelist
 import android.arch.lifecycle.ViewModel
 import android.os.Parcelable
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.git
 import org.eclipse.jgit.lib.FileMode
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.revwalk.RevCommit

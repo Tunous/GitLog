@@ -5,14 +5,17 @@ import android.arch.lifecycle.ViewModel
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.db.RepositoryDao
+import me.thanel.gitlog.db.model.git
 
-class RepositoryViewModel(
+open class RepositoryViewModel(
     private val repositoryDao: RepositoryDao,
     private val repositoryId: Int
 ) : ViewModel() {
     val repository = repositoryDao.getByIdAsync(repositoryId)
 
-    val gitRepository = Transformations.map(repository) { it.git.repository }
+    val git = Transformations.map(repository) { it.git }
+
+    val gitRepository = Transformations.map(git) { it.repository }
 
     fun deleteRepositoryAsync() = launch(CommonPool) {
         repositoryDao.deleteById(repositoryId)

@@ -17,6 +17,7 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.R
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.git
 import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.commit.CommitActivityStarter
