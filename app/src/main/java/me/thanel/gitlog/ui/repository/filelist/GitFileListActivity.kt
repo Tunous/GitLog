@@ -6,8 +6,10 @@ import android.os.Bundle
 import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.ui.base.activity.BaseFragmentActivity
 import me.thanel.gitlog.ui.commit.CommitActivityStarter
+import me.thanel.gitlog.ui.repository.RepositoryViewModel
 import me.thanel.gitlog.ui.utils.getAbbreviatedName
 import me.thanel.gitlog.ui.utils.observe
+import org.koin.android.architecture.ext.viewModel
 
 class GitFileListActivity : BaseFragmentActivity() {
     @get:Arg
@@ -16,11 +18,13 @@ class GitFileListActivity : BaseFragmentActivity() {
     @get:Arg
     val refName: String by argExtra()
 
+    private val repositoryViewModel by viewModel<RepositoryViewModel> {
+        RepositoryViewModel.createParams(repositoryId)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val viewModel = GitFileListViewModel.get(this, repositoryId, refName)
-        viewModel.repository.observe(this) {
+        repositoryViewModel.repository.observe(this) {
             it?.let {
                 toolbarSubtitle = it.git.repository.getAbbreviatedName(refName)
             }

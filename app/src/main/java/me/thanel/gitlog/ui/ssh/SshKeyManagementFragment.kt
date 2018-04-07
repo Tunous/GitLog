@@ -15,16 +15,15 @@ import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.KeyPair
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.base.dialog.InputDialog
+import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.explorer.FileViewerActivityStarter
 import me.thanel.gitlog.ui.utils.StyleableTag
 import me.thanel.gitlog.ui.utils.formatTags
-import me.thanel.gitlog.ui.utils.getViewModel
 import me.thanel.gitlog.ui.utils.sshDir
 import java.io.File
 
-class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
+class SshKeyManagementFragment : BaseFragment(),
     OnSshKeyMenuItemClickListener {
     private lateinit var rootFolder: File
     private lateinit var adapter: SshKeyListAdapter
@@ -43,8 +42,6 @@ class SshKeyManagementFragment : BaseFragment<SshKeyManagementViewModel>(),
                 ?.setOnSubmitListener(this::refresh)
         }
     }
-
-    override fun onCreateViewModel() = getViewModel<SshKeyManagementViewModel>(requireActivity())
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -1,11 +1,8 @@
 package me.thanel.gitlog.ui.commit
 
-import android.app.Application
 import android.arch.lifecycle.ViewModel
-import android.support.v4.app.FragmentActivity
-import me.thanel.gitlog.GitLogApplication
+import me.thanel.gitlog.db.RepositoryDao
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.ui.utils.getViewModel
 import me.thanel.gitlog.ui.utils.mapBg
 import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.diff.DiffFormatter
@@ -14,15 +11,14 @@ import org.eclipse.jgit.revwalk.RevCommit
 import java.io.ByteArrayOutputStream
 
 class CommitViewModel(
-    application: Application,
+    repositoryDao: RepositoryDao,
     val repositoryId: Int,
     val commitSha: String
 ) : ViewModel() {
-    private val db = (application as GitLogApplication).database
     private val outputStream = ByteArrayOutputStream()
     private val diffFormatter = DiffFormatter(outputStream)
 
-    val repository = db.repositoryDao().getRepository(repositoryId)
+    val repository = repositoryDao.getByIdAsync(repositoryId)
     val diffEntries = repository.mapBg { loadDiffEntries(it) }
     val commit = repository.mapBg { loadCommit(it) }
 
@@ -64,9 +60,12 @@ class CommitViewModel(
     }
 
     companion object {
-        fun get(activity: FragmentActivity, repositoryId: Int, commitSha: String) =
-            getViewModel(activity) {
-                CommitViewModel(activity.application, repositoryId, commitSha)
-            }
+        const val PARAM_REPOSITORY_ID = "repositoryId"
+        const val PARAM_COMMIT_SHA = "commitSha"
+
+        fun createParams(repositoryId: Int, commitSha: String) = mapOf(
+            PARAM_REPOSITORY_ID to repositoryId,
+            PARAM_COMMIT_SHA to commitSha
+        )
     }
 }

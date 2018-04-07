@@ -2,7 +2,6 @@ package me.thanel.gitlog.ui.repository
 
 import activitystarter.Arg
 import android.app.ProgressDialog
-import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -17,7 +16,6 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.ui.base.activity.BaseBottomNavigationActivity
 import me.thanel.gitlog.ui.repository.branchlist.BranchListFragmentStarter
@@ -28,13 +26,17 @@ import me.thanel.gitlog.ui.ssh.TransportCallback
 import me.thanel.gitlog.ui.utils.StyleableTag
 import me.thanel.gitlog.ui.utils.formatTags
 import me.thanel.gitlog.ui.utils.getAbbreviatedName
+import me.thanel.gitlog.ui.utils.observe
 import org.eclipse.jgit.lib.Constants
+import org.koin.android.architecture.ext.viewModel
 
 class RepositoryActivity : BaseBottomNavigationActivity() {
     @get:Arg
     val repositoryId: Int by argExtra()
 
-    private lateinit var viewModel: RepositoryViewModel
+    private val repositoryViewModel by viewModel<RepositoryViewModel> {
+        RepositoryViewModel.createParams(repositoryId)
+    }
 
     private var repository: Repository? = null
 
@@ -46,15 +48,14 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        viewModel = RepositoryViewModel.get(this)
-        viewModel.getRepository(repositoryId).observe(this, Observer {
+        repositoryViewModel.repository.observe(this) {
             if (it != null) {
                 toolbarTitle = it.name
                 toolbarSubtitle = it.git.repository.getAbbreviatedName(Constants.HEAD)
                 repository = it
                 invalidateOptionsMenu()
             }
-        })
+        }
     }
 
     override fun createFragment(itemId: Int): Fragment = when (itemId) {
@@ -115,10 +116,8 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     }
 
     private fun removeRepository() {
-        launch(CommonPool) {
-            viewModel.removeRepository(repository!!)
-            finish()
-        }
+        repositoryViewModel.deleteRepositoryAsync()
+        finish()
     }
 
     companion object {

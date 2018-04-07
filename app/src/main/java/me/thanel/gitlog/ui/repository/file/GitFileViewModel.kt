@@ -1,26 +1,27 @@
 package me.thanel.gitlog.ui.repository.file
 
-import android.app.Application
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
-import android.support.v4.app.FragmentActivity
-import me.thanel.gitlog.GitLogApplication
-import me.thanel.gitlog.ui.utils.getViewModel
+import me.thanel.gitlog.db.RepositoryDao
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
 import java.io.ByteArrayOutputStream
 
 class GitFileViewModel(
-    application: Application,
+    repositoryDao: RepositoryDao,
     repositoryId: Int,
     private val refName: String,
     private val filePath: String
 ) : ViewModel() {
-    private val db = (application as GitLogApplication).database
+    val repository = repositoryDao.getByIdAsync(repositoryId)
 
-    val repository = db.repositoryDao().getRepository(repositoryId)
+    val fileContent: LiveData<String> = Transformations.map(repository) {
+        readFileContent(it.git.repository)
+    }
 
-    fun readFileContent(repository: Repository): String {
+    private fun readFileContent(repository: Repository): String {
         val head = repository.resolve(refName)
 
         val revWalk = RevWalk(repository)
@@ -43,9 +44,14 @@ class GitFileViewModel(
     }
 
     companion object {
-        fun get(activity: FragmentActivity, repositoryId: Int, refName: String, filePath: String) =
-            getViewModel(activity) {
-                GitFileViewModel(activity.application, repositoryId, refName, filePath)
-            }
+        const val PARAM_REPOSITORY_ID = "repositoryId"
+        const val PARAM_REF_NAME = "refName"
+        const val PARAM_FILE_PATH = "filePath"
+
+        fun createParams(repositoryId: Int, refName: String, filePath: String) = mapOf(
+            PARAM_REPOSITORY_ID to repositoryId,
+            PARAM_REF_NAME to refName,
+            PARAM_FILE_PATH to filePath
+        )
     }
 }

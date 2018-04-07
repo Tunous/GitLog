@@ -24,7 +24,7 @@
         <activity android:name=".ui.repository.RepositoryActivity" />
         <activity android:name=".ui.commit.CommitActivity" />
         <activity
-            android:name=".ui.AddRepositoryActivity"
+            android:name=".ui.repositorylist.add.AddRepositoryActivity"
             android:excludeFromRecents="true"
             android:label="@string/clone_repository"
             android:theme="@style/Theme.AppCompat.Light.Dialog.MinWidth" />

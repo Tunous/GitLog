@@ -20,6 +20,7 @@ import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.commit.CommitActivityStarter
+import me.thanel.gitlog.ui.repository.RepositoryViewModel
 import me.thanel.gitlog.ui.utils.observe
 import org.eclipse.jgit.errors.IncorrectObjectTypeException
 import org.eclipse.jgit.errors.MissingObjectException
@@ -27,11 +28,16 @@ import org.eclipse.jgit.revplot.PlotCommitList
 import org.eclipse.jgit.revplot.PlotLane
 import org.eclipse.jgit.revplot.PlotWalk
 import org.eclipse.jgit.revwalk.RevCommit
+import org.koin.android.architecture.ext.viewModel
 import java.util.*
 
-class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
+class CommitLogFragment : BaseFragment() {
     @get:Arg
     val repositoryId: Int by argExtra()
+
+    private val viewModel by viewModel<RepositoryViewModel> {
+        RepositoryViewModel.createParams(repositoryId)
+    }
 
     private lateinit var commitLogAdapter: CommitLogAdapter
     private lateinit var repository: Repository
@@ -44,10 +50,10 @@ class CommitLogFragment : BaseFragment<CommitLogViewModel>() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateViewModel() = CommitLogViewModel.get(requireActivity(), repositoryId)
-
-    override fun observeViewModel(viewModel: CommitLogViewModel) =
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         viewModel.repository.observe(this, this::onRepositoryLoaded)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

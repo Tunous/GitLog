@@ -7,20 +7,25 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
-import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.R
+import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.repository.filelist.GitFileListActivityStarter
 import me.thanel.gitlog.ui.utils.observe
 import org.eclipse.jgit.diff.DiffEntry
 import org.eclipse.jgit.revwalk.RevCommit
+import org.koin.android.architecture.ext.sharedViewModel
 
-class CommitFragment : BaseFragment<CommitViewModel>() {
+class CommitFragment : BaseFragment() {
     @get:Arg
     val commitSha: String by argExtra()
 
     @get:Arg
     val repositoryId: Int by argExtra()
+
+    private val viewModel by sharedViewModel<CommitViewModel> {
+        CommitViewModel.createParams(repositoryId, commitSha)
+    }
 
     lateinit var adapter: DiffHunkAdapter
 
@@ -32,19 +37,14 @@ class CommitFragment : BaseFragment<CommitViewModel>() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateViewModel() =
-        CommitViewModel.get(requireActivity(), repositoryId, commitSha)
-
-    override fun observeViewModel(viewModel: CommitViewModel) {
-        viewModel.commit.observe(this, this::displayCommitInformation)
-        viewModel.diffEntries.observe(this, this::displayDiffs)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         adapter = DiffHunkAdapter(viewModel)
         recyclerView.adapter = adapter
+
+        viewModel.commit.observe(this, this::displayCommitInformation)
+        viewModel.diffEntries.observe(this, this::displayDiffs)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

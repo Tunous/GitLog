@@ -9,6 +9,7 @@ import me.thanel.gitlog.ui.commit.CommitActivityStarter
 import me.thanel.gitlog.ui.commit.CommitViewModel
 import me.thanel.gitlog.ui.utils.observe
 import org.eclipse.jgit.lib.AbbreviatedObjectId
+import org.koin.android.architecture.ext.getViewModel
 
 class DiffViewerActivity : BaseFragmentActivity() {
     @get:Arg
@@ -23,7 +24,9 @@ class DiffViewerActivity : BaseFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel = CommitViewModel.get(this, repositoryId, commitSha)
+        val viewModel = getViewModel<CommitViewModel> {
+            CommitViewModel.createParams(repositoryId, commitSha)
+        }
 
         viewModel.repository.observe(this) {
             toolbarSubtitle = it?.name

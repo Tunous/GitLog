@@ -7,11 +7,9 @@ import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.ui.base.fragment.BaseWebViewerFragment
 import java.io.File
 
-class FileViewerFragment : BaseWebViewerFragment<FileViewModel>() {
+class FileViewerFragment : BaseWebViewerFragment() {
     @get:Arg
     val filePath: String by argExtra()
-
-    override fun onCreateViewModel() = FileViewModel.get(requireActivity())
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

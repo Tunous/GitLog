@@ -5,15 +5,17 @@ import android.view.View
 import androidx.view.isVisible
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
-import me.thanel.gitlog.ui.AddRepositoryActivityStarter
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.repository.RepositoryActivityStarter
+import me.thanel.gitlog.ui.repositorylist.add.AddRepositoryActivityStarter
 import me.thanel.gitlog.ui.utils.observe
+import org.koin.android.architecture.ext.sharedViewModel
 
-class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
+class RepositoryListFragment : BaseFragment() {
     private val adapter = RepositoryListAdapter(this::openRepository)
+
+    private val repositoryViewModel by sharedViewModel<RepositoryListViewModel>()
 
     override val layoutResId: Int
         get() = R.layout.fragment_repository_list
@@ -30,10 +32,10 @@ class RepositoryListFragment : BaseFragment<RepositoryViewModel>() {
         }
     }
 
-    override fun onCreateViewModel() = RepositoryViewModel.get(requireActivity())
-
-    override fun observeViewModel(viewModel: RepositoryViewModel) =
-        viewModel.listRepositories().observe(this, this::displayRepositories)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        repositoryViewModel.listRepositories().observe(this, this::displayRepositories)
+    }
 
     private fun displayRepositories(repositories: List<Repository>?) {
         if (repositories != null) {

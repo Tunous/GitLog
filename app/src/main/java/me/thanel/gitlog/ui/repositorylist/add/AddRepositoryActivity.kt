@@ -1,9 +1,8 @@
-package me.thanel.gitlog.ui
+package me.thanel.gitlog.ui.repositorylist.add
 
 import activitystarter.MakeActivityStarter
 import android.app.Activity
 import android.app.ProgressDialog
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -18,21 +17,22 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.RepositoryViewModel
 import me.thanel.gitlog.db.model.Repository
 import me.thanel.gitlog.ui.repository.RepositoryActivity
 import me.thanel.gitlog.ui.repositorylist.RepositoryListActivityStarter
 import me.thanel.gitlog.ui.repositorylist.RepositoryListManager
+import me.thanel.gitlog.ui.repositorylist.RepositoryListViewModel
 import me.thanel.gitlog.ui.ssh.TransportCallback
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.errors.InvalidRemoteException
 import org.eclipse.jgit.api.errors.TransportException
 import org.eclipse.jgit.lib.EmptyProgressMonitor
+import org.koin.android.architecture.ext.viewModel
 import java.io.File
 
 @MakeActivityStarter
 class AddRepositoryActivity : AppCompatActivity() {
-    private lateinit var viewModel: RepositoryViewModel
+    private val repositoryListViewModel by viewModel<RepositoryListViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,8 +82,6 @@ class AddRepositoryActivity : AppCompatActivity() {
                 false
             }
         }
-
-        viewModel = ViewModelProviders.of(this).get(RepositoryViewModel::class.java)
     }
 
     private fun cloneRepository() {
@@ -104,7 +102,8 @@ class AddRepositoryActivity : AppCompatActivity() {
             repositoryNameInputView.error = null
         }
 
-        val exists = RepositoryListManager.exists(this, targetName)
+        val exists =
+            RepositoryListManager.exists(this, targetName)
         if (exists) {
             repositoryNameInputView.error = "Repository with this name already exists"
             return
@@ -143,7 +142,7 @@ class AddRepositoryActivity : AppCompatActivity() {
                         .close()
 
                     val repository = Repository(0, repoName, repoUrl, rootFile.absolutePath)
-                    viewModel.addRepository(repository)
+                    repositoryListViewModel.addRepository(repository)
                     repository
                 }
 

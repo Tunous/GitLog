@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    tools:context="me.thanel.gitlog.ui.AddRepositoryActivity">
+    tools:context="me.thanel.gitlog.ui.repositorylist.add.AddRepositoryActivity">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/repositoryUrlInputView"

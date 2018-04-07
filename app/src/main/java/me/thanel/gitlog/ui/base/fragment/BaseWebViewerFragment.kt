@@ -1,12 +1,11 @@
 package me.thanel.gitlog.ui.base.fragment
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.ViewModel
 import android.os.Bundle
 import kotlinx.android.synthetic.main.fragment_web_viewer.*
 import me.thanel.gitlog.R
 
-abstract class BaseWebViewerFragment<T : ViewModel> : BaseFragment<T>() {
+abstract class BaseWebViewerFragment : BaseFragment() {
     override val layoutResId: Int
         get() = R.layout.fragment_web_viewer
 

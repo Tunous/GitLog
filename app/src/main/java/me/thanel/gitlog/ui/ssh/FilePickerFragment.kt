@@ -1,17 +1,15 @@
 package me.thanel.gitlog.ui.ssh
 
 import android.app.Activity
-import android.arch.lifecycle.ViewModel
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
-import me.thanel.gitlog.ui.utils.getViewModel
 import java.io.File
 
-class FilePickerFragment : BaseFragment<FilePickerViewModel>() {
+class FilePickerFragment : BaseFragment() {
     private lateinit var fileListAdapter: FileListAdapter
 
     override val layoutResId: Int
@@ -36,8 +34,6 @@ class FilePickerFragment : BaseFragment<FilePickerViewModel>() {
         displayFiles(Environment.getExternalStorageDirectory())
     }
 
-    override fun onCreateViewModel() = getViewModel<FilePickerViewModel>(requireActivity())
-
     private fun displayFiles(file: File) {
         if (!file.isDirectory) return
 
@@ -50,5 +46,3 @@ class FilePickerFragment : BaseFragment<FilePickerViewModel>() {
         fun newInstance() = FilePickerFragment()
     }
 }
-
-class FilePickerViewModel : ViewModel()

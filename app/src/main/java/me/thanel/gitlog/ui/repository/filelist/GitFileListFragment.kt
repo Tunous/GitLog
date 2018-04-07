@@ -5,18 +5,28 @@ import android.os.Bundle
 import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.ui.base.fragment.BaseFragment
+import me.thanel.gitlog.ui.repository.RepositoryViewModel
 import me.thanel.gitlog.ui.repository.file.GitFileViewerActivityStarter
 import me.thanel.gitlog.ui.utils.observe
 import me.thanel.gitlog.ui.view.PathBar
+import org.koin.android.architecture.ext.sharedViewModel
+import org.koin.android.architecture.ext.viewModel
 
-class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
+class GitFileListFragment : BaseFragment() {
     @get:Arg
     val repositoryId: Int by argExtra()
 
     @get:Arg
     val refName: String by argExtra()
+
+    private val gitFileListViewModel by viewModel<GitFileListViewModel> {
+        GitFileListViewModel.createParams(refName)
+    }
+    private val repositoryViewModel by sharedViewModel<RepositoryViewModel> {
+        RepositoryViewModel.createParams(repositoryId)
+    }
 
     private val adapter = GitFileListAdapter(this::moveDown)
     private lateinit var pathBar: PathBar
@@ -48,21 +58,17 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
         }
 
         updatePathBar()
+
+        repositoryViewModel.repository.observe(this) {
+            repository = it!!
+            displayFiles()
+        }
     }
 
     override fun onDestroy() {
         removeHeaderView(pathBar)
         super.onDestroy()
     }
-
-    override fun onCreateViewModel() =
-        GitFileListViewModel.get(requireActivity(), repositoryId, refName)
-
-    override fun observeViewModel(viewModel: GitFileListViewModel) =
-        viewModel.repository.observe(this) {
-            repository = it!!
-            displayFiles()
-        }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -76,7 +82,7 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
     }
 
     private fun displayFiles(path: String = "") {
-        val files = viewModel.listFiles(repository, path)
+        val files = gitFileListViewModel.listFiles(repository, path)
         adapter.replaceAll(files)
     }
 
@@ -95,7 +101,7 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
 
         // Save scroll state
         val scrollState = recyclerView.layoutManager.onSaveInstanceState()
-        viewModel.pushScrollState(scrollState)
+        gitFileListViewModel.pushScrollState(scrollState)
 
         currentPath.add(file.name)
         updatePathBar()
@@ -109,7 +115,8 @@ class GitFileListFragment : BaseFragment<GitFileListViewModel>() {
         displayFiles(currentPath.joinToString("/"))
 
         // Restore scroll position
-        viewModel.popScrollState()?.let(recyclerView.layoutManager::onRestoreInstanceState)
+        gitFileListViewModel.popScrollState()
+            ?.let(recyclerView.layoutManager::onRestoreInstanceState)
         updatePathBar()
     }
 

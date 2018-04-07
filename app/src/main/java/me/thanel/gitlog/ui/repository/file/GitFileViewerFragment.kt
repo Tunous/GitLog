@@ -1,12 +1,14 @@
 package me.thanel.gitlog.ui.repository.file
 
 import activitystarter.Arg
+import android.os.Bundle
 import android.text.TextUtils
 import com.marcinmoskala.activitystarter.argExtra
 import me.thanel.gitlog.ui.base.fragment.BaseWebViewerFragment
 import me.thanel.gitlog.ui.utils.observe
+import org.koin.android.architecture.ext.viewModel
 
-class GitFileViewerFragment : BaseWebViewerFragment<GitFileViewModel>() {
+class GitFileViewerFragment : BaseWebViewerFragment() {
     @get:Arg
     val repositoryId: Int by argExtra()
 
@@ -16,19 +18,17 @@ class GitFileViewerFragment : BaseWebViewerFragment<GitFileViewModel>() {
     @get:Arg
     val filePath: String by argExtra()
 
-    override fun onCreateViewModel() = GitFileViewModel.get(
-        requireActivity(),
-        repositoryId,
-        refName,
-        filePath
-    )
+    private val gitFileViewModel by viewModel<GitFileViewModel> {
+        GitFileViewModel.createParams(repositoryId, refName, filePath)
+    }
 
-    override fun observeViewModel(viewModel: GitFileViewModel) =
-        viewModel.repository.observe(this) {
-            it?.let {
-                val content = viewModel.readFileContent(it.git.repository)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        gitFileViewModel.fileContent.observe(this) { content ->
+            if (content != null) {
                 val escapedContent = TextUtils.htmlEncode(content).replace("\n", "<br>")
                 loadData("<body><code><pre>$escapedContent</pre></code></body>")
             }
         }
+    }
 }

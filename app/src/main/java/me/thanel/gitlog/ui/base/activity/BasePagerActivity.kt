@@ -28,7 +28,7 @@ abstract class BasePagerActivity : BaseActivity() {
 
     override fun onBackPressed() {
         val fragment = adapter.getFragment(fragmentViewPager.currentItem)
-        val baseFragment = fragment as? BaseFragment<*>
+        val baseFragment = fragment as? BaseFragment
         val handled = baseFragment?.onBackPressed() ?: false
         if (!handled) {
             super.onBackPressed()
