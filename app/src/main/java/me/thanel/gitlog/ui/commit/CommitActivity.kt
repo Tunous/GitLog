@@ -10,6 +10,7 @@ import me.thanel.gitlog.ui.repository.RepositoryActivityStarter
 import me.thanel.gitlog.ui.utils.SHORT_SHA_LENGTH
 import me.thanel.gitlog.ui.utils.StyleableTag
 import me.thanel.gitlog.ui.utils.formatTags
+import kotlin.math.min
 
 class CommitActivity : BaseFragmentActivity() {
     @get:Arg
@@ -20,7 +21,7 @@ class CommitActivity : BaseFragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val shortSha = commitSha.substring(0, SHORT_SHA_LENGTH)
+        val shortSha = commitSha.substring(0, min(commitSha.length, SHORT_SHA_LENGTH))
         toolbarTitle = getString(R.string.commit_sha).formatTags(StyleableTag("sha", shortSha))
     }
 

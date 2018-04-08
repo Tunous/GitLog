@@ -19,6 +19,9 @@ class GitFileListActivity : BaseFragmentActivity() {
     @get:Arg
     val refName: String by argExtra()
 
+    @get:Arg(optional = true)
+    val initialPath: String by argExtra(default = "")
+
     private val repositoryViewModel by viewModel<RepositoryViewModel> {
         RepositoryViewModel.createParams(repositoryId)
     }
@@ -33,7 +36,7 @@ class GitFileListActivity : BaseFragmentActivity() {
     }
 
     override fun createFragment(): GitFileListFragment =
-        GitFileListFragmentStarter.newInstance(repositoryId, refName)
+        GitFileListFragmentStarter.newInstance(repositoryId, refName, initialPath)
 
     override fun getSupportParentActivityIntent(): Intent =
         CommitActivityStarter.getIntent(this, refName, repositoryId)

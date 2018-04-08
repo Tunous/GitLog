@@ -40,6 +40,7 @@ class FilePickerFragment : BaseFragment() {
     private fun displayFiles(file: File) {
         if (!file.isDirectory) return
         fileListAdapter.items = file.listFiles().sortedBy { it.name }
+        fileListAdapter.notifyDataSetChanged()
     }
 
     companion object {

@@ -3,6 +3,7 @@ package me.thanel.gitlog.ui.diff
 import activitystarter.Arg
 import android.os.Bundle
 import com.marcinmoskala.activitystarter.argExtra
+import com.pddstudio.highlightjs.models.Language
 import me.thanel.gitlog.ui.base.fragment.BaseWebViewerFragment
 import me.thanel.gitlog.ui.commit.FormattedDiffEntry
 import me.thanel.gitlog.ui.utils.observe
@@ -23,6 +24,12 @@ class DiffViewerFragment : BaseWebViewerFragment() {
         DiffViewModel.createParams(repositoryId, commitSha, diffId)
     }
 
+    override val language: Language
+        get() = Language.DIFF
+
+    override val showLineNumbers: Boolean
+        get() = false
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.formattedDiffEntry.observe(this, ::displayDiff)
@@ -34,16 +41,6 @@ class DiffViewerFragment : BaseWebViewerFragment() {
             return
         }
 
-        val diffText = formattedDiffEntry.formattedPatch
-            .split("\n")
-            .dropWhile { !it.startsWith("@@") }
-            .joinToString("<br/>")
-        loadData(StringBuilder().apply {
-            append("<body>")
-            append("<div>")
-            append("<p><pre><code>").append(diffText).append("</code></pre></p>")
-            append("</div>")
-            append("</body>")
-        }.toString())
+        setSource(formattedDiffEntry.formattedPatch)
     }
 }

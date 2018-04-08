@@ -36,7 +36,11 @@ class GitFileViewerActivity : BaseFragmentActivity() {
     override fun createFragment(): GitFileViewerFragment =
         GitFileViewerFragmentStarter.newInstance(repositoryId, refName, filePath)
 
-    override fun getSupportParentActivityIntent(): Intent =
-        GitFileListActivityStarter.getIntent(this, repositoryId, refName)
+    override fun getSupportParentActivityIntent(): Intent {
+        val directoryPath = filePath.split('/')
+            .dropLast(1) // Get rid of last path part which corresponds to file name
+            .joinToString("/")
+        return GitFileListActivityStarter.getIntent(this, repositoryId, refName, directoryPath)
             .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    }
 }

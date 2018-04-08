@@ -20,7 +20,7 @@ class GitFileListViewModel(
 
     fun pushScrollState(scrollPosition: Parcelable) = scrollStateStack.push(scrollPosition)
 
-    fun popScrollState(): Parcelable? = scrollStateStack.pop()
+    fun popScrollState(): Parcelable? = scrollStateStack.poll()
 
     fun listFiles(repo: Repository, path: String = ""): List<GitFile> {
         val gitRepo = repo.git.repository

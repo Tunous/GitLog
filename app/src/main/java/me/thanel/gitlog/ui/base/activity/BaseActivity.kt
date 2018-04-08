@@ -1,10 +1,12 @@
 package me.thanel.gitlog.ui.base.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.design.widget.AppBarLayout
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.view.View
 import me.thanel.gitlog.R
 
@@ -38,6 +40,22 @@ abstract class BaseActivity : AppCompatActivity() {
         if (canNavigateUp) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                val intent = supportParentActivityIntent
+                if (intent != null) {
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(intent)
+                } else {
+                    finish()
+                }
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     fun addHeaderView(view: View, addToTop: Boolean = false) {

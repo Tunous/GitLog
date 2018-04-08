@@ -22,6 +22,9 @@ class GitFileListFragment : BaseFragment() {
     @get:Arg
     val refName: String by argExtra()
 
+    @get:Arg(optional = true)
+    val initialPath: String by argExtra(default = "")
+
     private val gitFileListViewModel by viewModel<GitFileListViewModel> {
         GitFileListViewModel.createParams(refName)
     }
@@ -58,6 +61,8 @@ class GitFileListFragment : BaseFragment() {
         if (savedInstanceState != null) {
             val path = savedInstanceState.getString(STATE_CURRENT_PATH)
             currentPath.addAll(path.split("/"))
+        } else {
+            currentPath.addAll(initialPath.split("/"))
         }
 
         updatePathBar()
@@ -84,8 +89,9 @@ class GitFileListFragment : BaseFragment() {
         return true
     }
 
-    private fun displayFiles(path: String = "") {
+    private fun displayFiles(path: String = initialPath) {
         adapter.items = gitFileListViewModel.listFiles(repository, path)
+        adapter.notifyDataSetChanged()
     }
 
     private fun moveDown(file: GitFile) {
