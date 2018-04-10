@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.HorizontalScrollView
 import android.widget.ScrollView
+import androidx.view.children
 import kotlinx.android.synthetic.main.item_path_bar_entry.view.*
 import kotlinx.android.synthetic.main.view_path_bar.view.*
 import me.thanel.gitlog.R
@@ -33,23 +34,24 @@ class PathBar @JvmOverloads constructor(
 
     fun setPath(path: String) {
         pathEntryContainer.removeAllViews()
-        addEntry("/", "")
+        addEntry("/", "", path.isBlank())
         if (path.isNotBlank()) {
             val pathSegments = path.split("/")
             var fullPath = ""
             for (title in pathSegments) {
                 addSeparator()
                 fullPath += title
-                addEntry(title, fullPath)
+                addEntry(title, fullPath, false)
                 fullPath += "/"
             }
+            pathEntryContainer.children.last().isSelected = true
         }
         post {
             fullScroll(ScrollView.FOCUS_RIGHT)
         }
     }
 
-    private fun addEntry(title: String, fullPath: String) {
+    private fun addEntry(title: String, fullPath: String, isSelected: Boolean) {
         val entry = View.inflate(context, R.layout.item_path_bar_entry, null)
         entry.setOnClickListener {
             val path = it.tag as String
@@ -62,6 +64,7 @@ class PathBar @JvmOverloads constructor(
         }
         entry.tag = fullPath
         entry.titleView.text = title
+        entry.titleView.isSelected = isSelected
         pathEntryContainer.addView(entry)
     }
 

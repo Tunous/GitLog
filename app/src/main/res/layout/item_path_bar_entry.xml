@@ -7,6 +7,7 @@
     android:layout_marginEnd="8dp"
     android:background="?selectableItemBackgroundBorderless"
     android:padding="@dimen/small_spacing"
+    android:textColor="@drawable/path_bar_entry_text_color"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     tools:background="?colorPrimary"
     tools:text="directory" />
