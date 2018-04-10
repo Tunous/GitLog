@@ -1,6 +1,8 @@
 package me.thanel.gitlog.ui.utils
 
 import android.arch.lifecycle.*
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -218,4 +220,9 @@ fun Menu.setItemTextColor(@IdRes itemId: Int, @ColorInt color: Int) {
     item.title = SpannableString(item.title).apply {
         setSpan(ForegroundColorSpan(color), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
+}
+
+fun Context.copyToClipboard(label: String, text: String) {
+    val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    clipboardManager.primaryClip = ClipData.newPlainText(label, text)
 }

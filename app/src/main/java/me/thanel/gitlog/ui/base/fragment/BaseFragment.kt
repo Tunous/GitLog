@@ -1,5 +1,6 @@
 package me.thanel.gitlog.ui.base.fragment
 
+import activitystarter.ActivityStarter
 import android.content.Context
 import android.os.Bundle
 import android.support.annotation.LayoutRes
@@ -9,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import me.thanel.gitlog.ui.base.activity.BaseActivity
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment(
+    private val saveArgumentsState: Boolean = false
+) : Fragment() {
     protected lateinit var baseActivity: BaseActivity
 
     protected abstract val layoutResId: Int
@@ -19,6 +22,18 @@ abstract class BaseFragment : Fragment() {
         super.onAttach(context)
         baseActivity = context as? BaseActivity ?:
                 throw IllegalStateException("Parent activity must extend BaseActivity")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ActivityStarter.fill(this, savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (saveArgumentsState) {
+            ActivityStarter.save(this, outState)
+        }
     }
 
     override fun onCreateView(

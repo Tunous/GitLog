@@ -4,48 +4,69 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.HorizontalScrollView
+import android.widget.ScrollView
 import kotlinx.android.synthetic.main.item_path_bar_entry.view.*
 import kotlinx.android.synthetic.main.view_path_bar.view.*
 import me.thanel.gitlog.R
-import me.thanel.gitlog.ui.utils.resolveColor
 
 class PathBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : HorizontalScrollView(context, attrs, defStyleAttr), View.OnClickListener {
-    private var onPathEntryClicked: ((String) -> Unit)? = null
+) : HorizontalScrollView(context, attrs, defStyleAttr) {
+    private var onPathEntryClickListener: ((path: String) -> Unit)? = null
+    private var onPathEntryLongClickListener: ((view: View, path: String) -> Unit)? = null
 
     init {
         View.inflate(context, R.layout.view_path_bar, this)
-        setBackgroundColor(context.resolveColor(R.attr.colorPrimary))
-        isHorizontalScrollBarEnabled = true
         isFillViewport = true
-        setPath(emptyList())
+        setPath("")
     }
 
-    fun onPathEntryClicked(listener: ((String) -> Unit)? = null) {
-        onPathEntryClicked = listener
+    fun setOnPathEntryClickListener(listener: ((path: String) -> Unit)? = null) {
+        onPathEntryClickListener = listener
     }
 
-    fun setPath(path: List<String>) {
+    fun setOnPathEntryLongClickListener(listener: ((view: View, path: String) -> Unit)? = null) {
+        onPathEntryLongClickListener = listener
+    }
+
+    fun setPath(path: String) {
         pathEntryContainer.removeAllViews()
         addEntry("/", "")
-        for ((index, title) in path.withIndex()) {
-            addEntry(title, path.take(index + 1).joinToString("/"))
+        if (path.isNotBlank()) {
+            val pathSegments = path.split("/")
+            var fullPath = ""
+            for (title in pathSegments) {
+                addSeparator()
+                fullPath += title
+                addEntry(title, fullPath)
+                fullPath += "/"
+            }
         }
-    }
-
-    override fun onClick(view: View) {
-        val path = view.tag as String
-        onPathEntryClicked?.invoke(path)
+        post {
+            fullScroll(ScrollView.FOCUS_RIGHT)
+        }
     }
 
     private fun addEntry(title: String, fullPath: String) {
         val entry = View.inflate(context, R.layout.item_path_bar_entry, null)
-        entry.setOnClickListener(this)
+        entry.setOnClickListener {
+            val path = it.tag as String
+            onPathEntryClickListener?.invoke(path)
+        }
+        entry.setOnLongClickListener {
+            val path = it.tag as String
+            onPathEntryLongClickListener?.invoke(it, path)
+            true
+        }
         entry.tag = fullPath
         entry.titleView.text = title
         pathEntryContainer.addView(entry)
+    }
+
+    private fun addSeparator() {
+        val separator = View.inflate(context, R.layout.item_path_bar_separator, null)
+        pathEntryContainer.addView(separator)
     }
 }
