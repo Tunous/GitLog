@@ -62,7 +62,7 @@ dependencies {
     implementation "org.koin:koin-android-architecture:0.9.1"
     implementation "me.drakeet.multitype:multitype:$multiTypeVersion"
     implementation "me.drakeet.multitype:multitype-kotlin:$multiTypeVersion"
-    implementation "com.pddstudio:highlightjs-android:1.5.0"
+    implementation "com.github.Tunous:highlightjs-android:d52a41a7a7"
 
     implementation "com.squareup.picasso:picasso:$picassoVersion"
     implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$okhttpDownloaderVersion"
