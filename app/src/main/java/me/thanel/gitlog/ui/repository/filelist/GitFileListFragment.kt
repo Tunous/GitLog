@@ -3,6 +3,9 @@ package me.thanel.gitlog.ui.repository.filelist
 import activitystarter.Arg
 import android.os.Bundle
 import android.support.v7.widget.PopupMenu
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.drakeet.multitype.MultiTypeAdapter
@@ -11,6 +14,7 @@ import me.thanel.gitlog.db.model.GitLogRepository
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.repository.RepositoryViewModel
 import me.thanel.gitlog.ui.repository.file.GitFileViewerActivityStarter
+import me.thanel.gitlog.ui.repository.filelist.search.SearchActivityStarter
 import me.thanel.gitlog.ui.utils.copyToClipboard
 import me.thanel.gitlog.ui.utils.observe
 import me.thanel.gitlog.ui.view.PathBar
@@ -42,6 +46,11 @@ class GitFileListFragment : BaseFragment(saveArgumentsState = true) {
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -76,6 +85,18 @@ class GitFileListFragment : BaseFragment(saveArgumentsState = true) {
             gitLogRepository = it!!
             displayFiles()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.git_file_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.search -> SearchActivityStarter.start(requireContext(), repositoryId, refName)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {

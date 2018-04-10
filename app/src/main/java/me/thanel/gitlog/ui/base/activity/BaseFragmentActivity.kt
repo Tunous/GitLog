@@ -29,4 +29,6 @@ abstract class BaseFragmentActivity : BaseActivity() {
     }
 
     protected abstract fun createFragment(): Fragment
+
+    protected fun getFragment() = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
 }

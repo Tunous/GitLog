@@ -34,6 +34,7 @@
         <activity android:name=".ui.ssh.SshKeyManagementActivity" />
         <activity android:name=".ui.explorer.FileViewerActivity" />
         <activity android:name=".ui.filepicker.FilePickerActivity" />
+        <activity android:name=".ui.repository.filelist.search.SearchActivity"></activity>
     </application>
 
 </manifest>

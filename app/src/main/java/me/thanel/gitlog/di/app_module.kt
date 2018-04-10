@@ -6,6 +6,7 @@ import me.thanel.gitlog.ui.diff.DiffViewModel
 import me.thanel.gitlog.ui.repository.RepositoryViewModel
 import me.thanel.gitlog.ui.repository.file.GitFileViewModel
 import me.thanel.gitlog.ui.repository.filelist.GitFileListViewModel
+import me.thanel.gitlog.ui.repository.filelist.search.SearchViewModel
 import me.thanel.gitlog.ui.repositorylist.RepositoryListViewModel
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
@@ -38,6 +39,13 @@ val appModule = applicationContext {
             params[DiffViewModel.PARAM_REPOSITORY_ID],
             params[DiffViewModel.PARAM_COMMIT_SHA],
             params[DiffViewModel.PARAM_DIFF_ID]
+        )
+    }
+    viewModel { params ->
+        SearchViewModel(
+            get(),
+            params[SearchViewModel.PARAM_REPOSITORY_ID],
+            params[SearchViewModel.PARAM_REF_NAME]
         )
     }
 
