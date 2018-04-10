@@ -16,7 +16,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.GitLogRepository
 import me.thanel.gitlog.db.model.git
 import me.thanel.gitlog.preferences.Preferences
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
@@ -41,7 +41,7 @@ class CommitLogFragment : BaseFragment() {
     }
 
     private lateinit var commitLogAdapter: CommitLogAdapter
-    private lateinit var repository: Repository
+    private lateinit var gitLogRepository: GitLogRepository
 
     override val layoutResId: Int
         get() = R.layout.view_horizontal_recycler
@@ -84,9 +84,9 @@ class CommitLogFragment : BaseFragment() {
         return true
     }
 
-    private fun onRepositoryLoaded(repo: Repository?) {
+    private fun onRepositoryLoaded(repo: GitLogRepository?) {
         if (repo != null) {
-            repository = repo
+            gitLogRepository = repo
             logCommits()
         }
     }
@@ -97,7 +97,7 @@ class CommitLogFragment : BaseFragment() {
 
     private fun logCommits() = launch(UI) {
         val plotCommitList = withContext(CommonPool + coroutineContext) {
-            val repo = repository.git.repository
+            val repo = gitLogRepository.git.repository
             val plotWalk = PlotWalk(repo)
 
             for (ref in repo.allRefs.values) {

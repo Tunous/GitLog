@@ -5,18 +5,18 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.GitLogRepository
 
 @Dao
-interface RepositoryDao {
+interface GitLogRepositoryDao {
     @Insert(onConflict = OnConflictStrategy.FAIL)
-    fun add(repository: Repository)
+    fun add(gitLogRepository: GitLogRepository)
 
     @Query("SELECT * FROM repositories")
-    fun getAllAsync(): LiveData<List<Repository>>
+    fun getAllAsync(): LiveData<List<GitLogRepository>>
 
     @Query("SELECT * FROM repositories WHERE id = :id")
-    fun getByIdAsync(id: Int): LiveData<Repository>
+    fun getByIdAsync(id: Int): LiveData<GitLogRepository>
 
     @Query("DELETE FROM repositories WHERE id = :id")
     fun deleteById(id: Int): Int

@@ -6,7 +6,7 @@ import androidx.view.isVisible
 import kotlinx.android.synthetic.main.fragment_repository_list.*
 import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.GitLogRepository
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.repository.RepositoryActivityStarter
 import me.thanel.gitlog.ui.repositorylist.add.AddRepositoryActivityStarter
@@ -15,7 +15,7 @@ import org.koin.android.architecture.ext.sharedViewModel
 
 class RepositoryListFragment : BaseFragment() {
     private val adapter = MultiTypeAdapter().apply {
-        register(Repository::class.java, RepositoryViewBinder(::openRepository))
+        register(GitLogRepository::class.java, RepositoryViewBinder(::openRepository))
     }
 
     private val repositoryViewModel by sharedViewModel<RepositoryListViewModel>()
@@ -40,12 +40,12 @@ class RepositoryListFragment : BaseFragment() {
         repositoryViewModel.listRepositories().observe(this, this::displayRepositories)
     }
 
-    private fun displayRepositories(repositories: List<Repository>?) {
-        if (repositories != null) {
+    private fun displayRepositories(gitLogRepositories: List<GitLogRepository>?) {
+        if (gitLogRepositories != null) {
             loadingProgressBar.hide()
-            adapter.items = repositories
+            adapter.items = gitLogRepositories
             adapter.notifyDataSetChanged()
-            emptyView.isVisible = repositories.isEmpty()
+            emptyView.isVisible = gitLogRepositories.isEmpty()
         }
     }
 
@@ -53,7 +53,7 @@ class RepositoryListFragment : BaseFragment() {
         AddRepositoryActivityStarter.start(requireContext())
     }
 
-    private fun openRepository(repository: Repository) {
-        RepositoryActivityStarter.start(requireContext(), repository.id)
+    private fun openRepository(gitLogRepository: GitLogRepository) {
+        RepositoryActivityStarter.start(requireContext(), gitLogRepository.id)
     }
 }

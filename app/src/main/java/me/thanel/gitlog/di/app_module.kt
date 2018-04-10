@@ -42,5 +42,5 @@ val appModule = applicationContext {
     }
 
     bean { GitLogDatabase.buildDatabase(androidApplication()) }
-    bean { get<GitLogDatabase>().repositoryDao() }
+    bean { get<GitLogDatabase>().gitLogRepositoryDao() }
 }

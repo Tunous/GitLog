@@ -1,11 +1,12 @@
 package me.thanel.gitlog.ui.repositorylist
 
 import android.arch.lifecycle.ViewModel
-import me.thanel.gitlog.db.RepositoryDao
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.GitLogRepositoryDao
+import me.thanel.gitlog.db.model.GitLogRepository
 
-class RepositoryListViewModel(private val repositoryDao: RepositoryDao) : ViewModel() {
-    fun addRepository(repository: Repository) = repositoryDao.add(repository)
+class RepositoryListViewModel(private val gitLogRepositoryDao: GitLogRepositoryDao) : ViewModel() {
+    fun addRepository(gitLogRepository: GitLogRepository) =
+        gitLogRepositoryDao.add(gitLogRepository)
 
-    fun listRepositories() = repositoryDao.getAllAsync()
+    fun listRepositories() = gitLogRepositoryDao.getAllAsync()
 }

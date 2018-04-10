@@ -4,16 +4,16 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.GitLogRepository
 
 @Database(
     entities = [
-        Repository::class
+        GitLogRepository::class
     ],
     version = 2
 )
 abstract class GitLogDatabase : RoomDatabase() {
-    abstract fun repositoryDao(): RepositoryDao
+    abstract fun gitLogRepositoryDao(): GitLogRepositoryDao
 
     companion object {
         fun buildDatabase(context: Context) =

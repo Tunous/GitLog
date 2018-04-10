@@ -10,7 +10,7 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.GitLogRepository
 import me.thanel.gitlog.db.model.git
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.repository.RepositoryViewModel
@@ -45,9 +45,9 @@ class BranchListFragment : BaseFragment() {
         }
     }
 
-    private fun listBranches(repository: Repository) = launch(UI) {
+    private fun listBranches(gitLogRepository: GitLogRepository) = launch(UI) {
         val branches = withContext(CommonPool) {
-            repository.git.branchList()
+            gitLogRepository.git.branchList()
                 .setListMode(ListBranchCommand.ListMode.ALL)
                 .call()
         }

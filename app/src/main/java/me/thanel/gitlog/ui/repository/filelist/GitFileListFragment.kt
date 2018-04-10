@@ -7,7 +7,7 @@ import com.marcinmoskala.activitystarter.argExtra
 import kotlinx.android.synthetic.main.view_recycler.*
 import me.drakeet.multitype.MultiTypeAdapter
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.GitLogRepository
 import me.thanel.gitlog.ui.base.fragment.BaseFragment
 import me.thanel.gitlog.ui.repository.RepositoryViewModel
 import me.thanel.gitlog.ui.repository.file.GitFileViewerActivityStarter
@@ -38,7 +38,7 @@ class GitFileListFragment : BaseFragment(saveArgumentsState = true) {
         register(GitFile::class.java, GitFileViewBinder(::moveDown))
     }
     private lateinit var pathBar: PathBar
-    private lateinit var repository: Repository
+    private lateinit var gitLogRepository: GitLogRepository
 
     override val layoutResId: Int
         get() = R.layout.view_recycler
@@ -73,7 +73,7 @@ class GitFileListFragment : BaseFragment(saveArgumentsState = true) {
         updatePathBar()
 
         repositoryViewModel.repository.observe(this) {
-            repository = it!!
+            gitLogRepository = it!!
             displayFiles()
         }
     }
@@ -90,7 +90,7 @@ class GitFileListFragment : BaseFragment(saveArgumentsState = true) {
     }
 
     private fun displayFiles(path: String = currentPath) {
-        adapter.items = gitFileListViewModel.listFiles(repository, path)
+        adapter.items = gitFileListViewModel.listFiles(gitLogRepository, path)
         adapter.notifyDataSetChanged()
 
         currentPath = path

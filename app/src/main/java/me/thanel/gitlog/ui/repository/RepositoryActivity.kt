@@ -16,7 +16,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.GitLogRepository
 import me.thanel.gitlog.db.model.git
 import me.thanel.gitlog.ui.base.activity.BaseBottomNavigationActivity
 import me.thanel.gitlog.ui.repository.branchlist.BranchListFragmentStarter
@@ -39,7 +39,7 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
         RepositoryViewModel.createParams(repositoryId)
     }
 
-    private var repository: Repository? = null
+    private var gitLogRepository: GitLogRepository? = null
 
     override val menuResId: Int
         get() = R.menu.repository_navigation
@@ -53,7 +53,7 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
             if (it != null) {
                 toolbarTitle = it.name
                 toolbarSubtitle = it.git.repository.getAbbreviatedName(Constants.HEAD)
-                repository = it
+                gitLogRepository = it
                 invalidateOptionsMenu()
             }
         }
@@ -72,8 +72,8 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.remove)?.isVisible = repository != null
-        menu.findItem(R.id.fetch)?.isVisible = repository != null
+        menu.findItem(R.id.remove)?.isVisible = gitLogRepository != null
+        menu.findItem(R.id.fetch)?.isVisible = gitLogRepository != null
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -90,7 +90,7 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     private fun fetch() = launch(UI) {
         val dialog = ProgressDialog.show(this@RepositoryActivity, "Fetch", "Fetching...", true)
         async(CommonPool) {
-            repository!!.git.fetch()
+            gitLogRepository!!.git.fetch()
                 .setTransportConfigCallback(TransportCallback(this@RepositoryActivity))
                 .call()
         }.await()
@@ -104,7 +104,7 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
 
     private fun promptRemoveRepository() {
         val message = getString(R.string.remove_confirm_message)
-            .formatTags(StyleableTag("target", repository!!.name, StyleSpan(Typeface.BOLD)))
+            .formatTags(StyleableTag("target", gitLogRepository!!.name, StyleSpan(Typeface.BOLD)))
 
         AlertDialog.Builder(this)
             .setTitle(R.string.remove_repository_dialog_title)
@@ -119,9 +119,5 @@ class RepositoryActivity : BaseBottomNavigationActivity() {
     private fun removeRepository() {
         repositoryViewModel.deleteRepositoryAsync()
         finish()
-    }
-
-    companion object {
-        const val EXTRA_REPOSITORY = "extra.repository"
     }
 }

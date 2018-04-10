@@ -16,7 +16,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import me.thanel.gitlog.R
-import me.thanel.gitlog.db.model.Repository
+import me.thanel.gitlog.db.model.GitLogRepository
 import me.thanel.gitlog.ui.repositorylist.RepositoryListActivityStarter
 import me.thanel.gitlog.ui.repositorylist.RepositoryListManager
 import me.thanel.gitlog.ui.repositorylist.RepositoryListViewModel
@@ -139,7 +139,7 @@ class AddRepositoryActivity : AppCompatActivity() {
                         .call()
                         .close()
 
-                    val repository = Repository(0, repoName, repoUrl, rootFile.absolutePath)
+                    val repository = GitLogRepository(0, repoName, repoUrl, rootFile.absolutePath)
                     repositoryListViewModel.addRepository(repository)
                 }.join()
 

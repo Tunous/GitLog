@@ -3,7 +3,7 @@ package me.thanel.gitlog.ui.repository.file
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
-import me.thanel.gitlog.db.RepositoryDao
+import me.thanel.gitlog.db.GitLogRepositoryDao
 import me.thanel.gitlog.db.model.git
 import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.revwalk.RevWalk
@@ -11,12 +11,12 @@ import org.eclipse.jgit.treewalk.TreeWalk
 import java.io.ByteArrayOutputStream
 
 class GitFileViewModel(
-    repositoryDao: RepositoryDao,
+    gitLogRepositoryDao: GitLogRepositoryDao,
     repositoryId: Int,
     private val refName: String,
     private val filePath: String
 ) : ViewModel() {
-    val repository = repositoryDao.getByIdAsync(repositoryId)
+    val repository = gitLogRepositoryDao.getByIdAsync(repositoryId)
 
     val fileContent: LiveData<String> = Transformations.map(repository) {
         readFileContent(it.git.repository)

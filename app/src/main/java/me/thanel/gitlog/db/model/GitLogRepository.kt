@@ -6,12 +6,12 @@ import org.eclipse.jgit.api.Git
 import java.io.File
 
 @Entity(tableName = "repositories")
-data class Repository(
+data class GitLogRepository(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val name: String,
     val url: String,
     val path: String
 )
 
-val Repository.git: Git
+val GitLogRepository.git: Git
     get() = Git.open(File(path))
