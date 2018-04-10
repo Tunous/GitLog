@@ -29,7 +29,8 @@ class GitFileListViewModel(
     }
 
     private fun readFiles(
-        repository: org.eclipse.jgit.lib.Repository, commit: String,
+        repository: org.eclipse.jgit.lib.Repository,
+        commit: String,
         path: String
     ): List<GitFile> {
         val revCommit = buildRevCommit(repository, commit)
@@ -64,12 +65,7 @@ class GitFileListViewModel(
 
         treeWalk.release()
 
-        items.sortWith(Comparator { (leftPath, leftIsDir), (rightPath, rightIsDir) ->
-            if (leftIsDir != rightIsDir) {
-                return@Comparator rightIsDir.compareTo(leftIsDir)
-            }
-            return@Comparator leftPath.toUpperCase().compareTo(rightPath.toUpperCase())
-        })
+        items.sort()
 
         return items
     }
