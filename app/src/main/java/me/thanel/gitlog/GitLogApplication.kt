@@ -1,13 +1,13 @@
 package me.thanel.gitlog
 
-import android.support.multidex.MultiDexApplication
+import android.app.Application
 import com.chibatching.kotpref.Kotpref
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import me.thanel.gitlog.di.appModule
 import org.koin.android.ext.android.startKoin
 
-class GitLogApplication : MultiDexApplication() {
+class GitLogApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
