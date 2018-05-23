@@ -41,9 +41,10 @@ class AddRepositoryActivity : AppCompatActivity() {
         repositoryUrlInput.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 val text = s.toString().split("/").lastOrNull() ?: ""
-                val editable = repositoryNameInput.text
-                editable.clear()
-                editable.append(text)
+                repositoryNameInput.text?.apply {
+                    clear()
+                    append(text)
+                }
 
                 repositoryUrlInputView.error = null
             }

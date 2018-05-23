@@ -127,8 +127,9 @@ class GitFileListFragment : BaseFragment(saveArgumentsState = true) {
         displayFiles(file.path)
 
         // Save scroll state
-        val scrollState = recyclerView.layoutManager.onSaveInstanceState()
-        gitFileListViewModel.pushScrollState(scrollState)
+        recyclerView.layoutManager?.onSaveInstanceState()?.let {
+            gitFileListViewModel.pushScrollState(it)
+        }
 
         updatePathBar()
     }
@@ -144,6 +145,6 @@ class GitFileListFragment : BaseFragment(saveArgumentsState = true) {
 
         // Restore scroll position
         gitFileListViewModel.popScrollState()
-            ?.let(recyclerView.layoutManager::onRestoreInstanceState)
+            ?.let { recyclerView.layoutManager?.onRestoreInstanceState(it) }
     }
 }
