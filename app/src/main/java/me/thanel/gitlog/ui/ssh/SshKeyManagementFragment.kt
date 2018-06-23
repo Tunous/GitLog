@@ -144,7 +144,7 @@ class SshKeyManagementFragment : BaseFragment(),
         val files = rootFolder.listFiles()
             .filterNot { it.startsWith(".pub") }
         val jSch = JSch()
-        val keys = mutableListOf<Pair<String, KeyPair>>()
+        val keys = mutableListOf<SshKey>()
         for (file in files) {
             val keyPair = try {
                 KeyPair.load(jSch, file.absolutePath)
@@ -152,10 +152,10 @@ class SshKeyManagementFragment : BaseFragment(),
                 null
             }
             if (keyPair != null) {
-                keys.add(file.name to keyPair)
+                keys.add(SshKey(file.name, keyPair))
             }
         }
-        adapter.items = keys.sortedBy(Pair<String, KeyPair>::first)
+        adapter.items = keys.sortedBy(SshKey::name)
         adapter.notifyDataSetChanged()
     }
 
