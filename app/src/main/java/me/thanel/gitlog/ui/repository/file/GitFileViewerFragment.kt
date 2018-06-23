@@ -25,7 +25,7 @@ class GitFileViewerFragment : BaseWebViewerFragment() {
         super.onActivityCreated(savedInstanceState)
         gitFileViewModel.fileContent.observe(this) { content ->
             if (content != null) {
-                setSource(content)
+                setSource(content, filePath.takeLastWhile { it != '.' })
             }
         }
     }

@@ -1,6 +1,5 @@
 package me.thanel.gitlog.ui.base.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import com.pddstudio.highlightjs.models.Language
 import com.pddstudio.highlightjs.models.Theme
@@ -16,7 +15,6 @@ abstract class BaseWebViewerFragment : BaseFragment() {
     open val syntaxTheme: Theme = Theme.GITHUB
     open val showLineNumbers: Boolean = true
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -28,7 +26,20 @@ abstract class BaseWebViewerFragment : BaseFragment() {
         }
     }
 
-    protected fun setSource(source: File) = webView.setSource(source)
+    protected fun setSource(source: File) {
+        webView.highlightLanguage = Language.getFromAlias(source.extension) ?: Language.AUTO_DETECT
+        webView.setSource(source)
+        webView.reload()
+    }
 
-    protected fun setSource(source: String) = webView.setSource(source)
+    protected fun setSource(source: String, extension: String) {
+        webView.highlightLanguage = Language.getFromAlias(extension) ?: Language.AUTO_DETECT
+        webView.setSource(source)
+        webView.reload()
+    }
+
+    protected fun setSource(source: String) {
+        webView.setSource(source)
+        webView.reload()
+    }
 }
